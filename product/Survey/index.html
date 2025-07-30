@@ -318,6 +318,9 @@
         const loaderOverlay = document.getElementById('loader-overlay');
         const loaderText = document.getElementById('loader-text');
 
+        // Store original chart color for PDF export/restore
+        const originalChartColor = Chart.defaults.color;
+
         function updateProgressIndicator(step) {
             const progressSteps = document.querySelectorAll('[id^="progress-step-"]');
             progressSteps.forEach((s, index) => {
@@ -460,7 +463,6 @@
             return callAI(prompt);
         }
 
-        // --- MODIFIED: Using the more detailed prompt from the reference ---
         function recruitUsers() {
             const prompt = `作为一名专业的市场研究招募专员，请根据以下研究目标，为我生成 ${config.simulationCount} 位符合条件的虚拟用户画像。\n\n研究目标：\n"${state.researchGoal}"\n\n你的输出必须是一个严格的JSON数组，数组中包含 ${config.simulationCount} 个对象。每个对象都必须包含 "name" (一个常见的中文名), "age" (一个数字), "gender" (男或女), 和 "bio" (一段20-40字的生动自我介绍，需符合其画像特征)。不要包含任何额外的解释或Markdown标记，必须以 \`\`\`json 开始和结束：\n\`\`\`json\n[\n  {\n    "name": "李明",\n    "age": 28,\n    "gender": "男",\n    "bio": "我是一名在北京工作的软件工程师，平时喜欢研究各种数码产品，对新技术很敏感，业余时间会去健身和爬山。"\n  },\n  {\n    "name": "王秀英",\n    "age": 22,\n    "gender": "女",\n    "bio": "我是上海一所大学的设计系学生，热爱时尚和艺术，喜欢用Vlog记录生活，对产品的颜值和设计感有很高的要求。"\n  }\n]\n\`\`\`\n请确保生成的用户画像多样化，并能覆盖研究目标可能涉及的不同用户群体。`;
             return callAI(prompt);
@@ -630,21 +632,44 @@
             switchStep(1);
         }
 
-        function handleDownloadPDF() {
+        // --- MODIFIED: PDF Download Function ---
+        async function handleDownloadPDF() {
             const element = document.getElementById('report-body');
             showLoader(true, '正在生成PDF报告...');
-            const opt = {
-                margin: 1,
-                filename: `AI用户研究报告-${state.questionnaire.title || '未命名'}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true, backgroundColor: '#0D0D1B' },
-                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-            };
-            Chart.defaults.animation = false;
-            html2pdf().set(opt).from(element).save().then(() => {
+            
+            try {
+                // Temporarily set chart colors for light background
+                Chart.defaults.color = '#374151'; // Dark gray for text
+                generateCharts(); // Redraw charts with new colors
+
+                const opt = {
+                    margin: 1,
+                    filename: `AI用户研究报告-${state.questionnaire.title || '未命名'}.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { 
+                        scale: 2, 
+                        useCORS: true, 
+                        backgroundColor: '#ffffff' // Force white background
+                    },
+                    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                };
+
+                // Temporarily disable animations for PDF generation
+                Chart.defaults.animation = false;
+                
+                await html2pdf().set(opt).from(element).save();
+
+            } catch(error) {
+                console.error("PDF generation failed:", error);
+                showModal("生成PDF报告时出错，请重试。");
+            } finally {
+                // Restore original chart colors and settings
+                Chart.defaults.color = originalChartColor;
                 Chart.defaults.animation = true;
+                // Redraw charts with original colors for the webpage
+                generateCharts(); 
                 showLoader(false);
-            });
+            }
         }
 
         function handleShareReport() {
@@ -702,4 +727,4 @@
         window.addEventListener('load', loadReportFromURL);
     </script>
 </body>
-</html>
+</ht
