@@ -413,10 +413,29 @@
                     const text = result.choices[0].message.content;
                     if (expectJson) {
                         try {
-                            return JSON.parse(text);
+                            // Find the start and end of the JSON object/array to make parsing more robust
+                            const startIndex = text.indexOf('{');
+                            const endIndex = text.lastIndexOf('}');
+                            const startBracketIndex = text.indexOf('[');
+                            const endBracketIndex = text.lastIndexOf(']');
+
+                            let jsonText = '';
+
+                            if (startBracketIndex !== -1 && endBracketIndex !== -1) {
+                                // It's likely a JSON array, which is expected for participants
+                                jsonText = text.substring(startBracketIndex, endBracketIndex + 1);
+                            } else if (startIndex !== -1 && endIndex !== -1) {
+                                // It's likely a JSON object
+                                jsonText = text.substring(startIndex, endIndex + 1);
+                            } else {
+                                // Fallback if no clear JSON structure is found
+                                jsonText = text;
+                            }
+                            
+                            return JSON.parse(jsonText);
                         } catch (e) {
-                            console.error("Failed to parse JSON:", text);
-                            throw new Error("AI返回了无效的JSON格式。");
+                            console.error("Failed to parse JSON from raw text:", text);
+                            throw new Error("AI返回了无效的JSON格式，无法解析。");
                         }
                     }
                     return text;
