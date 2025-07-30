@@ -87,7 +87,6 @@
             -webkit-backdrop-filter: blur(4px);
             transition: opacity 0.3s ease;
         }
-        /* --- NEW: AI Thinking Animation --- */
         .ai-thinking-animation {
             width: 80px;
             height: 80px;
@@ -116,7 +115,6 @@
             font-size: 1rem;
             letter-spacing: 1px;
         }
-        /* --- END: AI Thinking Animation --- */
         .chat-bubble {
             max-width: 75%; padding: 0.6rem 1rem; border-radius: 16px; word-wrap: break-word; display: flex; flex-direction: column; line-height: 1.6;
         }
@@ -125,7 +123,6 @@
         .chat-name { font-weight: 600; font-size: 0.8rem; margin-bottom: 0.2rem; }
         .chat-name-left { color: #9ca3af; }
         .chat-name-right { color: #dbeafe; }
-        /* --- NEW: Typing Indicator --- */
         .typing-indicator { align-self: flex-start; margin-left: 10px; }
         .typing-indicator span {
             height: 8px; width: 8px; float: left; margin: 0 1px; background-color: #9ca3af; display: block; border-radius: 50%; opacity: 0.4; animation: bob 1s infinite;
@@ -136,7 +133,6 @@
             10% { transform: translateY(-5px); background-color: #e5e7eb; }
             50% { transform: translateY(0); background-color: #9ca3af; }
         }
-        /* --- END: Typing Indicator --- */
         .report-content h2, .voc-content h2 { font-size: 1.5rem; font-weight: 700; margin-top: 1.5rem; margin-bottom: 0.75rem; border-bottom: 2px solid rgba(255, 255, 255, 0.1); padding-bottom: 0.5rem; color: #fff; }
         .report-content h3, .voc-content h3 { font-size: 1.25rem; font-weight: 600; margin-top: 1.25rem; margin-bottom: 0.5rem; color: #e5e7eb; }
         .report-content p, .voc-content p { margin-bottom: 1rem; line-height: 1.75; color: #d1d5db; }
@@ -144,11 +140,24 @@
         .form-label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #d1d5db; }
         .form-input, textarea { width: 100%; padding: 0.75rem 1rem; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px; background-color: rgba(255, 255, 255, 0.05); color: #e0e0e0; transition: border-color 0.2s, box-shadow 0.2s; }
         .form-input:focus, textarea:focus { outline: none; border-color: #8A2BE2; box-shadow: 0 0 0 2px rgba(138, 43, 226, 0.5); }
-        /* --- NEW: Participant Card Animation --- */
         .participant-card {
             opacity: 0;
             transform: translateY(20px);
             transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        /* 导航栏所需的核心 CSS 样式 */ 
+        .glass-morphism { 
+            background: rgba(255, 255, 255, 0.05); 
+            backdrop-filter: blur(12px); 
+            -webkit-backdrop-filter: blur(12px); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+        }
+        .gradient-button { 
+            background-image: linear-gradient(to right, #4F46E5, #3B82F6); 
+            transition: all 0.3s ease; 
+        }
+        .gradient-button:hover { 
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.5); 
         }
     </style>
 </head>
@@ -162,26 +171,41 @@
         <div id="loader-text" class="loader-text">AI 正在思考...</div>
     </div>
 
-    <!-- Main Site Header -->
-    <header class="py-4 px-4 sm:px-6 lg:px-8 border-b border-gray-800/50 sticky top-0 bg-[#0D0D1B]/80 backdrop-blur-md z-40">
-        <div class="container mx-auto flex justify-between items-center">
-            <a href="https://sings.ai/" title="返回主页">
-                <h1 class="text-2xl font-bold text-white">sings.ai</h1>
-            </a>
-            <div class="flex items-center space-x-6">
-                <nav class="hidden md:flex items-center space-x-8">
-                    <a href="https://sings.ai/product" class="text-gray-300 hover:text-white transition">产品</a>
-                    <a href="#" class="text-gray-300 hover:text-white transition">定价</a>
-                    <a href="#" class="text-gray-300 hover:text-white transition">博客</a>
-                </nav>
-                <button class="btn-primary text-white font-semibold py-2 px-5 rounded-lg">
-                    登录
-                </button>
-            </div>
-        </div>
-    </header>
+    <!-- 导航栏 HTML 代码 --> 
+    <nav class="fixed top-0 left-0 right-0 z-50 p-4"> 
+        <div class="container mx-auto glass-morphism rounded-xl p-2 px-4 flex justify-between items-center"> 
+            <!-- 左侧: 返回主页按钮和 Logo --> 
+            <div class="flex items-center space-x-4"> 
+                <a href="https://sings.ai/#" class="flex items-center text-gray-300 hover:text-white transition-colors"> 
+                    <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg> 
+                    返回主页 
+                </a> 
+                <a href="https://sings.ai/#" class="text-xl font-bold text-white">sings.ai</a> 
+            </div> 
 
-    <div class="container mx-auto p-4 md:p-8 max-w-4xl">
+            <!-- 中间: 导航链接 (桌面端显示) --> 
+            <div class="hidden md:flex items-center space-x-8"> 
+                <a href="#" class="text-gray-300 hover:text-white transition-colors">产品</a> 
+                <a href="#" class="text-gray-300 hover:text-white transition-colors">方案</a> 
+                <a href="#" class="text-gray-300 hover:text-white transition-colors">资源</a> 
+                <a href="#" class="text-gray-300 hover:text-white transition-colors">定价</a> 
+            </div> 
+
+            <!-- 右侧: 操作按钮 (桌面端显示) --> 
+            <div class="hidden md:flex items-center space-x-4"> 
+                <a href="#" class="text-gray-300 hover:text-white transition-colors">登录</a> 
+                <a href="#" class="gradient-button text-white font-semibold py-2 px-4 rounded-lg">免费开始</a> 
+            </div> 
+            <!-- 移动端菜单按钮 --> 
+            <div class="md:hidden"> 
+                <button class="text-white"> 
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg> 
+                </button> 
+            </div> 
+        </div> 
+    </nav>
+
+    <div class="container mx-auto p-4 md:p-8 max-w-4xl px-4 pt-32 md:pt-40 pb-16 md:pb-24">
         <!-- Page Title Header -->
         <header class="text-center my-10">
             <h1 class="text-3xl md:text-5xl font-extrabold text-white">AI 定性研究座谈会工具</h1>
@@ -208,7 +232,7 @@
             </div>
         </div>
 
-        <!-- Other steps remain largely the same in structure -->
+        <!-- Step 2: Refine Needs & Define Sample -->
         <div id="step-2" class="step-card">
             <h2 class="text-2xl font-bold mb-2">第二步：确认研究需求与样本</h2>
             <p class="text-gray-400 mb-6">请确认AI提炼的研究目标，并检查、修改为你本次研究招募的核心用户条件。</p>
@@ -230,6 +254,7 @@
             </div>
         </div>
 
+        <!-- Step 3: Generate Interview Outline -->
         <div id="step-3" class="step-card">
             <h2 class="text-2xl font-bold mb-2">第三步：确认访谈大纲</h2>
             <p class="text-gray-400 mb-6">根据研究需求，AI已生成一份专业的访谈大纲。你可以在此基础上修改，后续访谈将严格依据此大纲进行。</p>
@@ -240,6 +265,7 @@
             </div>
         </div>
 
+        <!-- Step 4: Recruit Participants -->
         <div id="step-4" class="step-card">
             <h2 class="text-2xl font-bold mb-2">第四步：招募虚拟用户</h2>
             <p class="text-gray-400 mb-6">根据你确认的样本条件，AI已为你招募了6位符合条件的虚拟用户。请查看他们的基本信息。</p>
@@ -250,6 +276,7 @@
             </div>
         </div>
 
+        <!-- Step 5: Conduct Focus Group -->
         <div id="step-5" class="step-card">
             <h2 class="text-2xl font-bold mb-2">第五步：用户访谈</h2>
             <p class="text-gray-400 mb-6">访谈已开始。AI 正在模拟一场真实的、动态的群聊。请稍候...</p>
@@ -260,6 +287,7 @@
             </div>
         </div>
 
+        <!-- Step 6: Generate VOC -->
         <div id="step-6" class="step-card">
             <h2 class="text-2xl font-bold mb-2">第六步：生成用户之声 (VOC)</h2>
             <p class="text-gray-400 mb-6">访谈结束。AI已从对话中提炼出核心的用户观点和引述。</p>
@@ -270,6 +298,7 @@
             </div>
         </div>
 
+        <!-- Step 7: Data Analysis & Report -->
         <div id="step-7" class="step-card">
             <h2 class="text-2xl font-bold mb-2">第七步：数据分析与研究报告</h2>
             <p class="text-gray-400 mb-6">基于本次研究的全过程，AI已为你生成一份详细的研究报告。</p>
@@ -285,6 +314,7 @@
     </div>
 
     <script>
+        // --- Global State Management ---
         const appState = {
             currentStep: 1, researchNeed: '', refinedNeed: '',
             recruitmentCriteria: { city: '', age: '', gender: '', other: '' },
@@ -294,6 +324,7 @@
         const loaderOverlay = document.getElementById('loader-overlay');
         const loaderText = document.getElementById('loader-text');
 
+        // --- UI & Navigation ---
         function showStep(stepNumber) {
             document.querySelectorAll('.step-card').forEach(card => card.classList.remove('active'));
             document.getElementById(`step-${stepNumber}`).classList.add('active');
@@ -354,8 +385,11 @@
             showStep(1);
         }
 
-        async function callAIModel(prompt, expectJson = false) {
-            showLoader(true, expectJson ? '正在解析结构化数据...' : '正在生成内容...');
+        // --- API Call ---
+        async function callAIModel(prompt, expectJson = false, useGlobalLoader = true, loaderMsg = 'AI 正在思考...') {
+            if (useGlobalLoader) {
+                showLoader(true, loaderMsg);
+            }
             const apiKey = "sk-xifmrwnarxegowpdpwjmbpiodhjawjtacbkgtkoygpgszhec";
             const url = "https://api.siliconflow.cn/v1/chat/completions";
             const payload = {
@@ -377,33 +411,42 @@
                 const result = await response.json();
                 if (result.choices?.[0]?.message?.content) {
                     const text = result.choices[0].message.content;
-                    return expectJson ? JSON.parse(text) : text;
+                    if (expectJson) {
+                        try {
+                            return JSON.parse(text);
+                        } catch (e) {
+                            console.error("Failed to parse JSON:", text);
+                            throw new Error("AI返回了无效的JSON格式。");
+                        }
+                    }
+                    return text;
                 } else {
-                    throw new Error("Invalid API response format.");
+                    throw new Error("API返回了无效的数据格式。");
                 }
             } catch (error) {
                 console.error("Error calling AI Model:", error);
                 showModal(`调用AI时发生错误: ${error.message}`);
                 return null;
             } finally {
-                showLoader(false);
+                if (useGlobalLoader) {
+                    showLoader(false);
+                }
             }
         }
 
+        // --- Step 1 -> 2 ---
         async function handleStep1Next() {
             appState.researchNeed = document.getElementById('research-input').value;
             if (!appState.researchNeed.trim()) return showModal('请输入你的研究需求。');
             
-            showLoader(true, '正在分析您的研究需求...');
             const refinePrompt = `你是一名资深用户研究员。请将以下口语化的研究需求，提炼并改写成清晰、专业的研究目标。只输出改写后的目标，不要任何额外解释。原始需求: "${appState.researchNeed}"`;
-            const refinedNeedText = await callAIModel(refinePrompt);
+            const refinedNeedText = await callAIModel(refinePrompt, false, true, '正在分析您的研究需求...');
             if (!refinedNeedText) return;
             appState.refinedNeed = refinedNeedText;
             document.getElementById('refined-need').value = refinedNeedText;
 
-            showLoader(true, '正在建议用户样本条件...');
             const criteriaPrompt = `你是一名用户研究项目经理。根据以下研究目标，提取用于招募用户的核心样本条件。研究目标: "${refinedNeedText}"\n请严格按JSON格式输出，包含四个键: "city", "age", "gender", "other"。`;
-            const criteria = await callAIModel(criteriaPrompt, true);
+            const criteria = await callAIModel(criteriaPrompt, true, true, '正在建议用户样本条件...');
             if (!criteria) return showModal("AI未能生成有效的样本条件，请重试。");
             
             document.getElementById('criteria-city').value = criteria.city || '';
@@ -414,6 +457,7 @@
             showStep(2);
         }
 
+        // --- Step 2 -> 3 ---
         async function handleStep2Next() {
             appState.refinedNeed = document.getElementById('refined-need').value;
             Object.assign(appState.recruitmentCriteria, {
@@ -424,9 +468,8 @@
             });
             if (!appState.refinedNeed.trim() || !appState.recruitmentCriteria.other.trim()) return showModal('研究目标和关键特征不能为空。');
             
-            showLoader(true, '正在生成专业访谈大纲...');
-            const prompt = `你是一位顶尖的市场研究专家...设计一份专业的焦点小组座谈会访谈大纲...`;
-            const outlineText = await callAIModel(prompt);
+            const prompt = `你是一位顶尖的市场研究专家。根据以下研究目标和用户样本条件，设计一份专业的焦点小组座谈会访谈大纲。\n研究目标: "${appState.refinedNeed}"\n样本条件: 城市:${appState.recruitmentCriteria.city}, 年龄:${appState.recruitmentCriteria.age}, 性别:${appState.recruitmentCriteria.gender}, 其他:${appState.recruitmentCriteria.other}\n大纲应包含开场热身、背景探查、核心探究、总结收尾等部分。请直接输出这份大纲，使用 Markdown 格式。`;
+            const outlineText = await callAIModel(prompt, false, true, '正在生成专业访谈大纲...');
             if (outlineText) {
                 appState.interviewOutline = outlineText;
                 document.getElementById('interview-outline').value = outlineText;
@@ -434,14 +477,14 @@
             }
         }
 
+        // --- Step 3 -> 4 ---
         async function handleStep3Next() {
             appState.interviewOutline = document.getElementById('interview-outline').value;
             if (!appState.interviewOutline.trim()) return showModal('访谈大纲不能为空。');
 
-            showLoader(true, '正在全网寻找虚拟用户...');
             const criteriaString = `城市: ${appState.recruitmentCriteria.city}, 年龄: ${appState.recruitmentCriteria.age}, 性别: ${appState.recruitmentCriteria.gender}, 其他特征: ${appState.recruitmentCriteria.other}`;
-            const prompt = `根据以下用户样本条件，生成6位符合条件的虚拟用户画像...`;
-            const participants = await callAIModel(prompt, true);
+            const prompt = `根据以下用户样本条件，生成6位符合条件的虚拟用户画像。\n样本条件: ${criteriaString}\n请严格按JSON格式输出一个包含6个用户对象的数组。每个对象必须包含: name, age, gender, city, profession, bio。确保画像多样且符合条件。`;
+            const participants = await callAIModel(prompt, true, true, '正在全网寻找虚拟用户...');
             if (participants && Array.isArray(participants)) {
                 appState.participants = participants;
                 renderParticipants(appState.participants);
@@ -466,11 +509,13 @@
             });
         }
 
+        // --- Step 4 -> 5 ---
         function handleStep4Next() {
             showStep(5);
             runFocusGroup();
         }
 
+        // --- Focus Group Simulation Core Logic ---
         function showTypingIndicator(show) {
             let indicator = document.getElementById('typing-indicator');
             if (show) {
@@ -507,46 +552,69 @@
             return message;
         }
 
+        function parseOutlineQuestions(outlineText) {
+            const lines = outlineText.split('\n');
+            let questions = [];
+            let inCoreSection = false;
+
+            for (const line of lines) {
+                if (line.toLowerCase().includes('核心') && (line.toLowerCase().includes('探究') || line.toLowerCase().includes('问题'))) {
+                    inCoreSection = true;
+                    continue;
+                }
+                if (line.toLowerCase().includes('总结') || line.toLowerCase().includes('收尾')) {
+                    inCoreSection = false;
+                    break; 
+                }
+                if (inCoreSection && /^\s*[\d*-]\.?\s/.test(line)) {
+                    questions.push(line.replace(/^\s*[\d*-]\.?\s*/, '').trim());
+                }
+            }
+
+            if (questions.length === 0) {
+                for (const line of lines) {
+                    if (/^\s*[\d*-]\.?\s/.test(line) && line.length > 10 && !line.toLowerCase().includes('分钟')) {
+                        questions.push(line.replace(/^\s*[\d*-]\.?\s*/, '').trim());
+                    }
+                }
+            }
+            return questions.filter(q => q.length > 5);
+        }
+
         async function runFocusGroup() {
             document.getElementById('chat-container').innerHTML = '';
             appState.chatHistory = [];
             appState.isInterviewRunning = true;
             let lastMessage = { name: '系统', text: '访谈开始' };
-            const think = (duration = 2000) => new Promise(resolve => setTimeout(resolve, duration));
+            const think = (duration = 1500) => new Promise(resolve => setTimeout(resolve, duration + Math.random() * 1000));
             
             const nextBtn = document.getElementById('step-5-next-btn');
             const skipBtn = document.getElementById('skip-to-results-btn');
 
             try {
-                showLoader(true, '正在准备访谈环境...');
-                await think(1000);
-                showLoader(false);
-
+                // --- Phase 1: Warm-up ---
                 showTypingIndicator(true);
-                await think(1500);
                 let prompt = `你是一位专业的用户研究主持人。请说一段非常简短的开场白，欢迎大家。最多不超过30个字。`;
-                let response = await callAIModel(prompt);
+                let response = await callAIModel(prompt, false, false);
                 showTypingIndicator(false);
                 if (!response || !appState.isInterviewRunning) return;
                 lastMessage = addChatMessage('主持人', response, 'moderator');
-                await think();
-
-                showTypingIndicator(true);
-                await think(1500);
-                showTypingIndicator(false);
-                lastMessage = addChatMessage('主持人', '我们开始前，大家能用一句话介绍下自己吗？', 'moderator');
                 
+                await think(500);
+                if (!appState.isInterviewRunning) return;
+                lastMessage = addChatMessage('主持人', '我们开始前，大家能用一句话介绍下自己吗？', 'moderator');
+
                 for (const participant of appState.participants) {
                     if (!appState.isInterviewRunning) return;
                     showTypingIndicator(true);
-                    await think(1000 + Math.random() * 1500);
-                    prompt = `你正在参与一场座谈会，你的身份是: ${JSON.stringify(participant)}...`;
-                    response = await callAIModel(prompt);
+                    prompt = `你正在参与一场座谈会，你的身份是: ${JSON.stringify(participant)}。主持人请你做个简短的自我介绍。你的回答必须非常简短，像一条聊天消息，最多不超过30个字。`;
+                    response = await callAIModel(prompt, false, false);
                     showTypingIndicator(false);
                     if (response && appState.isInterviewRunning) lastMessage = addChatMessage(participant.name, response, 'user');
                     await think(500);
                 }
 
+                // --- Phase 2: Main Discussion ---
                 const coreQuestions = parseOutlineQuestions(appState.interviewOutline);
                 if (coreQuestions.length === 0) {
                     addChatMessage('系统', '未能从大纲中解析出核心问题，访谈无法继续。', 'moderator');
@@ -556,40 +624,62 @@
                 for (const question of coreQuestions) {
                     if (!appState.isInterviewRunning) return;
                     showTypingIndicator(true);
-                    await think(2000);
                     prompt = `你是一位专业的主持人。现在请根据大纲，正式提出以下这个问题，语言要自然。问题：“${question}”`;
-                    response = await callAIModel(prompt);
+                    response = await callAIModel(prompt, false, false);
                     showTypingIndicator(false);
                     if (!response || !appState.isInterviewRunning) return;
                     lastMessage = addChatMessage('主持人', response, 'moderator');
-                    await think();
-
+                    await think(1000);
+                    
                     for (let i = 0; i < 5; i++) { 
                         if (!appState.isInterviewRunning) return;
-                        showTypingIndicator(true);
-                        await think(1000 + Math.random() * 2000);
                         const potentialSpeakers = appState.participants.filter(p => p.name !== lastMessage.name);
                         const nextSpeaker = potentialSpeakers[Math.floor(Math.random() * potentialSpeakers.length)];
-                        prompt = `你正在参与一场座谈会，你的身份是: ${JSON.stringify(nextSpeaker)}...`;
-                        response = await callAIModel(prompt);
+                        
+                        showTypingIndicator(true);
+                        prompt = `你正在深度扮演一个虚拟用户，参与一场关于“${appState.refinedNeed}”的座谈会。
+你的角色信息: ${JSON.stringify(nextSpeaker)}
+当前讨论的核心问题: "${question}"
+到目前为止的聊天记录:
+${formatChatHistory()}
+---
+你的任务:
+现在轮到你发言。上一位发言者是 **${lastMessage.name}**，他/她说了：“**${lastMessage.text}**”。
+请你完全代入你的角色，针对他的发言和当前的核心问题，做出一个**高度仿真、像真人聊天一样**的回应。
+
+**严格遵守以下规则:**
+1.  **极度简短:** 你的发言**绝对不能超过30个字**。就像一条真实的聊天消息。
+2.  **互动性:** 你的回应必须是针对 **${lastMessage.name}** 的话。可以表示同意、反对、补充，甚至提出质疑。
+3.  **角色扮演:** 你的语气、观点必须完全符合你的角色设定(${nextSpeaker.profession}, ${nextSpeaker.bio})。
+4.  **多样性:** 不要总是同意。偶尔可以这样回应:
+    - **直接反驳:** "我不这么认为，其实..."
+    - **提出疑问:** "但如果那样的话，会不会...?"
+    - **@另一位用户:** "这个观点让我想起刚才@${appState.participants.find(p => p.name !== nextSpeaker.name)?.name || '张三'} 说的..."
+    - **情绪化表达:** "对对对！我也是这么想的！" 或 "有点没太明白你的意思。"
+
+请直接输出你扮演角色说的话，不要包含任何其他解释。`;
+                        response = await callAIModel(prompt, false, false);
                         showTypingIndicator(false);
-                        if (response && appState.isInterviewRunning) lastMessage = addChatMessage(nextSpeaker.name, response, 'user');
-                        await think(500);
+                        if (response && appState.isInterviewRunning) {
+                            lastMessage = addChatMessage(nextSpeaker.name, response, 'user');
+                        }
+                        await think(1000);
                     }
+
                     if (!appState.isInterviewRunning) return;
                     showTypingIndicator(true);
-                    await think(2000);
-                    prompt = `你是一位专业的主持人。关于“${question}”的讨论暂时告一段落...`;
-                    response = await callAIModel(prompt);
+                    prompt = `你是一位专业的主持人。关于“${question}”的讨论暂时告一段落。刚才大家讨论得很好，甚至有一些不同观点。请你用一句话，自然地对刚才的讨论（包括共识和分歧）做个简短的小结，并准备引出下一个话题。不要说“下一个话题是...”，可以说“好的，感谢大家的分享，那我们接着聊聊...”`;
+                    response = await callAIModel(prompt, false, false);
                     showTypingIndicator(false);
                     if(response && appState.isInterviewRunning) lastMessage = addChatMessage('主持人', response, 'moderator');
-                    await think();
+                    await think(1000);
                 }
 
+                // --- Phase 3: Closing ---
+                if (!appState.isInterviewRunning) return;
                 showTypingIndicator(true);
-                await think(1500);
-                prompt = `你是一位专业的主持人。所有核心问题都讨论完了...`;
-                response = await callAIModel(prompt);
+                prompt = `你是一位专业的主持人。所有核心问题都讨论完了，请发表一段简短的结束语，感谢大家的参与。一句话就行。`;
+                response = await callAIModel(prompt, false, false);
                 showTypingIndicator(false);
                 if (response) addChatMessage('主持人', response, 'moderator');
 
@@ -603,17 +693,6 @@
             }
         }
         
-        function parseOutlineQuestions(outlineText) {
-            const lines = outlineText.split('\n');
-            const questions = [];
-            lines.forEach(line => {
-                if (/^\s*[\d*-]\.?\s/.test(line) && line.length > 10 && !line.toLowerCase().includes('分钟')) {
-                    questions.push(line.replace(/^\s*[\d*-]\.?\s*/, '').trim());
-                }
-            });
-            return questions;
-        }
-
         function skipToResults() {
             if (appState.isInterviewRunning) {
                 appState.isInterviewRunning = false; 
@@ -628,10 +707,10 @@
             return appState.chatHistory.map(msg => `${msg.name}: ${msg.text}`).join('\n');
         }
 
+        // --- Step 5 -> 6 ---
         async function handleStep5Next() {
-            showLoader(true, '正在从对话中提炼用户之声...');
-            const prompt = `你是一名用户研究员，请分析以下座谈会访谈记录...`;
-            const vocResult = await callAIModel(prompt);
+            const prompt = `你是一名用户研究员，请分析以下座谈会访谈记录。\n研究目标: "${appState.refinedNeed}"\n访谈记录:\n${formatChatHistory()}\n请为我生成一份“用户之声”(VOC)报告，包含每个用户的主要观点和关键引述(Quote)。请使用Markdown格式化输出。`;
+            const vocResult = await callAIModel(prompt, false, true, '正在从对话中提炼用户之声...');
             if (vocResult) {
                 appState.voc = vocResult;
                 document.getElementById('voc-content').innerHTML = marked.parse(vocResult);
@@ -639,10 +718,16 @@
             }
         }
 
+        // --- Step 6 -> 7 ---
         async function handleStep6Next() {
-            showLoader(true, '正在撰写最终分析报告...');
-            const prompt = `你是一位顶尖的策略分析师和用户研究专家...`;
-            const reportResult = await callAIModel(prompt);
+            const criteriaString = `城市: ${appState.recruitmentCriteria.city}, 年龄: ${appState.recruitmentCriteria.age}, 性别: ${appState.recruitmentCriteria.gender}, 其他: ${appState.recruitmentCriteria.other}`;
+            const prompt = `你是一位顶尖的策略分析师和用户研究专家。请根据以下所有信息，撰写一份完整、深刻、专业的最终研究报告。\n---
+            **1. 研究目标与样本:**\n研究目标: ${appState.refinedNeed}\n样本条件: ${criteriaString}
+            **2. 访谈大纲:**\n${appState.interviewOutline}
+            **3. 参与用户画像:**\n${JSON.stringify(appState.participants, null, 2)}
+            **4. 用户之声 (VOC) 总结:**\n${appState.voc}
+            ---\n你的报告必须包含研究背景、方法样本、用户画像、核心洞察、结论建议和附录等部分。请使用Markdown格式。`;
+            const reportResult = await callAIModel(prompt, false, true, '正在撰写最终分析报告...');
             if (reportResult) {
                 appState.report = reportResult;
                 document.getElementById('report-content').innerHTML = marked.parse(reportResult);
@@ -650,6 +735,7 @@
             }
         }
         
+        // --- PDF Download Function ---
         async function downloadReportAsPDF() {
             const reportContentElement = document.getElementById('report-content');
             if (!reportContentElement || !reportContentElement.innerHTML.trim()) {
@@ -686,6 +772,7 @@
             }
         }
 
+        // --- Initialization ---
         document.addEventListener('DOMContentLoaded', () => showStep(1));
     </script>
 </body>
