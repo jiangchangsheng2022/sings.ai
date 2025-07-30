@@ -85,6 +85,22 @@
             border-radius: 9999px;
             background-image: linear-gradient(to right, #A78BFA, #3B82F6);
         }
+        /* 导航栏所需的核心 CSS 样式 */
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .gradient-button {
+            background-image: linear-gradient(to right, #4F46E5, #3B82F6);
+            transition: all 0.3s ease;
+        }
+
+        .gradient-button:hover {
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+        }
     </style>
 </head>
 <body class="glow-background">
@@ -99,7 +115,43 @@
         </defs>
     </svg>
 
-    <div class="container mx-auto px-6 py-16 md:py-24">
+    <!-- 导航栏 HTML 代码 -->
+    <nav class="fixed top-0 left-0 right-0 z-50 p-4">
+        <div class="container mx-auto glass-morphism rounded-xl p-2 px-4 flex justify-between items-center">
+            <!-- 左侧: 返回主页按钮和 Logo -->
+            <div class="flex items-center space-x-4">
+                <a href="https://sings.ai/#" class="flex items-center text-gray-300 hover:text-white transition-colors">
+                    <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    返回主页
+                </a>
+                <a href="https://sings.ai/#" class="text-xl font-bold text-white">sings.ai</a>
+            </div>
+
+            <!-- 中间: 导航链接 (桌面端显示) -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#" class="text-gray-300 hover:text-white transition-colors">产品</a>
+                <a href="#" class="text-gray-300 hover:text-white transition-colors">方案</a>
+                <a href="#" class="text-gray-300 hover:text-white transition-colors">资源</a>
+                <a href="#" class="text-gray-300 hover:text-white transition-colors">定价</a>
+            </div>
+
+            <!-- 右侧: 操作按钮 (桌面端显示) -->
+            <div class="hidden md:flex items-center space-x-4">
+                <a href="#" class="text-gray-300 hover:text-white transition-colors">登录</a>
+                <a href="#" class="gradient-button text-white font-semibold py-2 px-4 rounded-lg">免费开始</a>
+            </div>
+            
+            <!-- 移动端菜单按钮 -->
+            <div class="md:hidden">
+                <button class="text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 页面主要内容容器，调整了上边距以避免被导航栏遮挡 -->
+    <div class="container mx-auto px-6 pt-32 md:pt-40 pb-16 md:pb-24">
         
         <!-- 页面标题和介绍 -->
         <header class="text-center max-w-3xl mx-auto mb-16 md:mb-24 relative z-10">
@@ -116,9 +168,9 @@
             <div class="timeline-line absolute h-full"></div>
 
             <!-- 阶段一 -->
-            <div class="relative flex justify-between items-center mb-16 w-full">
+            <div class="relative flex justify-between items-start mb-16 w-full flex-wrap md:flex-nowrap">
                 <!-- 左侧卡片 -->
-                <div class="w-full md:w-5/12">
+                <div class="w-full md:w-5/12 order-1">
                     <div class="relative">
                         <div class="timeline-point hidden md:block" style="right: -29px; left: auto;">
                             <div class="timeline-point-inner"></div>
@@ -132,8 +184,8 @@
                         </div>
                     </div>
                 </div>
-                <!-- 右侧示例 (仅桌面显示) -->
-                <div class="w-5/12 px-4 hidden md:flex flex-col items-start">
+                <!-- 右侧示例 -->
+                <div class="w-full md:w-5/12 px-4 flex-col items-start order-2 md:order-2 mt-8 md:mt-0 flex">
                     <svg class="w-12 h-12 mb-4 gradient-icon-fill" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"/><path d="M13 7h-2v5.414l3.293 3.293 1.414-1.414L13 11.586z"/></svg>
                     <h4 class="font-bold text-lg text-white mb-2">场景示例</h4>
                     <p class="text-gray-400 text-sm">AI 自动转写访谈录音，几分钟内完成情绪分析和关键词提取，研究员可直接看到用户的兴奋点或沮丧点。</p>
@@ -141,15 +193,15 @@
             </div>
 
             <!-- 阶段二 -->
-            <div class="relative flex justify-between items-center mb-16 w-full">
-                <!-- 左侧示例 (仅桌面显示) -->
-                <div class="w-5/12 px-4 hidden md:flex flex-col items-end text-right">
+            <div class="relative flex justify-between items-start mb-16 w-full flex-wrap md:flex-nowrap">
+                <!-- 左侧示例 -->
+                <div class="w-full md:w-5/12 px-4 flex-col items-end text-right order-2 md:order-1 mt-8 md:mt-0 hidden md:flex">
                     <svg class="w-12 h-12 mb-4 gradient-icon-fill" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M18.944 11.112C18.507 7.67 15.56 5 12 5s-6.507 2.67-6.944 6.112H2v8h20v-8h-3.056zM12 7c2.343 0 4.332 1.633 4.815 3.888H7.185C7.668 8.633 9.657 7 12 7zm-8 8v-4h16v4H4z"/></svg>
                     <h4 class="font-bold text-lg text-white mb-2">场景示例</h4>
                     <p class="text-gray-400 text-sm">企业用户自助上传访谈、问卷等数据，平台自动分析并生成可视化报告，将研究能力普及化。</p>
                 </div>
                 <!-- 右侧卡片 -->
-                <div class="w-full md:w-5/12">
+                <div class="w-full md:w-5/12 order-1 md:order-2">
                     <div class="relative">
                         <div class="timeline-point hidden md:block" style="left: -29px;">
                             <div class="timeline-point-inner"></div>
@@ -163,12 +215,18 @@
                         </div>
                     </div>
                 </div>
+                 <!-- 移动端显示的示例 -->
+                <div class="w-full md:w-5/12 px-4 flex-col items-start order-3 md:hidden mt-8 flex">
+                     <svg class="w-12 h-12 mb-4 gradient-icon-fill" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M18.944 11.112C18.507 7.67 15.56 5 12 5s-6.507 2.67-6.944 6.112H2v8h20v-8h-3.056zM12 7c2.343 0 4.332 1.633 4.815 3.888H7.185C7.668 8.633 9.657 7 12 7zm-8 8v-4h16v4H4z"/></svg>
+                    <h4 class="font-bold text-lg text-white mb-2">场景示例</h4>
+                    <p class="text-gray-400 text-sm">企业用户自助上传访谈、问卷等数据，平台自动分析并生成可视化报告，将研究能力普及化。</p>
+                </div>
             </div>
 
             <!-- 阶段三 -->
-            <div class="relative flex justify-between items-center mb-16 w-full">
+            <div class="relative flex justify-between items-start mb-16 w-full flex-wrap md:flex-nowrap">
                 <!-- 左侧卡片 -->
-                <div class="w-full md:w-5/12">
+                <div class="w-full md:w-5/12 order-1">
                     <div class="relative">
                         <div class="timeline-point hidden md:block" style="right: -29px; left: auto;">
                             <div class="timeline-point-inner"></div>
@@ -182,8 +240,8 @@
                         </div>
                     </div>
                 </div>
-                <!-- 右侧示例 (仅桌面显示) -->
-                <div class="w-5/12 px-4 hidden md:flex flex-col items-start">
+                <!-- 右侧示例 -->
+                <div class="w-full md:w-5/12 px-4 flex-col items-start order-2 md:order-2 mt-8 md:mt-0 flex">
                     <svg class="w-12 h-12 mb-4 gradient-icon-fill" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/><path d="M12.5 12.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5zm4.5-1.5c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5-1.5.67-1.5 1.5.67 1.5 1.5 1.5zm-9 0c.83 0 1.5-.67 1.5-1.5S8.83 8 8 8s-1.5.67-1.5 1.5.67 1.5 1.5 1.5zm4.5 7.5c-1.67 0-5 1.17-5 2.5v1.5h10v-1.5c0-1.33-3.33-2.5-5-2.5z"/></svg>
                     <h4 class="font-bold text-lg text-white mb-2">场景示例</h4>
                     <p class="text-gray-400 text-sm">实时捕捉到用户在 App 内的“犹豫”信号，预测流失风险，并自动触发引导提示或优惠券进行挽留。</p>
