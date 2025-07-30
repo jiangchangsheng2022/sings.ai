@@ -7,6 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.2.12/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -248,7 +250,8 @@
             <div id="chat-container" class="w-full h-96 bg-gray-100 rounded-lg p-4 overflow-y-auto flex flex-col space-y-3">
                 <!-- Chat messages will be inserted here -->
             </div>
-             <div class="mt-6 text-right">
+             <div class="mt-6 flex justify-end space-x-4">
+                <button id="skip-to-results-btn" onclick="skipToResults()" class="btn-secondary">后台处理，抢先看结果</button>
                 <button id="step-5-next-btn" onclick="handleStep5Next()" class="btn-primary" disabled>访谈进行中...</button>
             </div>
         </div>
@@ -275,7 +278,10 @@
             </div>
              <div class="mt-8 flex justify-between">
                 <button onclick="showStep(6)" class="btn-secondary">查看VOC</button>
-                <button onclick="restart()" class="btn-primary">完成，重新开始</button>
+                <div class="flex items-center space-x-2">
+                    <button onclick="downloadReportAsPDF()" class="btn-secondary">下载报告 (PDF)</button>
+                    <button onclick="restart()" class="btn-primary">完成，重新开始</button>
+                </div>
             </div>
         </div>
 
@@ -292,7 +298,8 @@
             participants: [],
             chatHistory: [],
             voc: '',
-            report: ''
+            report: '',
+            isInterviewRunning: false
         };
 
         const loader = document.getElementById('loader');
@@ -320,16 +327,21 @@
         }
 
         function restart() {
+            appState.isInterviewRunning = false; // Stop any ongoing interview
             Object.assign(appState, {
                 currentStep: 1, researchNeed: '', refinedNeed: '',
                 recruitmentCriteria: { city: '', age: '', gender: '', other: '' },
-                interviewOutline: '', participants: [], chatHistory: [], voc: '', report: ''
+                interviewOutline: '', participants: [], chatHistory: [], voc: '', report: '',
+                isInterviewRunning: false
             });
             ['research-input', 'refined-need', 'criteria-city', 'criteria-age', 'criteria-gender', 'criteria-other', 'interview-outline'].forEach(id => document.getElementById(id).value = '');
             ['participants-grid', 'chat-container', 'voc-content', 'report-content'].forEach(id => document.getElementById(id).innerHTML = '');
+            
             const nextBtn = document.getElementById('step-5-next-btn');
             nextBtn.disabled = true;
             nextBtn.textContent = '访谈进行中...';
+            document.getElementById('skip-to-results-btn').style.display = 'inline-block';
+
             showStep(1);
         }
 
@@ -342,7 +354,7 @@
                 const payload = {
                     model: "alibaba/Qwen2-7B-Instruct",
                     messages: [{ role: "user", content: prompt }],
-                    temperature: 0.7, // Slightly higher for more natural conversation
+                    temperature: 0.7, 
                 };
                 if (expectJson) payload.response_format = { type: "json_object" };
 
@@ -445,7 +457,8 @@
         // --- 访谈模拟核心逻辑 ---
         function addChatMessage(name, text, type) {
             const chatContainer = document.getElementById('chat-container');
-            appState.chatHistory.push({ name, text });
+            const message = { name, text };
+            appState.chatHistory.push(message);
 
             const isModerator = type === 'moderator';
             const bubble = document.createElement('div');
@@ -461,62 +474,124 @@
             bubble.append(nameEl, textEl);
             chatContainer.appendChild(bubble);
             chatContainer.scrollTop = chatContainer.scrollHeight;
+            return message;
+        }
+
+        function parseOutlineQuestions(outlineText) {
+            const lines = outlineText.split('\n');
+            const questions = [];
+            let inCoreSection = false;
+            for (const line of lines) {
+                if (line.includes('核心问题深入探究')) {
+                    inCoreSection = true;
+                    continue;
+                }
+                if (line.includes('总结与收尾')) {
+                    inCoreSection = false;
+                    break;
+                }
+                if (inCoreSection && /^\s*[\d-*]\.?\s/.test(line)) {
+                    questions.push(line.replace(/^\s*[\d-*]\.?\s*/, '').trim());
+                }
+            }
+            if (questions.length === 0) {
+                 for (const line of lines) {
+                     if (/^\s*[\d-*]\.?\s/.test(line) && !line.toLowerCase().includes('分钟')) {
+                        questions.push(line.replace(/^\s*[\d-*]\.?\s*/, '').trim());
+                    }
+                 }
+            }
+            return questions.filter(q => q.length > 5); // Filter out potential noise
         }
 
         async function runFocusGroup() {
             document.getElementById('chat-container').innerHTML = '';
             appState.chatHistory = [];
-            let lastSpeaker = null;
-
-            const think = () => new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 1000));
-
-            // 1. Moderator opens
-            let prompt = `你是一位专业的用户研究主持人。你将主持一场关于“${appState.refinedNeed}”的座谈会。请根据访谈大纲，先说一段简短的开场白，欢迎大家。`;
-            let response = await callAIModel(prompt);
-            if (!response) return;
-            addChatMessage('主持人', response, 'moderator');
-            lastSpeaker = { name: '主持人' };
-            await think();
-
-            // 2. User introductions
-            addChatMessage('主持人', '在我们正式开始前，大家能简单介绍一下自己吗？', 'moderator');
-            for (const participant of appState.participants) {
-                prompt = `你正在参与一场座谈会，你的身份是: ${JSON.stringify(participant)}。主持人请你做个简短的自我介绍。`;
-                response = await callAIModel(prompt);
-                if (response) addChatMessage(participant.name, response, 'user');
-                lastSpeaker = participant;
-                await think();
-            }
-
-            // 3. Main discussion loop (e.g., 12 turns)
-            for (let i = 0; i < 12; i++) {
-                const shouldModeratorSpeak = (i % 4 === 0 && i > 0) || lastSpeaker.name === '主持人';
-                
-                if (shouldModeratorSpeak) {
-                    prompt = `你是一位专业的主持人。当前聊天记录如下:\n${formatChatHistory()}\n请根据访谈大纲和当前对话内容，提出一个简短的、引导性的问题，或者对刚才的讨论做个小结。`;
-                    response = await callAIModel(prompt);
-                    if (response) addChatMessage('主持人', response, 'moderator');
-                    lastSpeaker = { name: '主持人' };
-                } else {
-                    const potentialSpeakers = appState.participants.filter(p => p.name !== lastSpeaker.name);
-                    const nextSpeaker = potentialSpeakers[Math.floor(Math.random() * potentialSpeakers.length)];
-                    
-                    prompt = `你正在参与一场座谈会，你的身份是: ${JSON.stringify(nextSpeaker)}。当前聊天记录如下:\n${formatChatHistory()}\n请根据最后几条消息，发表一个简短、自然的看法或回应。`;
-                    response = await callAIModel(prompt);
-                    if (response) addChatMessage(nextSpeaker.name, response, 'user');
-                    lastSpeaker = nextSpeaker;
-                }
-                await think();
-            }
-
-            // 4. Moderator closes
-            prompt = `你是一位专业的主持人。讨论已接近尾声，请发表一段简短的结束语，感谢大家的参与。`;
-            response = await callAIModel(prompt);
-            if (response) addChatMessage('主持人', response, 'moderator');
-
+            appState.isInterviewRunning = true;
+            let lastMessage = { name: '系统', text: '访谈开始' };
+            const think = () => new Promise(resolve => setTimeout(resolve, 1500 + Math.random() * 1000));
+            
             const nextBtn = document.getElementById('step-5-next-btn');
-            nextBtn.disabled = false;
-            nextBtn.textContent = '访谈结束，查看用户之声';
+            const skipBtn = document.getElementById('skip-to-results-btn');
+
+            try {
+                // --- Phase 1: Warm-up ---
+                let prompt = `你是一位专业的用户研究主持人。请说一段非常简短的开场白，欢迎大家。最多不超过30个字。`;
+                if (!appState.isInterviewRunning) return;
+                let response = await callAIModel(prompt);
+                if (!response || !appState.isInterviewRunning) return;
+                lastMessage = addChatMessage('主持人', response, 'moderator');
+                await think();
+
+                if (!appState.isInterviewRunning) return;
+                lastMessage = addChatMessage('主持人', '我们开始前，大家能用一句话介绍下自己吗？', 'moderator');
+                for (const participant of appState.participants) {
+                    if (!appState.isInterviewRunning) return;
+                    prompt = `你正在参与一场座谈会，你的身份是: ${JSON.stringify(participant)}。主持人请你做个简短的自我介绍。你的回答必须非常简短，像一条聊天消息，最多不超过30个字。`;
+                    response = await callAIModel(prompt);
+                    if (response && appState.isInterviewRunning) lastMessage = addChatMessage(participant.name, response, 'user');
+                    await think();
+                }
+
+                // --- Phase 2: Main Discussion (Question by Question) ---
+                const coreQuestions = parseOutlineQuestions(appState.interviewOutline);
+                if (coreQuestions.length === 0) {
+                    addChatMessage('系统', '未能从大纲中解析出核心问题，访谈无法继续。', 'moderator');
+                    return;
+                }
+                
+                for (const question of coreQuestions) {
+                    if (!appState.isInterviewRunning) return;
+                    prompt = `你是一位专业的主持人。现在请根据大纲，正式提出以下这个问题，语言要自然。问题：“${question}”`;
+                    response = await callAIModel(prompt);
+                    if (!response || !appState.isInterviewRunning) return;
+                    lastMessage = addChatMessage('主持人', response, 'moderator');
+                    await think();
+
+                    for (let i = 0; i < 5; i++) { // 5 turns of discussion per question
+                        if (!appState.isInterviewRunning) return;
+                        const potentialSpeakers = appState.participants.filter(p => p.name !== lastMessage.name);
+                        const nextSpeaker = potentialSpeakers[Math.floor(Math.random() * potentialSpeakers.length)];
+                        
+                        prompt = `你正在参与一场座谈会，你的身份是: ${JSON.stringify(nextSpeaker)}。当前正在讨论的核心问题是：“${question}”\n完整的聊天记录如下:\n${formatChatHistory()}\n**重要指示：**\n上一位发言者是 **${lastMessage.name}**，他/她说了：“**${lastMessage.text}**”。请你直接针对他/她的这句话，并围绕当前核心问题，发表一个非常简短、自然的看法或回应。像在真实聊天中接话一样，不要超过30个字。`;
+                        
+                        response = await callAIModel(prompt);
+                        if (response && appState.isInterviewRunning) {
+                            lastMessage = addChatMessage(nextSpeaker.name, response, 'user');
+                        }
+                        await think();
+                    }
+                    if (!appState.isInterviewRunning) return;
+                    prompt = `你是一位专业的主持人。关于“${question}”的讨论暂时告一段落。请根据刚才的讨论，用一句话做个简短的小结，并准备引出下一个话题。`;
+                    response = await callAIModel(prompt);
+                    if(response && appState.isInterviewRunning) lastMessage = addChatMessage('主持人', response, 'moderator');
+                    await think();
+                }
+
+                // --- Phase 3: Closing ---
+                if (!appState.isInterviewRunning) return;
+                prompt = `你是一位专业的主持人。所有核心问题都讨论完了，请发表一段简短的结束语，感谢大家的参与。一句话就行。`;
+                response = await callAIModel(prompt);
+                if (response) addChatMessage('主持人', response, 'moderator');
+
+            } finally {
+                appState.isInterviewRunning = false;
+                nextBtn.disabled = false;
+                nextBtn.textContent = '访谈已完成，查看用户之声';
+                skipBtn.style.display = 'none'; // Hide skip button when done
+            }
+        }
+
+        function skipToResults() {
+            if (appState.isInterviewRunning) {
+                appState.isInterviewRunning = false; // Set flag to stop the async loop
+                showLoader(true); // Show loader while processing
+                // Add a small delay to allow the loop to terminate before generating VOC
+                setTimeout(() => {
+                    handleStep5Next();
+                    showLoader(false);
+                }, 500);
+            }
         }
 
         function formatChatHistory() {
@@ -550,6 +625,68 @@
                 showStep(7);
             }
         }
+        
+        // --- PDF Download Function ---
+        async function downloadReportAsPDF() {
+            const reportContentElement = document.getElementById('report-content');
+            if (!reportContentElement || !reportContentElement.innerHTML.trim()) {
+                alert('报告内容为空，无法下载。');
+                return;
+            }
+
+            showLoader(true);
+
+            try {
+                const { jsPDF } = window.jspdf;
+                // Use html2canvas to capture the rendered HTML, including Chinese characters
+                const canvas = await html2canvas(reportContentElement, {
+                    scale: 2, // Higher scale for better resolution
+                    useCORS: true,
+                    logging: false,
+                    backgroundColor: '#ffffff'
+                });
+
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'pt',
+                    format: 'a4'
+                });
+
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = pdf.internal.pageSize.getHeight();
+                
+                const canvasWidth = canvas.width;
+                const canvasHeight = canvas.height;
+
+                const ratio = canvasWidth / pdfWidth;
+                const imgHeight = canvasHeight / ratio;
+
+                let heightLeft = imgHeight;
+                let position = 0;
+
+                // Add the first page
+                pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight, undefined, 'FAST');
+                heightLeft -= pdfHeight;
+
+                // Add new pages if content overflows
+                while (heightLeft > 0) {
+                    position = heightLeft - imgHeight;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight, undefined, 'FAST');
+                    heightLeft -= pdfHeight;
+                }
+
+                pdf.save('AI-研究报告.pdf');
+
+            } catch (error) {
+                console.error("生成PDF时出错:", error);
+                alert("抱歉，生成PDF报告时出现问题。请检查控制台获取更多信息。");
+            } finally {
+                showLoader(false);
+            }
+        }
+
 
         // --- 初始化 ---
         document.addEventListener('DOMContentLoaded', () => showStep(1));
