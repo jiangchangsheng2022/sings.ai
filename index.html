@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>蒋昌盛 | 市场研究与用户洞察专家</title>
+    
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide-icons@latest/dist/lucide.js"></script>
+
+    <style>
+        /* Custom styles for the page */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa; /* Light gray background */
+            color: #212529; /* Dark text color */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        
+        /* --- Static Hero Background --- */
+        .hero-bg {
+            background-color: #ffffff; /* White hero background */
+            background-image: radial-gradient(circle at 1px 1px, rgba(0,0,0,0.05) 1px, transparent 0);
+            background-size: 2rem 2rem;
+        }
+
+        /* --- Card Styling for Light Theme --- */
+        .light-card {
+            background: #ffffff;
+            border: 1px solid #e9ecef; /* Light border */
+            border-radius: 1rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .light-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.07);
+        }
+        
+        .project-entry-card {
+            display: block;
+            position: relative;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            border: 1px solid #e9ecef;
+            background-color: #ffffff;
+            transition: all 0.3s ease;
+        }
+        .project-entry-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.07);
+            border-color: #4f46e5;
+        }
+
+
+        /* --- Section Title --- */
+        .section-title {
+            background: -webkit-linear-gradient(45deg, #4f46e5, #c026d3); /* Darker gradient for light bg */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* --- Timeline --- */
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #dee2e6; /* Light gray line */
+        }
+        .timeline-item-dot {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1rem;
+            height: 1rem;
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header & Hero Section -->
+    <header id="home" class="hero-bg min-h-screen flex items-center justify-center p-6 lg:p-12">
+        <div class="container mx-auto flex flex-col md:flex-row items-center gap-12">
+            
+            <!-- Left Column: Intro Text -->
+            <div class="md:w-3/5 text-center md:text-left">
+                <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-gray-900 mb-4">
+                    蒋昌盛
+                </h1>
+                <p class="text-xl md:text-2xl font-medium text-gray-700 mb-8">
+                    市场研究员・用户洞察专家・数据决策驱动者
+                </p>
+                <p class="max-w-xl mx-auto md:mx-0 text-gray-600 mb-10">
+                    拥有超过3年市场研究与咨询经验，擅长融合定性与定量研究方法，将复杂数据转化为富有洞察力的商业故事，驱动产品创新与业务增长。
+                </p>
+                <div class="flex items-center justify-center md:justify-start space-x-4">
+                    <a href="mailto:jiang.changsheng@foxmail.com" class="bg-indigo-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors duration-300 flex items-center space-x-2">
+                        <i data-lucide="mail" class="w-5 h-5"></i>
+                        <span>联系我</span>
+                    </a>
+                    <a href="#projects" class="bg-gray-100 text-gray-800 font-semibold px-6 py-3 rounded-lg hover:bg-gray-200 transition-colors duration-300 flex items-center space-x-2">
+                         <i data-lucide="folder-kanban" class="w-5 h-5"></i>
+                        <span>查看项目</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right Column: AI Project Entries -->
+            <div class="md:w-2/5 w-full mt-10 md:mt-0">
+                <div class="space-y-6">
+                    <!-- Project Card 1: AI Qualitative Interview -->
+                    <a href="#" class="project-entry-card">
+                        <div class="flex items-start gap-4">
+                            <div class="bg-indigo-100 p-3 rounded-lg">
+                                <i data-lucide="brain-circuit" class="w-8 h-8 text-indigo-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-800 mb-1">AI 模拟定性访谈</h3>
+                                <p class="text-gray-600 text-sm mb-3">通过AI模拟真实用户，进行深度访谈，高效挖掘用户需求与痛点。</p>
+                                <div class="font-semibold text-indigo-600 flex items-center">
+                                    进入体验 <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    <!-- Project Card 2: AI Quantitative Survey -->
+                    <a href="#" class="project-entry-card">
+                        <div class="flex items-start gap-4">
+                            <div class="bg-pink-100 p-3 rounded-lg">
+                                <i data-lucide="clipboard-list" class="w-8 h-8 text-pink-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-800 mb-1">AI 模拟定量调研</h3>
+                                <p class="text-gray-600 text-sm mb-3">利用AI生成和分析大规模问卷数据，快速验证市场假设与产品概念。</p>
+                                <div class="font-semibold text-pink-600 flex items-center">
+                                    进入体验 <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </header>
+
+    <main class="px-6 md:px-10 py-20 md:py-32">
+
+        <!-- About Me Section -->
+        <section id="about" class="max-w-4xl mx-auto mb-32">
+            <h2 class="text-4xl font-bold text-center mb-4 section-title">关于我</h2>
+            <p class="text-lg text-center text-gray-600 mb-16">我坚信，AI正在重塑用户洞察的未来</p>
+            <div class="grid md:grid-cols-3 gap-8 text-center">
+                <div class="light-card p-8">
+                    <div class="flex justify-center mb-4">
+                        <div class="bg-purple-100 p-3 rounded-full">
+                            <i data-lucide="rocket" class="w-8 h-8 text-purple-600"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">AI研究先驱</h3>
+                    <p class="text-gray-600">
+                        我不仅精通传统研究，更是国内最早将大语言模型应用于市场调研的探索者之一，致力于用AI的力量革新洞察方式。
+                    </p>
+                </div>
+                <div class="light-card p-8">
+                    <div class="flex justify-center mb-4">
+                        <div class="bg-sky-100 p-3 rounded-full">
+                            <i data-lucide="layers" class="w-8 h-8 text-sky-600"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">洞察 x 开发 全栈能力</h3>
+                    <p class="text-gray-600">
+                        我的能力不止于撰写报告。我能将敏锐的商业洞察转化为实际的产品，独立开发AI研究工具就是最好的证明。
+                    </p>
+                </div>
+                <div class="light-card p-8">
+                    <div class="flex justify-center mb-4">
+                        <div class="bg-emerald-100 p-3 rounded-full">
+                            <i data-lucide="trending-up" class="w-8 h-8 text-emerald-600"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">价值驱动的创新</h3>
+                    <p class="text-gray-600">
+                        无论是运用传统方法还是开创AI应用，我的核心目标始终是为业务创造真实价值，驱动增长、提升效率。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="max-w-4xl mx-auto mb-32">
+            <h2 class="text-4xl font-bold text-center mb-4 section-title">专业技能</h2>
+            <p class="text-lg text-center text-gray-600 mb-16">我用来创造价值的工具箱</p>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div class="light-card p-6 flex flex-col items-center text-center">
+                    <i data-lucide="users" class="w-10 h-10 mb-4 text-indigo-600"></i>
+                    <h3 class="font-bold text-lg text-gray-800">定性研究</h3>
+                    <p class="text-sm text-gray-600">深访, 焦点小组, 家访</p>
+                </div>
+                <div class="light-card p-6 flex flex-col items-center text-center">
+                    <i data-lucide="file-spreadsheet" class="w-10 h-10 mb-4 text-pink-600"></i>
+                    <h3 class="font-bold text-lg text-gray-800">定量研究</h3>
+                    <p class="text-sm text-gray-600">问卷设计, NPS, PSM, MaxDiff</p>
+                </div>
+                <div class="light-card p-6 flex flex-col items-center text-center">
+                    <i data-lucide="database" class="w-10 h-10 mb-4 text-teal-600"></i>
+                    <h3 class="font-bold text-lg text-gray-800">数据分析</h3>
+                    <p class="text-sm text-gray-600">SPSS, Excel, Tableau, MySQL</p>
+                </div>
+                <div class="light-card p-6 flex flex-col items-center text-center">
+                    <i data-lucide="briefcase" class="w-10 h-10 mb-4 text-amber-600"></i>
+                    <h3 class="font-bold text-lg text-gray-800">项目管理</h3>
+                    <p class="text-sm text-gray-600">全流程管理, 供应商协调</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Projects Section -->
+        <section id="projects" class="max-w-5xl mx-auto mb-32">
+            <h2 class="text-4xl font-bold text-center mb-4 section-title">精选项目</h2>
+            <p class="text-lg text-center text-gray-600 mb-16">这里是我过往的一些项目案例，点击可以查看详情（未来可链接至具体页面）</p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="light-card overflow-hidden relative">
+                    <i data-lucide="arrow-up-right" class="absolute top-4 right-4 text-gray-400"></i>
+                    <div class="p-6">
+                        <p class="text-sm text-indigo-600 font-semibold mb-2">汽车行业</p>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">保时捷：小程序新车购车路径测试</h3>
+                        <p class="text-gray-600 text-sm">主导项目，通过用户测试优化线上购车流程，提升用户体验与转化率。</p>
+                    </div>
+                    <div class="px-6 pb-4 text-xs text-gray-500">角色：主导研究员</div>
+                </div>
+                <div class="light-card overflow-hidden relative">
+                    <i data-lucide="arrow-up-right" class="absolute top-4 right-4 text-gray-400"></i>
+                    <div class="p-6">
+                        <p class="text-sm text-pink-600 font-semibold mb-2">智能家居</p>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">德施曼：全国智能门锁渗透率分析</h3>
+                        <p class="text-gray-600 text-sm">战略级研究，为公司高层决策提供关键市场数据与趋势洞察。</p>
+                    </div>
+                    <div class="px-6 pb-4 text-xs text-gray-500">角色：主导研究员 (战略方向)</div>
+                </div>
+                <div class="light-card overflow-hidden relative">
+                    <i data-lucide="arrow-up-right" class="absolute top-4 right-4 text-gray-400"></i>
+                    <div class="p-6">
+                        <p class="text-sm text-teal-600 font-semibold mb-2">美妆行业</p>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">花西子：气垫粉底留置项目</h3>
+                        <p class="text-gray-600 text-sm">通过产品留置测试（iHUT），深入了解用户使用习惯与痛点，为产品迭代提供依据。</p>
+                    </div>
+                     <div class="px-6 pb-4 text-xs text-gray-500">角色：主导研究员</div>
+                </div>
+                <div class="light-card overflow-hidden relative">
+                    <i data-lucide="arrow-up-right" class="absolute top-4 right-4 text-gray-400"></i>
+                    <div class="p-6">
+                        <p class="text-sm text-amber-600 font-semibold mb-2">汽车行业</p>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">上汽通用：品牌健康度追踪 (BTS)</h3>
+                        <p class="text-gray-600 text-sm">长期跟踪项目，监控品牌关键指标，为市场策略调整提供持续性数据支持。</p>
+                    </div>
+                     <div class="px-6 pb-4 text-xs text-gray-500">角色：主导研究员</div>
+                </div>
+                <div class="light-card overflow-hidden relative">
+                     <i data-lucide="arrow-up-right" class="absolute top-4 right-4 text-gray-400"></i>
+                    <div class="p-6">
+                        <p class="text-sm text-sky-600 font-semibold mb-2">轮胎行业</p>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">米其林：天鹅绒设计喜爱度调查</h3>
+                        <p class="text-gray-600 text-sm">针对特定产品设计进行消费者偏好研究，验证新设计的市场接受度。</p>
+                    </div>
+                     <div class="px-6 pb-4 text-xs text-gray-500">角色：主导研究员</div>
+                </div>
+                <div class="light-card overflow-hidden relative">
+                     <i data-lucide="arrow-up-right" class="absolute top-4 right-4 text-gray-400"></i>
+                    <div class="p-6">
+                        <p class="text-sm text-rose-600 font-semibold mb-2">无人驾驶</p>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">斯特兰蒂斯：RoboTaxi中国市场调研</h3>
+                        <p class="text-gray-600 text-sm">探索性研究，评估自动驾驶出租车在中国市场的潜力、用户接受度与商业模式。</p>
+                    </div>
+                     <div class="px-6 pb-4 text-xs text-gray-500">角色：主导研究员</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section id="experience" class="max-w-3xl mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-4 section-title">工作经历</h2>
+            <p class="text-lg text-center text-gray-600 mb-16">我的职业成长足迹</p>
+            <div class="relative pt-4">
+                <div class="timeline"></div>
+                <!-- Timeline Item 1 -->
+                <div class="relative mb-12 md:flex items-center w-full">
+                    <div class="timeline-item-dot bg-indigo-600 -top-1"></div>
+                    <div class="md:w-1/2 md:pr-8">
+                        <div class="light-card p-6">
+                            <p class="text-indigo-600 font-semibold text-sm">2024.05 - 至今</p>
+                            <h3 class="text-xl font-bold text-gray-800 mt-1 flex items-center gap-2">
+                                <i data-lucide="building-2" class="w-5 h-5 text-gray-500"></i>
+                                德施曼智能锁
+                            </h3>
+                            <p class="text-gray-700 font-medium mt-2">高级用户研究员 (战略方向)</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Timeline Item 2 -->
+                <div class="relative mb-12 md:flex flex-row-reverse items-center w-full">
+                    <div class="timeline-item-dot bg-pink-600 -top-1"></div>
+                    <div class="md:w-1/2 md:pl-8">
+                        <div class="light-card p-6">
+                            <p class="text-pink-600 font-semibold text-sm">2022.09 - 2024.05</p>
+                            <h3 class="text-xl font-bold text-gray-800 mt-1 flex items-center gap-2">
+                                <i data-lucide="building-2" class="w-5 h-5 text-gray-500"></i>
+                                巧思市场调研
+                            </h3>
+                            <p class="text-gray-700 font-medium mt-2">高级研究员</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Timeline Item 3 -->
+                <div class="relative mb-12 md:flex items-center w-full">
+                    <div class="timeline-item-dot bg-teal-600 -top-1"></div>
+                    <div class="md:w-1/2 md:pr-8">
+                        <div class="light-card p-6">
+                            <p class="text-teal-600 font-semibold text-sm">2021.12 - 2022.09</p>
+                            <h3 class="text-xl font-bold text-gray-800 mt-1 flex items-center gap-2">
+                                <i data-lucide="building-2" class="w-5 h-5 text-gray-500"></i>
+                                快决测市场调研
+                            </h3>
+                            <p class="text-gray-700 font-medium mt-2">研究员</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-gray-200 bg-white">
+        <div class="max-w-5xl mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-center">
+            <div class="text-center md:text-left mb-4 md:mb-0">
+                <p class="text-gray-900 font-bold">蒋昌盛</p>
+                <p class="text-sm text-gray-600">jiang.changsheng@foxmail.com</p>
+            </div>
+            <div class="text-sm text-gray-500 text-center md:text-right">
+                <p>&copy; 2024 Jiang Changsheng. All Rights Reserved.</p>
+                <p>Designed & Coded with ❤️</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize Lucide Icons
+            lucide.createIcons();
+
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
