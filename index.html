@@ -79,295 +79,347 @@
             background-color: #2563EB;
             color: white;
         }
+        /* Chat Interface Styles */
+        #chat-interface {
+            transition: opacity 0.5s ease-in-out;
+        }
+        .chat-message {
+            max-width: 80%;
+        }
+        .user-message {
+            background-color: #2563EB;
+            color: white;
+        }
+        .ai-message {
+            background-color: #1F2937;
+            color: #E2E8F0;
+        }
+        .typing-indicator span {
+            height: 8px;
+            width: 8px;
+            background-color: #60A5FA;
+            border-radius: 50%;
+            display: inline-block;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+        .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+        .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1.0); }
+        }
     </style>
 </head>
 <body class="antialiased">
 
-    <!-- Header -->
-    <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
-        <div class="container mx-auto px-4">
-            <div class="flex items-center justify-between h-20">
-                <a href="#" class="flex items-center text-2xl font-bold text-white">
-                    <span class="text-blue-400">Sings</span><span>.AI</span>
-                </a>
-                <nav class="hidden md:flex items-center space-x-8">
-                    <a href="#three-echoes" class="text-gray-300 hover:text-white transition-colors" data-lang="navCoreConcept">核心理念</a>
-                    <a href="#services" class="text-gray-300 hover:text-white transition-colors" data-lang="navServices">产品与服务</a>
-                    <a href="#" class="text-gray-300 hover:text-white transition-colors" data-lang="navPricing">定价</a>
-                    <a href="#" class="text-gray-300 hover:text-white transition-colors" data-lang="navAbout">关于我们</a>
-                </nav>
-                <div class="hidden md:flex items-center space-x-4">
-                    <a href="#" class="text-gray-300 hover:text-white transition-colors" data-lang="login">登录</a>
-                    <a href="#" class="px-5 py-2.5 rounded-lg font-semibold btn-primary" data-lang="bookDemo">预约演示</a>
-                    <!-- Language Switcher -->
-                    <div class="lang-switcher flex items-center border border-gray-600 rounded-lg">
-                        <button id="lang-zh" class="px-3 py-1 text-sm rounded-l-md">中</button>
-                        <button id="lang-en" class="px-3 py-1 text-sm rounded-r-md">EN</button>
-                    </div>
-                </div>
-                <div class="md:hidden">
-                    <button id="mobile-menu-button" class="text-white">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </header>
-    
-    <!-- Mobile Menu -->
-    <div id="mobile-menu" class="hidden md:hidden fixed inset-0 bg-gray-900/90 backdrop-blur-sm z-40 pt-20">
-        <div class="container mx-auto px-4 flex flex-col items-center text-center space-y-6">
-            <a href="#three-echoes" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="navCoreConceptMobile">核心理念</a>
-            <a href="#services" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="navServicesMobile">产品与服务</a>
-            <a href="#" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="navPricingMobile">定价</a>
-            <a href="#" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="navAboutMobile">关于我们</a>
-            <hr class="w-full border-gray-700 my-4">
-            <a href="#" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="loginMobile">登录</a>
-            <a href="#" class="w-full max-w-xs px-6 py-3 rounded-lg text-white font-semibold btn-primary" data-lang="bookDemoMobile">预约演示</a>
-        </div>
-    </div>
-
-    <main>
-        <!-- Hero Section -->
-        <section class="hero-bg pt-40 pb-20 md:pt-48 md:pb-32 text-center">
-            <div class="container mx-auto px-4 relative z-10">
-                <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight tracking-tight" data-lang="heroTitle">
-                    于千万回响中，<span class="highlight-text">洞见未来</span>。
-                </h1>
-                <p class="mt-6 max-w-3xl mx-auto text-lg md:text-xl text-gray-400" data-lang="heroSubtitle">
-                    我们赋予数据歌唱的能力，将商业世界的嘈杂噪音，转化为指引您增长的清晰旋律。Sings.AI，您最智慧的商业指挥家。
-                </p>
-                <div class="mt-10 flex flex-col sm:flex-row justify-center items-center gap-4">
-                    <a href="#" class="w-full sm:w-auto px-8 py-4 rounded-lg text-white font-semibold btn-primary" data-lang="heroBtnPrimary">预约免费演示</a>
-                    <a href="#three-echoes" class="w-full sm:w-auto px-8 py-4 rounded-lg text-white font-semibold btn-secondary flex items-center justify-center gap-2" data-lang="heroBtnSecondary">
-                        了解核心理念
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- The Problem Section -->
-        <section class="py-20 md:py-24">
-            <div class="container mx-auto px-4 text-center">
-                <h2 class="text-3xl md:text-4xl font-bold text-white" data-lang="problemTitle">您是否也被“数据噪音”所困扰？</h2>
-                <p class="mt-4 max-w-2xl mx-auto text-lg text-gray-400" data-lang="problemSubtitle">
-                    企业从不缺少数据，缺的是穿透噪音的洞察力。孤立的报表、矛盾的用户反馈、海量的市场信息，它们本身不会“歌唱”，反而让您离真正的答案越来越远。
-                </p>
-            </div>
-        </section>
-        
-        <!-- The Three Echoes Section -->
-        <section id="three-echoes" class="py-12 md:py-24">
+    <div id="main-content">
+        <!-- Header -->
+        <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
             <div class="container mx-auto px-4">
-                <div class="text-center mb-16">
-                    <h2 class="text-3xl md:text-4xl font-bold text-white" data-lang="echoesTitle">Sings.AI 核心理念：<span class="highlight-text">三大回响</span></h2>
-                    <p class="mt-4 max-w-2xl mx-auto text-lg text-gray-400" data-lang="echoesSubtitle">任何单一维度的声音都可能产生误导。我们整合三大回响，助您获得最接近真相的全景洞察。</p>
-                </div>
-                <div class="grid md:grid-cols-3 gap-8">
-                    <div class="glass-card p-8 text-center fade-in">
-                        <h3 class="text-2xl font-bold text-white" data-lang="userEchoTitle">用户之声</h3>
-                        <p class="mt-4 text-gray-400" data-lang="userEchoDesc">源自用户互动中关于体验和需求的声音。我们通过定性与定量分析，助您建立用户同理心，打磨产品体验。</p>
-                    </div>
-                    <div class="glass-card p-8 text-center fade-in" style="transition-delay: 150ms;">
-                        <h3 class="text-2xl font-bold text-white" data-lang="dataEchoTitle">数据之声</h3>
-                        <p class="mt-4 text-gray-400" data-lang="dataEchoDesc">源自企业内部运营关于商业增长的声音。我们衡量增长健康度，优化商业模式，驱动ROI导向的精准决策。</p>
-                    </div>
-                    <div class="glass-card p-8 text-center fade-in" style="transition-delay: 300ms;">
-                        <h3 class="text-2xl font-bold text-white" data-lang="marketEchoTitle">市场之声</h3>
-                        <p class="mt-4 text-gray-400" data-lang="marketEchoDesc">源自宏观商业环境中关于竞争与趋势的声音。我们帮您明确战略定位，发现市场机会，预警外部风险。</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Services Section -->
-        <section id="services" class="py-12 md:py-24 space-y-24">
-            <div class="container mx-auto px-4 fade-in">
-                <div class="grid md:grid-cols-2 gap-12 items-center">
-                    <div>
-                        <span class="font-semibold text-blue-400" data-lang="service1Type">定量洞察</span>
-                        <h2 class="mt-2 text-3xl md:text-4xl font-bold text-white" data-lang="service1Title">AI 全景问卷调研</h2>
-                        <p class="mt-4 text-lg text-gray-400" data-lang="service1Desc">彻底颠覆传统问卷。从研究目标输入到洞察报告生成，全程由AI驱动，解决传统调研周期长、成本高、数据质量不稳的核心痛点。</p>
-                        <ul class="mt-6 space-y-3" data-lang="service1List">
-                            <li class="flex items-start gap-3">
-                                <span class="text-blue-400 font-bold">1.</span>
-                                <span>部署数千<span class="highlight-text">AI仿真用户</span>，在数小时内完成海量高质量数据采集。</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <span class="text-blue-400 font-bold">2.</span>
-                                <span>AI自动完成数据清洗、处理与统计，直接生成<span class="highlight-text">深度洞察报告</span>。</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="bg-gray-900/50 border border-gray-800 rounded-xl p-2">
-                        <svg viewBox="0 0 600 450" class="rounded-lg w-full" xmlns="http://www.w3.org/2000/svg" aria-label="自动化洞察报告仪表盘">
-                            <rect width="600" height="450" rx="8" fill="#111827"></rect>
-                            <rect x="50" y="50" width="350" height="200" rx="4" fill="#1F2937"></rect>
-                            <text x="60" y="80" font-family="sans-serif" font-size="16" fill="#9CA3AF">用户增长趋势</text>
-                            <path d="M 70 220 L 70 150 L 120 150 L 120 180 L 170 180 L 170 160 L 220 160 L 220 200 L 270 200 L 270 170 L 320 170 L 320 220 Z" fill="#2563EB" opacity="0.6"></path>
-                            <line x1="70" y1="220" x2="370" y2="220" stroke="#4B5563" stroke-width="2"></line>
-                            <rect x="420" y="50" width="130" height="200" rx="4" fill="#1F2937"></rect>
-                            <text x="430" y="80" font-family="sans-serif" font-size="16" fill="#9CA3AF">用户来源</text>
-                            <circle cx="485" cy="160" r="50" fill="#3B82F6"></circle>
-                            <path d="M 485 160 L 485 110 A 50 50 0 0 1 535 160 Z" fill="#1D4ED8"></path>
-                            <rect x="50" y="270" width="500" height="130" rx="4" fill="#1F2937"></rect>
-                            <text x="60" y="300" font-family="sans-serif" font-size="16" fill="#9CA3AF">核心洞察</text>
-                            <rect x="70" y="320" width="460" height="10" rx="5" fill="#4B5563"></rect>
-                            <rect x="70" y="345" width="420" height="10" rx="5" fill="#4B5563"></rect>
-                            <rect x="70" y="370" width="440" height="10" rx="5" fill="#4B5563"></rect>
-                        </svg>
-                    </div>
-                </div>
-            </div>
-
-            <div class="container mx-auto px-4 fade-in">
-                <div class="grid md:grid-cols-2 gap-12 items-center">
-                    <div class="bg-gray-900/50 border border-gray-800 rounded-xl p-2 order-last md:order-first">
-                        <svg viewBox="0 0 600 450" class="rounded-lg w-full" xmlns="http://www.w3.org/2000/svg" aria-label="AI深度访谈模拟界面">
-                            <rect width="600" height="450" rx="8" fill="#111827"></rect>
-                            <text x="50" y="60" font-family="sans-serif" font-size="18" fill="#9CA3AF">AI 主持人</text>
-                            <rect x="50" y="80" width="400" height="60" rx="10" fill="#1F2937"></rect>
-                            <rect x="65" y="95" width="300" height="8" rx="4" fill="#4B5563"></rect>
-                            <rect x="65" y="115" width="250" height="8" rx="4" fill="#4B5563"></rect>
-                            <text x="550" y="180" font-family="sans-serif" font-size="18" fill="#60A5FA" text-anchor="end">AI 受访者</text>
-                            <rect x="150" y="200" width="400" height="80" rx="10" fill="#1E40AF"></rect>
-                            <rect x="165" y="215" width="350" height="8" rx="4" fill="#DBEAFE"></rect>
-                            <rect x="165" y="235" width="370" height="8" rx="4" fill="#DBEAFE"></rect>
-                            <rect x="165" y="255" width="310" height="8" rx="4" fill="#DBEAFE"></rect>
-                            <text x="50" y="320" font-family="sans-serif" font-size="18" fill="#9CA3AF">AI 主持人</text>
-                            <rect x="50" y="340" width="350" height="40" rx="10" fill="#1F2937"></rect>
-                            <rect x="65" y="355" width="280" height="8" rx="4" fill="#4B5563"></rect>
-                        </svg>
-                    </div>
-                    <div>
-                        <span class="font-semibold text-blue-400" data-lang="service2Type">定性洞察</span>
-                        <h2 class="mt-2 text-3xl md:text-4xl font-bold text-white" data-lang="service2Title">AI 深度访谈模拟</h2>
-                        <p class="mt-4 text-lg text-gray-400" data-lang="service2Desc">革命性的定性研究工具。利用AI同时模拟研究主持人与受访用户，实现一对一或多对多深度访谈的完全仿真，深入探寻用户行为背后的“为什么”。</p>
-                        <ul class="mt-6 space-y-3" data-lang="service2List">
-                            <li class="flex items-start gap-3">
-                                <span class="text-blue-400 font-bold">1.</span>
-                                <span>AI主持人与<span class="highlight-text">AI受访者</span>进行高度仿真的沉浸式对话。</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <span class="text-blue-400 font-bold">2.</span>
-                                <span>AI自动完成转写、语义分析与观点聚类，提炼<span class="highlight-text">关键主题与动机</span>。</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Target Audience Section -->
-        <section class="py-20 md:py-24 bg-gray-900/30">
-            <div class="container mx-auto px-4 text-center">
-                <h2 class="text-3xl md:text-4xl font-bold text-white" data-lang="audienceTitle">为追求精准决策的<span class="highlight-text">前瞻者</span>而设计</h2>
-                <p class="mt-4 max-w-2xl mx-auto text-lg text-gray-400" data-lang="audienceSubtitle">无论您是产品、市场、增长负责人，还是企业高层决策者，Sings.AI 都将成为您不可或缺的 AI 洞察伙伴。</p>
-                <div class="mt-8 flex flex-wrap justify-center gap-4 text-gray-300" data-lang="audienceTags">
-                    <span class="bg-gray-700/50 px-4 py-2 rounded-full">产品负责人</span>
-                    <span class="bg-gray-700/50 px-4 py-2 rounded-full">市场总监</span>
-                    <span class="bg-gray-700/50 px-4 py-2 rounded-full">增长负责人</span>
-                    <span class="bg-gray-700/50 px-4 py-2 rounded-full">用户研究负责人</span>
-                    <span class="bg-gray-700/50 px-4 py-2 rounded-full">CEO / CSO</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- Final CTA Section -->
-        <section class="py-20 md:py-32 text-center">
-            <div class="container mx-auto px-4">
-                 <h2 class="text-4xl md:text-5xl font-extrabold text-white leading-tight" data-lang="ctaTitle">
-                    停止盲目收集数据，<br>开始聆听<span class="highlight-text">真正的回响</span>。
-                </h2>
-                <div class="mt-10">
-                     <a href="#" class="inline-block px-10 py-5 rounded-lg text-white font-semibold btn-primary text-lg" data-lang="ctaButton">立即体验 Sings.AI</a>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer class="border-t border-gray-800">
-        <div class="container mx-auto px-4 py-16">
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-8">
-                <div class="col-span-2 md:col-span-1">
+                <div class="flex items-center justify-between h-20">
                     <a href="#" class="flex items-center text-2xl font-bold text-white">
                         <span class="text-blue-400">Sings</span><span>.AI</span>
                     </a>
-                    <p class="mt-4 text-gray-400 text-sm" data-lang="footerSlogan">于千万回响中，洞见未来。</p>
-                </div>
-                <div>
-                    <h3 class="font-semibold text-white tracking-wider" data-lang="footerProduct">产品</h3>
-                    <ul class="mt-4 space-y-3" data-lang="footerProductLinks">
-                        <li><a href="#services" class="text-gray-400 hover:text-white transition-colors">AI问卷调研</a></li>
-                        <li><a href="#services" class="text-gray-400 hover:text-white transition-colors">AI深度访谈</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">定价</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="font-semibold text-white tracking-wider" data-lang="footerConcept">理念</h3>
-                    <ul class="mt-4 space-y-3" data-lang="footerConceptLinks">
-                        <li><a href="#three-echoes" class="text-gray-400 hover:text-white transition-colors">三大回响</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">客户案例</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="font-semibold text-white tracking-wider" data-lang="footerCompany">公司</h3>
-                    <ul class="mt-4 space-y-3" data-lang="footerCompanyLinks">
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">关于我们</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">加入我们</a></li>
-                        <li><a href="mailto:jiang.changsheng@foxmail.com" class="text-gray-400 hover:text-white transition-colors">联系方式</a></li>
-                    </ul>
-                </div>
-                 <div>
-                    <h3 class="font-semibold text-white tracking-wider" data-lang="footerLegal">法律</h3>
-                    <ul class="mt-4 space-y-3" data-lang="footerLegalLinks">
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">隐私政策</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">服务条款</a></li>
-                    </ul>
+                    <nav class="hidden md:flex items-center space-x-8">
+                        <a href="#three-echoes" class="text-gray-300 hover:text-white transition-colors" data-lang="navCoreConcept">核心理念</a>
+                        <a href="#services" class="text-gray-300 hover:text-white transition-colors" data-lang="navServices">产品与服务</a>
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors" data-lang="navPricing">定价</a>
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors" data-lang="navAbout">关于我们</a>
+                    </nav>
+                    <div class="hidden md:flex items-center space-x-4">
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors" data-lang="login">登录</a>
+                        <a href="#chat" class="px-5 py-2.5 rounded-lg font-semibold btn-primary chat-trigger" data-lang="bookDemo">预约演示</a>
+                        <div class="lang-switcher flex items-center border border-gray-600 rounded-lg">
+                            <button id="lang-zh" class="px-3 py-1 text-sm rounded-l-md">中</button>
+                            <button id="lang-en" class="px-3 py-1 text-sm rounded-r-md">EN</button>
+                        </div>
+                    </div>
+                    <div class="md:hidden">
+                        <button id="mobile-menu-button" class="text-white">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                        </button>
+                    </div>
                 </div>
             </div>
-            <div class="mt-12 pt-8 border-t border-gray-800 text-center text-gray-500 text-sm">
-                <p data-lang="footerCopyright">&copy; 2024 Sings.AI, Inc. 保留所有权利。</p>
+        </header>
+        
+        <div id="mobile-menu" class="hidden md:hidden fixed inset-0 bg-gray-900/90 backdrop-blur-sm z-40 pt-20">
+            <div class="container mx-auto px-4 flex flex-col items-center text-center space-y-6">
+                <a href="#three-echoes" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="navCoreConceptMobile">核心理念</a>
+                <a href="#services" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="navServicesMobile">产品与服务</a>
+                <a href="#" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="navPricingMobile">定价</a>
+                <a href="#" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="navAboutMobile">关于我们</a>
+                <hr class="w-full border-gray-700 my-4">
+                <a href="#" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="loginMobile">登录</a>
+                <a href="#chat" class="w-full max-w-xs px-6 py-3 rounded-lg text-white font-semibold btn-primary chat-trigger" data-lang="bookDemoMobile">预约演示</a>
             </div>
         </div>
-    </footer>
+
+        <main>
+            <!-- Sections from Hero to Final CTA -->
+            <section class="hero-bg pt-40 pb-20 md:pt-48 md:pb-32 text-center">
+                <div class="container mx-auto px-4 relative z-10">
+                    <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight tracking-tight" data-lang="heroTitle">
+                        于千万回响中，<span class="highlight-text">洞见未来</span>。
+                    </h1>
+                    <p class="mt-6 max-w-3xl mx-auto text-lg md:text-xl text-gray-400" data-lang="heroSubtitle">
+                        我们赋予数据歌唱的能力，将商业世界的嘈杂噪音，转化为指引您增长的清晰旋律。Sings.AI，您最智慧的商业指挥家。
+                    </p>
+                    <div class="mt-10 flex flex-col sm:flex-row justify-center items-center gap-4">
+                        <a href="#chat" class="w-full sm:w-auto px-8 py-4 rounded-lg text-white font-semibold btn-primary chat-trigger" data-lang="heroBtnPrimary">预约免费演示</a>
+                        <a href="#three-echoes" class="w-full sm:w-auto px-8 py-4 rounded-lg text-white font-semibold btn-secondary flex items-center justify-center gap-2" data-lang="heroBtnSecondary">
+                            了解核心理念
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="py-20 md:py-24">
+                <div class="container mx-auto px-4 text-center">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white" data-lang="problemTitle">您是否也被“数据噪音”所困扰？</h2>
+                    <p class="mt-4 max-w-2xl mx-auto text-lg text-gray-400" data-lang="problemSubtitle">
+                        企业从不缺少数据，缺的是穿透噪音的洞察力。孤立的报表、矛盾的用户反馈、海量的市场信息，它们本身不会“歌唱”，反而让您离真正的答案越来越远。
+                    </p>
+                </div>
+            </section>
+            
+            <section id="three-echoes" class="py-12 md:py-24">
+                <div class="container mx-auto px-4">
+                    <div class="text-center mb-16">
+                        <h2 class="text-3xl md:text-4xl font-bold text-white" data-lang="echoesTitle">Sings.AI 核心理念：<span class="highlight-text">三大回响</span></h2>
+                        <p class="mt-4 max-w-2xl mx-auto text-lg text-gray-400" data-lang="echoesSubtitle">任何单一维度的声音都可能产生误导。我们整合三大回响，助您获得最接近真相的全景洞察。</p>
+                    </div>
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <div class="glass-card p-8 text-center fade-in">
+                            <h3 class="text-2xl font-bold text-white" data-lang="userEchoTitle">用户之声</h3>
+                            <p class="mt-4 text-gray-400" data-lang="userEchoDesc">源自用户互动中关于体验和需求的声音。我们通过定性与定量分析，助您建立用户同理心，打磨产品体验。</p>
+                        </div>
+                        <div class="glass-card p-8 text-center fade-in" style="transition-delay: 150ms;">
+                            <h3 class="text-2xl font-bold text-white" data-lang="dataEchoTitle">数据之声</h3>
+                            <p class="mt-4 text-gray-400" data-lang="dataEchoDesc">源自企业内部运营关于商业增长的声音。我们衡量增长健康度，优化商业模式，驱动ROI导向的精准决策。</p>
+                        </div>
+                        <div class="glass-card p-8 text-center fade-in" style="transition-delay: 300ms;">
+                            <h3 class="text-2xl font-bold text-white" data-lang="marketEchoTitle">市场之声</h3>
+                            <p class="mt-4 text-gray-400" data-lang="marketEchoDesc">源自宏观商业环境中关于竞争与趋势的声音。我们帮您明确战略定位，发现市场机会，预警外部风险。</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="services" class="py-12 md:py-24 space-y-24">
+                <div class="container mx-auto px-4 fade-in">
+                    <div class="grid md:grid-cols-2 gap-12 items-center">
+                        <div>
+                            <span class="font-semibold text-blue-400" data-lang="service1Type">定量洞察</span>
+                            <h2 class="mt-2 text-3xl md:text-4xl font-bold text-white" data-lang="service1Title">AI 全景问卷调研</h2>
+                            <p class="mt-4 text-lg text-gray-400" data-lang="service1Desc">彻底颠覆传统问卷。从研究目标输入到洞察报告生成，全程由AI驱动，解决传统调研周期长、成本高、数据质量不稳的核心痛点。</p>
+                            <ul class="mt-6 space-y-3" data-lang="service1List">
+                                <li class="flex items-start gap-3">
+                                    <span class="text-blue-400 font-bold">1.</span>
+                                    <span>部署数千<span class="highlight-text">AI仿真用户</span>，在数小时内完成海量高质量数据采集。</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="text-blue-400 font-bold">2.</span>
+                                    <span>AI自动完成数据清洗、处理与统计，直接生成<span class="highlight-text">深度洞察报告</span>。</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="bg-gray-900/50 border border-gray-800 rounded-xl p-2">
+                            <svg viewBox="0 0 600 450" class="rounded-lg w-full" xmlns="http://www.w3.org/2000/svg" aria-label="自动化洞察报告仪表盘">
+                                <rect width="600" height="450" rx="8" fill="#111827"></rect>
+                                <rect x="50" y="50" width="350" height="200" rx="4" fill="#1F2937"></rect>
+                                <text x="60" y="80" font-family="sans-serif" font-size="16" fill="#9CA3AF">用户增长趋势</text>
+                                <path d="M 70 220 L 70 150 L 120 150 L 120 180 L 170 180 L 170 160 L 220 160 L 220 200 L 270 200 L 270 170 L 320 170 L 320 220 Z" fill="#2563EB" opacity="0.6"></path>
+                                <line x1="70" y1="220" x2="370" y2="220" stroke="#4B5563" stroke-width="2"></line>
+                                <rect x="420" y="50" width="130" height="200" rx="4" fill="#1F2937"></rect>
+                                <text x="430" y="80" font-family="sans-serif" font-size="16" fill="#9CA3AF">用户来源</text>
+                                <circle cx="485" cy="160" r="50" fill="#3B82F6"></circle>
+                                <path d="M 485 160 L 485 110 A 50 50 0 0 1 535 160 Z" fill="#1D4ED8"></path>
+                                <rect x="50" y="270" width="500" height="130" rx="4" fill="#1F2937"></rect>
+                                <text x="60" y="300" font-family="sans-serif" font-size="16" fill="#9CA3AF">核心洞察</text>
+                                <rect x="70" y="320" width="460" height="10" rx="5" fill="#4B5563"></rect>
+                                <rect x="70" y="345" width="420" height="10" rx="5" fill="#4B5563"></rect>
+                                <rect x="70" y="370" width="440" height="10" rx="5" fill="#4B5563"></rect>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container mx-auto px-4 fade-in">
+                    <div class="grid md:grid-cols-2 gap-12 items-center">
+                        <div class="bg-gray-900/50 border border-gray-800 rounded-xl p-2 order-last md:order-first">
+                            <svg viewBox="0 0 600 450" class="rounded-lg w-full" xmlns="http://www.w3.org/2000/svg" aria-label="AI深度访谈模拟界面">
+                                <rect width="600" height="450" rx="8" fill="#111827"></rect>
+                                <text x="50" y="60" font-family="sans-serif" font-size="18" fill="#9CA3AF">AI 主持人</text>
+                                <rect x="50" y="80" width="400" height="60" rx="10" fill="#1F2937"></rect>
+                                <rect x="65" y="95" width="300" height="8" rx="4" fill="#4B5563"></rect>
+                                <rect x="65" y="115" width="250" height="8" rx="4" fill="#4B5563"></rect>
+                                <text x="550" y="180" font-family="sans-serif" font-size="18" fill="#60A5FA" text-anchor="end">AI 受访者</text>
+                                <rect x="150" y="200" width="400" height="80" rx="10" fill="#1E40AF"></rect>
+                                <rect x="165" y="215" width="350" height="8" rx="4" fill="#DBEAFE"></rect>
+                                <rect x="165" y="235" width="370" height="8" rx="4" fill="#DBEAFE"></rect>
+                                <rect x="165" y="255" width="310" height="8" rx="4" fill="#DBEAFE"></rect>
+                                <text x="50" y="320" font-family="sans-serif" font-size="18" fill="#9CA3AF">AI 主持人</text>
+                                <rect x="50" y="340" width="350" height="40" rx="10" fill="#1F2937"></rect>
+                                <rect x="65" y="355" width="280" height="8" rx="4" fill="#4B5563"></rect>
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="font-semibold text-blue-400" data-lang="service2Type">定性洞察</span>
+                            <h2 class="mt-2 text-3xl md:text-4xl font-bold text-white" data-lang="service2Title">AI 深度访谈模拟</h2>
+                            <p class="mt-4 text-lg text-gray-400" data-lang="service2Desc">革命性的定性研究工具。利用AI同时模拟研究主持人与受访用户，实现一对一或多对多深度访谈的完全仿真，深入探寻用户行为背后的“为什么”。</p>
+                            <ul class="mt-6 space-y-3" data-lang="service2List">
+                                <li class="flex items-start gap-3">
+                                    <span class="text-blue-400 font-bold">1.</span>
+                                    <span>AI主持人与<span class="highlight-text">AI受访者</span>进行高度仿真的沉浸式对话。</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="text-blue-400 font-bold">2.</span>
+                                    <span>AI自动完成转写、语义分析与观点聚类，提炼<span class="highlight-text">关键主题与动机</span>。</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="py-20 md:py-24 bg-gray-900/30">
+                <div class="container mx-auto px-4 text-center">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white" data-lang="audienceTitle">为追求精准决策的<span class="highlight-text">前瞻者</span>而设计</h2>
+                    <p class="mt-4 max-w-2xl mx-auto text-lg text-gray-400" data-lang="audienceSubtitle">无论您是产品、市场、增长负责人，还是企业高层决策者，Sings.AI 都将成为您不可或缺的 AI 洞察伙伴。</p>
+                    <div class="mt-8 flex flex-wrap justify-center gap-4 text-gray-300" data-lang="audienceTags">
+                        <span class="bg-gray-700/50 px-4 py-2 rounded-full">产品负责人</span>
+                        <span class="bg-gray-700/50 px-4 py-2 rounded-full">市场总监</span>
+                        <span class="bg-gray-700/50 px-4 py-2 rounded-full">增长负责人</span>
+                        <span class="bg-gray-700/50 px-4 py-2 rounded-full">用户研究负责人</span>
+                        <span class="bg-gray-700/50 px-4 py-2 rounded-full">CEO / CSO</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="py-20 md:py-32 text-center">
+                <div class="container mx-auto px-4">
+                     <h2 class="text-4xl md:text-5xl font-extrabold text-white leading-tight" data-lang="ctaTitle">
+                        停止盲目收集数据，<br>开始聆听<span class="highlight-text">真正的回响</span>。
+                    </h2>
+                    <div class="mt-10">
+                         <a href="#chat" class="inline-block px-10 py-5 rounded-lg text-white font-semibold btn-primary text-lg chat-trigger" data-lang="ctaButton">立即体验 Sings.AI</a>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="border-t border-gray-800">
+            <div class="container mx-auto px-4 py-16">
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-8">
+                    <div class="col-span-2 md:col-span-1">
+                        <a href="#" class="flex items-center text-2xl font-bold text-white">
+                            <span class="text-blue-400">Sings</span><span>.AI</span>
+                        </a>
+                        <p class="mt-4 text-gray-400 text-sm" data-lang="footerSlogan">于千万回响中，洞见未来。</p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-white tracking-wider" data-lang="footerProduct">产品</h3>
+                        <ul class="mt-4 space-y-3" data-lang="footerProductLinks">
+                            <li><a href="#services" class="text-gray-400 hover:text-white transition-colors">AI问卷调研</a></li>
+                            <li><a href="#services" class="text-gray-400 hover:text-white transition-colors">AI深度访谈</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">定价</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-white tracking-wider" data-lang="footerConcept">理念</h3>
+                        <ul class="mt-4 space-y-3" data-lang="footerConceptLinks">
+                            <li><a href="#three-echoes" class="text-gray-400 hover:text-white transition-colors">三大回响</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">客户案例</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-white tracking-wider" data-lang="footerCompany">公司</h3>
+                        <ul class="mt-4 space-y-3" data-lang="footerCompanyLinks">
+                            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">关于我们</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">加入我们</a></li>
+                            <li><a href="mailto:jiang.changsheng@foxmail.com" class="text-gray-400 hover:text-white transition-colors">联系方式</a></li>
+                        </ul>
+                    </div>
+                     <div>
+                        <h3 class="font-semibold text-white tracking-wider" data-lang="footerLegal">法律</h3>
+                        <ul class="mt-4 space-y-3" data-lang="footerLegalLinks">
+                            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">隐私政策</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">服务条款</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="mt-12 pt-8 border-t border-gray-800 text-center text-gray-500 text-sm">
+                    <p data-lang="footerCopyright">&copy; 2024 Sings.AI, Inc. 保留所有权利。</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Chat Interface -->
+    <div id="chat-interface" class="hidden fixed inset-0 bg-gray-900 z-[60] flex flex-col opacity-0">
+        <header class="flex-shrink-0 bg-gray-800/50 backdrop-blur-lg border-b border-gray-700">
+            <div class="container mx-auto px-4 flex items-center justify-between h-20">
+                <a href="#" class="flex items-center text-2xl font-bold text-white">
+                    <span class="text-blue-400">Sings</span><span>.AI</span>
+                    <span class="ml-4 text-base font-medium text-gray-300">| AI 研究顾问</span>
+                </a>
+                <button id="close-chat" class="text-gray-400 hover:text-white transition-colors">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+        </header>
+        <main class="flex-1 overflow-y-auto p-4 md:p-6">
+            <div id="chat-messages" class="space-y-6">
+                <!-- Chat messages will be appended here -->
+            </div>
+        </main>
+        <footer class="flex-shrink-0 p-4 bg-gray-800/50 border-t border-gray-700">
+            <div class="container mx-auto">
+                <div class="flex items-center bg-gray-900 rounded-lg p-2">
+                    <input type="text" id="chat-input" placeholder="请简单描述您的研究想法..." class="flex-1 bg-transparent text-white placeholder-gray-500 focus:outline-none px-2">
+                    <button id="send-button" class="bg-blue-600 hover:bg-blue-700 text-white rounded-md p-2 ml-2 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contact-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[70] flex items-center justify-center p-4">
+        <div class="bg-gray-800 border border-gray-700 rounded-lg p-8 max-w-md w-full text-center relative transform transition-all opacity-0 scale-95">
+            <button id="close-modal" class="absolute top-4 right-4 text-gray-500 hover:text-white text-2xl leading-none">&times;</button>
+            <h3 class="text-2xl font-bold text-white" data-lang="modalTitle">感谢您的体验</h3>
+            <p class="mt-4 text-gray-400" data-lang="modalText">您的研究方案已生成。如需进一步讨论或获取定制服务，请随时联系我们。</p>
+            <a href="mailto:jiang.changsheng@foxmail.com" class="mt-6 inline-block px-6 py-3 rounded-lg text-white font-semibold btn-primary" data-lang="modalButton">立即联系</a>
+        </div>
+    </div>
+
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // --- Language Translation Logic ---
             const translations = {
-                // Nav
+                // ... (all translation key-value pairs remain the same) ...
                 navCoreConcept: { zh: '核心理念', en: 'Core Concept' },
                 navServices: { zh: '产品与服务', en: 'Services' },
                 navPricing: { zh: '定价', en: 'Pricing' },
                 navAbout: { zh: '关于我们', en: 'About Us' },
                 login: { zh: '登录', en: 'Login' },
                 bookDemo: { zh: '预约演示', en: 'Book a Demo' },
-                // Mobile Nav
                 navCoreConceptMobile: { zh: '核心理念', en: 'Core Concept' },
                 navServicesMobile: { zh: '产品与服务', en: 'Services' },
                 navPricingMobile: { zh: '定价', en: 'Pricing' },
                 navAboutMobile: { zh: '关于我们', en: 'About Us' },
                 loginMobile: { zh: '登录', en: 'Login' },
                 bookDemoMobile: { zh: '预约演示', en: 'Book a Demo' },
-                // Hero
-                heroTitle: {
-                    zh: '于千万回响中，<span class="highlight-text">洞见未来</span>。',
-                    en: 'From millions of echoes, <span class="highlight-text">see the future</span>.'
-                },
-                heroSubtitle: {
-                    zh: '我们赋予数据歌唱的能力，将商业世界的嘈杂噪音，转化为指引您增长的清晰旋律。Sings.AI，您最智慧的商业指挥家。',
-                    en: 'We give data the ability to sing, turning the noise of the business world into a clear melody that guides your growth. Sings.AI, your wisest business conductor.'
-                },
+                heroTitle: { zh: '于千万回响中，<span class="highlight-text">洞见未来</span>。', en: 'From millions of echoes, <span class="highlight-text">see the future</span>.' },
+                heroSubtitle: { zh: '我们赋予数据歌唱的能力，将商业世界的嘈杂噪音，转化为指引您增长的清晰旋律。Sings.AI，您最智慧的商业指挥家。', en: 'We give data the ability to sing, turning the noise of the business world into a clear melody that guides your growth. Sings.AI, your wisest business conductor.' },
                 heroBtnPrimary: { zh: '预约免费演示', en: 'Book a Free Demo' },
                 heroBtnSecondary: { zh: '了解核心理念', en: 'Learn the Core Concept' },
-                // Problem
                 problemTitle: { zh: '您是否也被“数据噪音”所困扰？', en: 'Are you troubled by "data noise"?' },
-                problemSubtitle: {
-                    zh: '企业从不缺少数据，缺的是穿透噪音的洞察力。孤立的报表、矛盾的用户反馈、海量的市场信息，它们本身不会“歌唱”，反而让您离真正的答案越来越远。',
-                    en: 'Businesses don\'t lack data; they lack the insight to penetrate the noise. Isolated reports, conflicting user feedback, and vast market information don\'t "sing" on their own, instead moving you further from the real answers.'
-                },
-                // Echoes
+                problemSubtitle: { zh: '企业从不缺少数据，缺的是穿透噪音的洞察力。孤立的报表、矛盾的用户反馈、海量的市场信息，它们本身不会“歌唱”，反而让您离真正的答案越来越远。', en: 'Businesses don\'t lack data; they lack the insight to penetrate the noise. Isolated reports, conflicting user feedback, and vast market information don\'t "sing" on their own, instead moving you further from the real answers.' },
                 echoesTitle: { zh: 'Sings.AI 核心理念：<span class="highlight-text">三大回响</span>', en: 'Sings.AI Core Concept: <span class="highlight-text">The Three Echoes</span>' },
                 echoesSubtitle: { zh: '任何单一维度的声音都可能产生误导。我们整合三大回响，助您获得最接近真相的全景洞察。', en: 'Any single dimension of sound can be misleading. We integrate the three echoes to help you get the most accurate panoramic insight.' },
                 userEchoTitle: { zh: '用户之声', en: 'Voice of the User' },
@@ -376,54 +428,32 @@
                 dataEchoDesc: { zh: '源自企业内部运营关于商业增长的声音。我们衡量增长健康度，优化商业模式，驱动ROI导向的精准决策。', en: 'Sounds of business growth from internal operations. We measure growth health, optimize business models, and drive ROI-oriented decisions.' },
                 marketEchoTitle: { zh: '市场之声', en: 'Voice of the Market' },
                 marketEchoDesc: { zh: '源自宏观商业环境中关于竞争与趋势的声音。我们帮您明确战略定位，发现市场机会，预警外部风险。', en: 'Sounds of competition and trends from the macro-environment. We help you define strategic positioning, discover opportunities, and mitigate external risks.' },
-                // Services
                 service1Type: { zh: '定量洞察', en: 'Quantitative Insights' },
                 service1Title: { zh: 'AI 全景问卷调研', en: 'AI Panoramic Surveys' },
                 service1Desc: { zh: '彻底颠覆传统问卷。从研究目标输入到洞察报告生成，全程由AI驱动，解决传统调研周期长、成本高、数据质量不稳的核心痛点。', en: 'Completely revolutionizing traditional surveys. From inputting research goals to generating insight reports, the entire process is AI-driven, solving the core pain points of long cycles, high costs, and unstable data quality.' },
-                service1List: {
-                    zh: `<li class="flex items-start gap-3"><span class="text-blue-400 font-bold">1.</span><span>部署数千<span class="highlight-text">AI仿真用户</span>，在数小时内完成海量高质量数据采集。</span></li><li class="flex items-start gap-3"><span class="text-blue-400 font-bold">2.</span><span>AI自动完成数据清洗、处理与统计，直接生成<span class="highlight-text">深度洞察报告</span>。</span></li>`,
-                    en: `<li class="flex items-start gap-3"><span class="text-blue-400 font-bold">1.</span><span>Deploy thousands of <span class="highlight-text">AI simulated users</span> to collect massive, high-quality data within hours.</span></li><li class="flex items-start gap-3"><span class="text-blue-400 font-bold">2.</span><span>AI automatically cleans, processes, and analyzes data to directly generate <span class="highlight-text">in-depth insight reports</span>.</span></li>`
-                },
+                service1List: { zh: `<li class="flex items-start gap-3"><span class="text-blue-400 font-bold">1.</span><span>部署数千<span class="highlight-text">AI仿真用户</span>，在数小时内完成海量高质量数据采集。</span></li><li class="flex items-start gap-3"><span class="text-blue-400 font-bold">2.</span><span>AI自动完成数据清洗、处理与统计，直接生成<span class="highlight-text">深度洞察报告</span>。</span></li>`, en: `<li class="flex items-start gap-3"><span class="text-blue-400 font-bold">1.</span><span>Deploy thousands of <span class="highlight-text">AI simulated users</span> to collect massive, high-quality data within hours.</span></li><li class="flex items-start gap-3"><span class="text-blue-400 font-bold">2.</span><span>AI automatically cleans, processes, and analyzes data to directly generate <span class="highlight-text">in-depth insight reports</span>.</span></li>` },
                 service2Type: { zh: '定性洞察', en: 'Qualitative Insights' },
                 service2Title: { zh: 'AI 深度访谈模拟', en: 'AI In-depth Interviews' },
                 service2Desc: { zh: '革命性的定性研究工具。利用AI同时模拟研究主持人与受访用户，实现一对一或多对多深度访谈的完全仿真，深入探寻用户行为背后的“为什么”。', en: 'A revolutionary qualitative research tool. AI simulates both the moderator and respondents for fully immersive one-on-one or group interviews to uncover the "why" behind user behavior.' },
-                service2List: {
-                    zh: `<li class="flex items-start gap-3"><span class="text-blue-400 font-bold">1.</span><span>AI主持人与<span class="highlight-text">AI受访者</span>进行高度仿真的沉浸式对话。</span></li><li class="flex items-start gap-3"><span class="text-blue-400 font-bold">2.</span><span>AI自动完成转写、语义分析与观点聚类，提炼<span class="highlight-text">关键主题与动机</span>。</span></li>`,
-                    en: `<li class="flex items-start gap-3"><span class="text-blue-400 font-bold">1.</span><span>AI moderators and <span class="highlight-text">AI respondents</span> engage in highly realistic, immersive conversations.</span></li><li class="flex items-start gap-3"><span class="text-blue-400 font-bold">2.</span><span>AI automatically transcribes, analyzes semantics, and clusters opinions to extract <span class="highlight-text">key themes and motivations</span>.</span></li>`
-                },
-                // Audience
+                service2List: { zh: `<li class="flex items-start gap-3"><span class="text-blue-400 font-bold">1.</span><span>AI主持人与<span class="highlight-text">AI受访者</span>进行高度仿真的沉浸式对话。</span></li><li class="flex items-start gap-3"><span class="text-blue-400 font-bold">2.</span><span>AI自动完成转写、语义分析与观点聚类，提炼<span class="highlight-text">关键主题与动机</span>。</span></li>`, en: `<li class="flex items-start gap-3"><span class="text-blue-400 font-bold">1.</span><span>AI moderators and <span class="highlight-text">AI respondents</span> engage in highly realistic, immersive conversations.</span></li><li class="flex items-start gap-3"><span class="text-blue-400 font-bold">2.</span><span>AI automatically transcribes, analyzes semantics, and clusters opinions to extract <span class="highlight-text">key themes and motivations</span>.</span></li>` },
                 audienceTitle: { zh: '为追求精准决策的<span class="highlight-text">前瞻者</span>而设计', en: 'Designed for <span class="highlight-text">Visionaries</span> Who Pursue Precision Decisions' },
                 audienceSubtitle: { zh: '无论您是产品、市场、增长负责人，还是企业高层决策者，Sings.AI 都将成为您不可或缺的 AI 洞察伙伴。', en: 'Whether you are a product, marketing, or growth leader, or a C-level executive, Sings.AI will be your indispensable AI insight partner.' },
-                audienceTags: {
-                    zh: `<span class="bg-gray-700/50 px-4 py-2 rounded-full">产品负责人</span><span class="bg-gray-700/50 px-4 py-2 rounded-full">市场总监</span><span class="bg-gray-700/50 px-4 py-2 rounded-full">增长负责人</span><span class="bg-gray-700/50 px-4 py-2 rounded-full">用户研究负责人</span><span class="bg-gray-700/50 px-4 py-2 rounded-full">CEO / CSO</span>`,
-                    en: `<span class="bg-gray-700/50 px-4 py-2 rounded-full">Product Leads</span><span class="bg-gray-700/50 px-4 py-2 rounded-full">Marketing Directors</span><span class="bg-gray-700/50 px-4 py-2 rounded-full">Growth Managers</span><span class="bg-gray-700/50 px-4 py-2 rounded-full">UX Researchers</span><span class="bg-gray-700/50 px-4 py-2 rounded-full">CEO / CSO</span>`
-                },
-                // CTA
+                audienceTags: { zh: `<span class="bg-gray-700/50 px-4 py-2 rounded-full">产品负责人</span><span class="bg-gray-700/50 px-4 py-2 rounded-full">市场总监</span><span class="bg-gray-700/50 px-4 py-2 rounded-full">增长负责人</span><span class="bg-gray-700/50 px-4 py-2 rounded-full">用户研究负责人</span><span class="bg-gray-700/50 px-4 py-2 rounded-full">CEO / CSO</span>`, en: `<span class="bg-gray-700/50 px-4 py-2 rounded-full">Product Leads</span><span class="bg-gray-700/50 px-4 py-2 rounded-full">Marketing Directors</span><span class="bg-gray-700/50 px-4 py-2 rounded-full">Growth Managers</span><span class="bg-gray-700/50 px-4 py-2 rounded-full">UX Researchers</span><span class="bg-gray-700/50 px-4 py-2 rounded-full">CEO / CSO</span>` },
                 ctaTitle: { zh: '停止盲目收集数据，<br>开始聆听<span class="highlight-text">真正的回响</span>。', en: 'Stop blindly collecting data,<br>start listening to <span class="highlight-text">the real echoes</span>.' },
                 ctaButton: { zh: '立即体验 Sings.AI', en: 'Experience Sings.AI Now' },
-                // Footer
                 footerSlogan: { zh: '于千万回响中，洞见未来。', en: 'From millions of echoes, see the future.' },
                 footerProduct: { zh: '产品', en: 'Product' },
-                footerProductLinks: {
-                    zh: `<li><a href="#services" class="text-gray-400 hover:text-white transition-colors">AI问卷调研</a></li><li><a href="#services" class="text-gray-400 hover:text-white transition-colors">AI深度访谈</a></li><li><a href="#" class="text-gray-400 hover:text-white transition-colors">定价</a></li>`,
-                    en: `<li><a href="#services" class="text-gray-400 hover:text-white transition-colors">AI Surveys</a></li><li><a href="#services" class="text-gray-400 hover:text-white transition-colors">AI Interviews</a></li><li><a href="#" class="text-gray-400 hover:text-white transition-colors">Pricing</a></li>`
-                },
+                footerProductLinks: { zh: `<li><a href="#services" class="text-gray-400 hover:text-white transition-colors">AI问卷调研</a></li><li><a href="#services" class="text-gray-400 hover:text-white transition-colors">AI深度访谈</a></li><li><a href="#" class="text-gray-400 hover:text-white transition-colors">定价</a></li>`, en: `<li><a href="#services" class="text-gray-400 hover:text-white transition-colors">AI Surveys</a></li><li><a href="#services" class="text-gray-400 hover:text-white transition-colors">AI Interviews</a></li><li><a href="#" class="text-gray-400 hover:text-white transition-colors">Pricing</a></li>` },
                 footerConcept: { zh: '理念', en: 'Concept' },
-                footerConceptLinks: {
-                    zh: `<li><a href="#three-echoes" class="text-gray-400 hover:text-white transition-colors">三大回响</a></li><li><a href="#" class="text-gray-400 hover:text-white transition-colors">客户案例</a></li>`,
-                    en: `<li><a href="#three-echoes" class="text-gray-400 hover:text-white transition-colors">The Three Echoes</a></li><li><a href="#" class="text-gray-400 hover:text-white transition-colors">Case Studies</a></li>`
-                },
+                footerConceptLinks: { zh: `<li><a href="#three-echoes" class="text-gray-400 hover:text-white transition-colors">三大回响</a></li><li><a href="#" class="text-gray-400 hover:text-white transition-colors">客户案例</a></li>`, en: `<li><a href="#three-echoes" class="text-gray-400 hover:text-white transition-colors">The Three Echoes</a></li><li><a href="#" class="text-gray-400 hover:text-white transition-colors">Case Studies</a></li>` },
                 footerCompany: { zh: '公司', en: 'Company' },
-                footerCompanyLinks: {
-                    zh: `<li><a href="#" class="text-gray-400 hover:text-white transition-colors">关于我们</a></li><li><a href="#" class="text-gray-400 hover:text-white transition-colors">加入我们</a></li><li><a href="mailto:jiang.changsheng@foxmail.com" class="text-gray-400 hover:text-white transition-colors">联系方式</a></li>`,
-                    en: `<li><a href="#" class="text-gray-400 hover:text-white transition-colors">About Us</a></li><li><a href="#" class="text-gray-400 hover:text-white transition-colors">Careers</a></li><li><a href="mailto:jiang.changsheng@foxmail.com" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>`
-                },
+                footerCompanyLinks: { zh: `<li><a href="#" class="text-gray-400 hover:text-white transition-colors">关于我们</a></li><li><a href="#" class="text-gray-400 hover:text-white transition-colors">加入我们</a></li><li><a href="mailto:jiang.changsheng@foxmail.com" class="text-gray-400 hover:text-white transition-colors">联系方式</a></li>`, en: `<li><a href="#" class="text-gray-400 hover:text-white transition-colors">About Us</a></li><li><a href="#" class="text-gray-400 hover:text-white transition-colors">Careers</a></li><li><a href="mailto:jiang.changsheng@foxmail.com" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>` },
                 footerLegal: { zh: '法律', en: 'Legal' },
-                footerLegalLinks: {
-                    zh: `<li><a href="#" class="text-gray-400 hover:text-white transition-colors">隐私政策</a></li><li><a href="#" class="text-gray-400 hover:text-white transition-colors">服务条款</a></li>`,
-                    en: `<li><a href="#" class="text-gray-400 hover:text-white transition-colors">Privacy Policy</a></li><li><a href="#" class="text-gray-400 hover:text-white transition-colors">Terms of Service</a></li>`
-                },
-                footerCopyright: { zh: '&copy; 2024 Sings.AI, Inc. 保留所有权利。', en: '&copy; 2024 Sings.AI, Inc. All rights reserved.' }
+                footerLegalLinks: { zh: `<li><a href="#" class="text-gray-400 hover:text-white transition-colors">隐私政策</a></li><li><a href="#" class="text-gray-400 hover:text-white transition-colors">服务条款</a></li>`, en: `<li><a href="#" class="text-gray-400 hover:text-white transition-colors">Privacy Policy</a></li><li><a href="#" class="text-gray-400 hover:text-white transition-colors">Terms of Service</a></li>` },
+                footerCopyright: { zh: '&copy; 2024 Sings.AI, Inc. 保留所有权利。', en: '&copy; 2024 Sings.AI, Inc. All rights reserved.' },
+                modalTitle: { zh: '感谢您的体验', en: 'Thanks for your time' },
+                modalText: { zh: '您的研究方案已生成。如需进一步讨论或获取定制服务，请随时联系我们。', en: 'Your research plan has been generated. For further discussion or customized services, please feel free to contact us.'},
+                modalButton: { zh: '立即联系', en: 'Contact Us'}
             };
 
             const langZhBtn = document.getElementById('lang-zh');
@@ -433,7 +463,6 @@
                 document.querySelectorAll('[data-lang]').forEach(element => {
                     const key = element.getAttribute('data-lang');
                     if (translations[key] && translations[key][lang]) {
-                        // Use innerHTML for elements that might contain HTML tags
                         if (['heroTitle', 'echoesTitle', 'audienceTitle', 'ctaTitle', 'service1List', 'service2List', 'audienceTags', 'footerProductLinks', 'footerConceptLinks', 'footerCompanyLinks', 'footerLegalLinks'].includes(key)) {
                             element.innerHTML = translations[key][lang];
                         } else {
@@ -448,51 +477,36 @@
 
             langZhBtn.addEventListener('click', () => switchLanguage('zh'));
             langEnBtn.addEventListener('click', () => switchLanguage('en'));
-
-            // Set initial language
             switchLanguage('zh');
 
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
-            mobileMenuButton.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
+            mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
 
             const header = document.getElementById('header');
             window.addEventListener('scroll', () => {
-                if (window.scrollY > 10) {
-                    header.classList.add('bg-gray-900/80', 'backdrop-blur-lg');
-                } else {
-                    header.classList.remove('bg-gray-900/80', 'backdrop-blur-lg');
-                }
+                header.classList.toggle('bg-gray-900/80', window.scrollY > 10);
+                header.classList.toggle('backdrop-blur-lg', window.scrollY > 10);
             });
 
             const faders = document.querySelectorAll('.fade-in');
-            const appearOptions = {
-                threshold: 0.2,
-                rootMargin: "0px 0px -50px 0px"
-            };
-            const appearOnScroll = new IntersectionObserver(function(entries, observer) {
+            const appearOnScroll = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
                     if (!entry.isIntersecting) return;
                     entry.target.classList.add('visible');
                     observer.unobserve(entry.target);
                 });
-            }, appearOptions);
-            faders.forEach(fader => {
-                appearOnScroll.observe(fader);
-            });
+            }, { threshold: 0.2, rootMargin: "0px 0px -50px 0px" });
+            faders.forEach(fader => appearOnScroll.observe(fader));
             
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     const href = this.getAttribute('href');
-                    if (href && href.length > 1) {
+                    if (href.length > 1 && !href.startsWith('#chat')) {
                         e.preventDefault();
                         const targetElement = document.querySelector(href);
                         if (targetElement) {
-                            targetElement.scrollIntoView({
-                                behavior: 'smooth'
-                            });
+                            targetElement.scrollIntoView({ behavior: 'smooth' });
                         }
                         if (!mobileMenu.classList.contains('hidden')) {
                             mobileMenu.classList.add('hidden');
@@ -500,6 +514,140 @@
                     }
                 });
             });
+
+            // --- Chat & Modal Logic ---
+            const mainContent = document.getElementById('main-content');
+            const chatInterface = document.getElementById('chat-interface');
+            const chatTriggers = document.querySelectorAll('.chat-trigger');
+            const closeChatBtn = document.getElementById('close-chat');
+            const chatMessages = document.getElementById('chat-messages');
+            const chatInput = document.getElementById('chat-input');
+            const sendButton = document.getElementById('send-button');
+            const contactModal = document.getElementById('contact-modal');
+            const closeModalBtn = document.getElementById('close-modal');
+            let chatHistory = [];
+
+            const systemInstruction = {
+                parts: [{ text: "你是一个名叫 Sings.AI 的顶级市场研究与用户洞察顾问。你的任务是帮助用户将模糊的研究想法，转化为一份清晰、专业、可执行的研究需求简报。请不要直接回答用户的问题，而是通过提问的方式，一步步引导他们明确以下几个核心问题：1. 研究背景与目标是什么？ 2. 核心研究对象是谁？ 3. 需要了解他们的哪些方面（如行为、态度、需求痛点）？ 4. 研究结果将用于什么商业决策？。在对话开始时，请先做一个简短的自我介绍，并发出第一个引导性问题，比如：'您好！我是 Sings.AI 的研究顾问。很高兴能帮助您构建研究方案。为了更好地开始，您能简单介绍一下您这次研究的大致想法或背景吗？'。在搜集到足够信息后，请主动为用户总结一份结构化的研究需求简报并寻求确认。在用户确认后，再根据简报输出一份专业的研究方案。在您输出最终的研究方案后，请在回复的末尾加上特殊标记：[CONVERSATION_COMPLETE]" }]
+            };
+            
+            function openChat() {
+                mainContent.classList.add('hidden');
+                chatInterface.classList.remove('hidden');
+                setTimeout(() => chatInterface.classList.remove('opacity-0'), 10);
+                if (chatMessages.children.length === 0) {
+                    getInitialGreeting();
+                }
+            }
+
+            function closeChat() {
+                chatInterface.classList.add('opacity-0');
+                setTimeout(() => {
+                    chatInterface.classList.add('hidden');
+                    mainContent.classList.remove('hidden');
+                }, 500);
+            }
+
+            chatTriggers.forEach(trigger => trigger.addEventListener('click', (e) => { e.preventDefault(); openChat(); }));
+            closeChatBtn.addEventListener('click', closeChat);
+
+            function showContactModal() {
+                const modalBox = contactModal.querySelector('div');
+                contactModal.classList.remove('hidden');
+                setTimeout(() => {
+                    modalBox.classList.remove('opacity-0', 'scale-95');
+                }, 10);
+            }
+
+            function hideContactModal() {
+                const modalBox = contactModal.querySelector('div');
+                modalBox.classList.add('opacity-0', 'scale-95');
+                setTimeout(() => {
+                    contactModal.classList.add('hidden');
+                }, 300);
+            }
+            closeModalBtn.addEventListener('click', hideContactModal);
+
+            function addMessageToUI(sender, text) {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('chat-message', 'p-4', 'rounded-lg', 'w-fit', 'max-w-[80%]');
+                if (sender === 'user') {
+                    messageElement.classList.add('user-message', 'self-end', 'ml-auto');
+                } else {
+                    messageElement.classList.add('ai-message', 'self-start', 'mr-auto');
+                }
+                text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+                messageElement.innerHTML = text;
+                chatMessages.appendChild(messageElement);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            function showTypingIndicator() {
+                const typingElement = document.createElement('div');
+                typingElement.id = 'typing-indicator';
+                typingElement.classList.add('ai-message', 'self-start', 'p-4', 'rounded-lg', 'w-fit');
+                typingElement.innerHTML = `<div class="typing-indicator"><span></span><span></span><span></span></div>`;
+                chatMessages.appendChild(typingElement);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            function hideTypingIndicator() {
+                const indicator = document.getElementById('typing-indicator');
+                if (indicator) indicator.remove();
+            }
+
+            async function callGeminiAPI(currentChatHistory) {
+                const payload = { "system_instruction": systemInstruction, "contents": currentChatHistory };
+                const apiKey = "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+                try {
+                    const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                    if (!response.ok) throw new Error(`API call failed with status: ${response.status}`);
+                    const result = await response.json();
+                    if (result.candidates && result.candidates[0].content.parts[0].text) {
+                        return result.candidates[0].content.parts[0].text;
+                    }
+                    return '抱歉，我暂时无法生成回复。请尝试换一种问法。';
+                } catch (error) {
+                    console.error("Error calling Gemini API:", error);
+                    return '抱歉，连接时出现问题，请检查您的网络并重试。';
+                }
+            }
+            
+            async function getInitialGreeting() {
+                showTypingIndicator();
+                const initialUserMessage = { role: "user", parts: [{ text: "你好，请开始吧。" }] };
+                const aiResponseText = await callGeminiAPI([initialUserMessage]);
+                hideTypingIndicator();
+                chatHistory = [initialUserMessage, { role: "model", parts: [{ text: aiResponseText }] }];
+                addMessageToUI('ai', aiResponseText);
+            }
+
+            async function handleSend() {
+                const userInput = chatInput.value.trim();
+                if (!userInput) return;
+
+                addMessageToUI('user', userInput);
+                chatInput.value = '';
+                showTypingIndicator();
+
+                chatHistory.push({ role: "user", parts: [{ text: userInput }] });
+                const aiResponseText = await callGeminiAPI(chatHistory);
+                hideTypingIndicator();
+                
+                if (aiResponseText.includes('[CONVERSATION_COMPLETE]')) {
+                    const cleanResponse = aiResponseText.replace('[CONVERSATION_COMPLETE]', '').trim();
+                    chatHistory.push({ role: "model", parts: [{ text: cleanResponse }] });
+                    addMessageToUI('ai', cleanResponse);
+                    showContactModal();
+                } else {
+                    chatHistory.push({ role: "model", parts: [{ text: aiResponseText }] });
+                    addMessageToUI('ai', aiResponseText);
+                }
+            }
+
+            sendButton.addEventListener('click', handleSend);
+            chatInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleSend(); });
         });
     </script>
 </body>
