@@ -20,6 +20,7 @@
         /* 背景辉光效果 */
         .glow-background {
             position: relative;
+            overflow-x: hidden;
         }
         .glow-background::before {
             content: '';
@@ -82,11 +83,52 @@
         details > summary::-webkit-details-marker {
             display: none;
         }
+        /* 导航栏所需的玻璃质感背景 */
+        .glass-morphism {
+            background: rgba(31, 41, 55, 0.3);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
     </style>
 </head>
 <body class="glow-background">
 
-    <div class="container mx-auto px-4 py-16 md:py-24">
+    <!-- 导航栏 HTML 代码 -->
+    <nav class="fixed top-0 left-0 right-0 z-50 p-4">
+        <div class="container mx-auto glass-morphism rounded-xl p-2 px-4 flex justify-between items-center">
+            <!-- 左侧: 返回主页按钮和 Logo -->
+            <div class="flex items-center space-x-4">
+                <a href="https://sings.ai/#" class="flex items-center text-gray-300 hover:text-white transition-colors">
+                    <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    返回主页
+                </a>
+                <a href="https://sings.ai/#" class="text-xl font-bold text-white">sings.ai</a>
+            </div>
+
+            <!-- 中间: 导航链接 (桌面端显示) -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#" class="text-gray-300 hover:text-white transition-colors">产品</a>
+                <a href="#" class="text-gray-300 hover:text-white transition-colors">方案</a>
+                <a href="#" class="text-gray-300 hover:text-white transition-colors">资源</a>
+                <a href="#" class="text-gray-300 hover:text-white transition-colors">定价</a>
+            </div>
+
+            <!-- 右侧: 操作按钮 (桌面端显示) -->
+            <div class="hidden md:flex items-center space-x-4">
+                <a href="#" class="text-gray-300 hover:text-white transition-colors">登录</a>
+                <a href="#" class="gradient-button text-white font-semibold py-2 px-4 rounded-lg">免费开始</a>
+            </div>
+            <!-- 移动端菜单按钮 -->
+            <div class="md:hidden">
+                <button class="text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 pt-32 md:pt-40 pb-16 md:pb-24">
 
         <!-- 1. 标题和价格切换 -->
         <header class="text-center max-w-3xl mx-auto mb-12 md:mb-16">
