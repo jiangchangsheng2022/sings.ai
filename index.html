@@ -121,10 +121,19 @@
                         <span class="text-blue-400">Sings</span><span>.AI</span>
                     </a>
                     <nav class="hidden md:flex items-center space-x-8">
+                        <div class="relative group">
+                            <button class="text-gray-300 hover:text-white transition-colors flex items-center" data-lang="navProduct">
+                                产品
+                                <svg class="w-4 h-4 ml-1 text-gray-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+                            <div class="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-56 bg-gray-800 border border-gray-700 rounded-lg shadow-lg hidden group-hover:block z-[60]">
+                                <a href="https://sings.ai/product/Survey/" class="block px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors" data-lang="productSurvey">AI 全景问卷调研</a>
+                                <a href="https://sings.ai/product/FGD/" class="block px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors" data-lang="productInterview">AI 深度访谈模拟</a>
+                            </div>
+                        </div>
                         <a href="#three-echoes" class="text-gray-300 hover:text-white transition-colors" data-lang="navCoreConcept">核心理念</a>
-                        <a href="#services" class="text-gray-300 hover:text-white transition-colors" data-lang="navServices">产品与服务</a>
                         <a href="#" class="text-gray-300 hover:text-white transition-colors" data-lang="navPricing">定价</a>
-                        <a href="#" class="text-gray-300 hover:text-white transition-colors" data-lang="navAbout">关于我们</a>
+                        <a href="https://sings.ai/page/about.html" class="text-gray-300 hover:text-white transition-colors" data-lang="navAbout">关于我们</a>
                     </nav>
                     <div class="hidden md:flex items-center space-x-4">
                         <a href="#" class="text-gray-300 hover:text-white transition-colors" data-lang="login">登录</a>
@@ -145,10 +154,19 @@
         
         <div id="mobile-menu" class="hidden md:hidden fixed inset-0 bg-gray-900/90 backdrop-blur-sm z-40 pt-20">
             <div class="container mx-auto px-4 flex flex-col items-center text-center space-y-6">
+                <div>
+                    <button id="mobile-product-toggle" class="text-xl text-gray-300 hover:text-white transition-colors w-full text-center flex items-center justify-center" data-lang="navProductMobile">
+                        产品
+                        <svg class="w-5 h-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="mobile-product-menu" class="hidden mt-4 space-y-4">
+                        <a href="https://sings.ai/product/Survey/" class="block text-lg text-gray-400 hover:text-white" data-lang="productSurveyMobile">AI 全景问卷调研</a>
+                        <a href="https://sings.ai/product/FGD/" class="block text-lg text-gray-400 hover:text-white" data-lang="productInterviewMobile">AI 深度访谈模拟</a>
+                    </div>
+                </div>
                 <a href="#three-echoes" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="navCoreConceptMobile">核心理念</a>
-                <a href="#services" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="navServicesMobile">产品与服务</a>
                 <a href="#" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="navPricingMobile">定价</a>
-                <a href="#" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="navAboutMobile">关于我们</a>
+                <a href="https://sings.ai/page/about.html" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="navAboutMobile">关于我们</a>
                 <hr class="w-full border-gray-700 my-4">
                 <a href="#" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="loginMobile">登录</a>
                 <a href="#chat" class="w-full max-w-xs px-6 py-3 rounded-lg text-white font-semibold btn-primary chat-trigger" data-lang="bookDemoMobile">预约演示</a>
@@ -321,8 +339,8 @@
                     <div>
                         <h3 class="font-semibold text-white tracking-wider" data-lang="footerProduct">产品</h3>
                         <ul class="mt-4 space-y-3" data-lang="footerProductLinks">
-                            <li><a href="#services" class="text-gray-400 hover:text-white transition-colors">AI问卷调研</a></li>
-                            <li><a href="#services" class="text-gray-400 hover:text-white transition-colors">AI深度访谈</a></li>
+                            <li><a href="https://sings.ai/product/Survey/" class="text-gray-400 hover:text-white transition-colors">AI问卷调研</a></li>
+                            <li><a href="https://sings.ai/product/FGD/" class="text-gray-400 hover:text-white transition-colors">AI深度访谈</a></li>
                             <li><a href="#" class="text-gray-400 hover:text-white transition-colors">定价</a></li>
                         </ul>
                     </div>
@@ -336,7 +354,7 @@
                     <div>
                         <h3 class="font-semibold text-white tracking-wider" data-lang="footerCompany">公司</h3>
                         <ul class="mt-4 space-y-3" data-lang="footerCompanyLinks">
-                            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">关于我们</a></li>
+                            <li><a href="https://sings.ai/page/about.html" class="text-gray-400 hover:text-white transition-colors">关于我们</a></li>
                             <li><a href="#" class="text-gray-400 hover:text-white transition-colors">加入我们</a></li>
                             <li><a href="mailto:jiang.changsheng@foxmail.com" class="text-gray-400 hover:text-white transition-colors">联系方式</a></li>
                         </ul>
@@ -403,13 +421,17 @@
             const translations = {
                 // ... (all translation key-value pairs remain the same) ...
                 navCoreConcept: { zh: '核心理念', en: 'Core Concept' },
-                navServices: { zh: '产品与服务', en: 'Services' },
+                navProduct: { zh: '产品', en: 'Product' },
+                productSurvey: { zh: 'AI 全景问卷调研', en: 'AI Panoramic Surveys' },
+                productInterview: { zh: 'AI 深度访谈模拟', en: 'AI In-depth Interviews' },
+                navProductMobile: { zh: '产品', en: 'Product' },
+                productSurveyMobile: { zh: 'AI 全景问卷调研', en: 'AI Panoramic Surveys' },
+                productInterviewMobile: { zh: 'AI 深度访谈模拟', en: 'AI In-depth Interviews' },
                 navPricing: { zh: '定价', en: 'Pricing' },
                 navAbout: { zh: '关于我们', en: 'About Us' },
                 login: { zh: '登录', en: 'Login' },
                 bookDemo: { zh: '预约演示', en: 'Book a Demo' },
                 navCoreConceptMobile: { zh: '核心理念', en: 'Core Concept' },
-                navServicesMobile: { zh: '产品与服务', en: 'Services' },
                 navPricingMobile: { zh: '定价', en: 'Pricing' },
                 navAboutMobile: { zh: '关于我们', en: 'About Us' },
                 loginMobile: { zh: '登录', en: 'Login' },
@@ -443,11 +465,11 @@
                 ctaButton: { zh: '立即体验 Sings.AI', en: 'Experience Sings.AI Now' },
                 footerSlogan: { zh: '于千万回响中，洞见未来。', en: 'From millions of echoes, see the future.' },
                 footerProduct: { zh: '产品', en: 'Product' },
-                footerProductLinks: { zh: `<li><a href="#services" class="text-gray-400 hover:text-white transition-colors">AI问卷调研</a></li><li><a href="#services" class="text-gray-400 hover:text-white transition-colors">AI深度访谈</a></li><li><a href="#" class="text-gray-400 hover:text-white transition-colors">定价</a></li>`, en: `<li><a href="#services" class="text-gray-400 hover:text-white transition-colors">AI Surveys</a></li><li><a href="#services" class="text-gray-400 hover:text-white transition-colors">AI Interviews</a></li><li><a href="#" class="text-gray-400 hover:text-white transition-colors">Pricing</a></li>` },
+                footerProductLinks: { zh: `<li><a href="https://sings.ai/product/Survey/" class="text-gray-400 hover:text-white transition-colors">AI问卷调研</a></li><li><a href="https://sings.ai/product/FGD/" class="text-gray-400 hover:text-white transition-colors">AI深度访谈</a></li><li><a href="#" class="text-gray-400 hover:text-white transition-colors">定价</a></li>`, en: `<li><a href="https://sings.ai/product/Survey/" class="text-gray-400 hover:text-white transition-colors">AI Surveys</a></li><li><a href="https://sings.ai/product/FGD/" class="text-gray-400 hover:text-white transition-colors">AI Interviews</a></li><li><a href="#" class="text-gray-400 hover:text-white transition-colors">Pricing</a></li>` },
                 footerConcept: { zh: '理念', en: 'Concept' },
                 footerConceptLinks: { zh: `<li><a href="#three-echoes" class="text-gray-400 hover:text-white transition-colors">三大回响</a></li><li><a href="#" class="text-gray-400 hover:text-white transition-colors">客户案例</a></li>`, en: `<li><a href="#three-echoes" class="text-gray-400 hover:text-white transition-colors">The Three Echoes</a></li><li><a href="#" class="text-gray-400 hover:text-white transition-colors">Case Studies</a></li>` },
                 footerCompany: { zh: '公司', en: 'Company' },
-                footerCompanyLinks: { zh: `<li><a href="#" class="text-gray-400 hover:text-white transition-colors">关于我们</a></li><li><a href="#" class="text-gray-400 hover:text-white transition-colors">加入我们</a></li><li><a href="mailto:jiang.changsheng@foxmail.com" class="text-gray-400 hover:text-white transition-colors">联系方式</a></li>`, en: `<li><a href="#" class="text-gray-400 hover:text-white transition-colors">About Us</a></li><li><a href="#" class="text-gray-400 hover:text-white transition-colors">Careers</a></li><li><a href="mailto:jiang.changsheng@foxmail.com" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>` },
+                footerCompanyLinks: { zh: `<li><a href="https://sings.ai/page/about.html" class="text-gray-400 hover:text-white transition-colors">关于我们</a></li><li><a href="#" class="text-gray-400 hover:text-white transition-colors">加入我们</a></li><li><a href="mailto:jiang.changsheng@foxmail.com" class="text-gray-400 hover:text-white transition-colors">联系方式</a></li>`, en: `<li><a href="https://sings.ai/page/about.html" class="text-gray-400 hover:text-white transition-colors">About Us</a></li><li><a href="#" class="text-gray-400 hover:text-white transition-colors">Careers</a></li><li><a href="mailto:jiang.changsheng@foxmail.com" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>` },
                 footerLegal: { zh: '法律', en: 'Legal' },
                 footerLegalLinks: { zh: `<li><a href="#" class="text-gray-400 hover:text-white transition-colors">隐私政策</a></li><li><a href="#" class="text-gray-400 hover:text-white transition-colors">服务条款</a></li>`, en: `<li><a href="#" class="text-gray-400 hover:text-white transition-colors">Privacy Policy</a></li><li><a href="#" class="text-gray-400 hover:text-white transition-colors">Terms of Service</a></li>` },
                 footerCopyright: { zh: '&copy; 2024 Sings.AI, Inc. 保留所有权利。', en: '&copy; 2024 Sings.AI, Inc. All rights reserved.' },
@@ -481,7 +503,12 @@
 
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
+            const mobileProductToggle = document.getElementById('mobile-product-toggle');
+            const mobileProductMenu = document.getElementById('mobile-product-menu');
+
             mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+            mobileProductToggle.addEventListener('click', () => mobileProductMenu.classList.toggle('hidden'));
+
 
             const header = document.getElementById('header');
             window.addEventListener('scroll', () => {
@@ -500,6 +527,7 @@
             faders.forEach(fader => appearOnScroll.observe(fader));
             
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                if (anchor.classList.contains('page-link')) return; // Skip page switching links
                 anchor.addEventListener('click', function (e) {
                     const href = this.getAttribute('href');
                     if (href.length > 1 && !href.startsWith('#chat')) {
@@ -516,7 +544,6 @@
             });
 
             // --- Chat & Modal Logic ---
-            const mainContent = document.getElementById('main-content');
             const chatInterface = document.getElementById('chat-interface');
             const chatTriggers = document.querySelectorAll('.chat-trigger');
             const closeChatBtn = document.getElementById('close-chat');
@@ -532,7 +559,6 @@
             };
             
             function openChat() {
-                mainContent.classList.add('hidden');
                 chatInterface.classList.remove('hidden');
                 setTimeout(() => chatInterface.classList.remove('opacity-0'), 10);
                 if (chatMessages.children.length === 0) {
@@ -544,7 +570,6 @@
                 chatInterface.classList.add('opacity-0');
                 setTimeout(() => {
                     chatInterface.classList.add('hidden');
-                    mainContent.classList.remove('hidden');
                 }, 500);
             }
 
