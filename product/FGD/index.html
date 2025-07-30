@@ -365,7 +365,7 @@
             closeButton.className = 'btn-primary w-full';
             closeButton.onclick = () => modalOverlay.remove();
             modalContent.append(messageP, closeButton);
-            modalOverlay.appendChild(modalContent);
+            modalOverlay.appendChild(modalOverlay);
             document.body.appendChild(modalOverlay);
         }
 
@@ -413,7 +413,6 @@
                     const text = result.choices[0].message.content;
                     if (expectJson) {
                         try {
-                            // Find the start and end of the JSON object/array to make parsing more robust
                             const startIndex = text.indexOf('{');
                             const endIndex = text.lastIndexOf('}');
                             const startBracketIndex = text.indexOf('[');
@@ -422,13 +421,10 @@
                             let jsonText = '';
 
                             if (startBracketIndex !== -1 && endBracketIndex !== -1) {
-                                // It's likely a JSON array, which is expected for participants
                                 jsonText = text.substring(startBracketIndex, endBracketIndex + 1);
                             } else if (startIndex !== -1 && endIndex !== -1) {
-                                // It's likely a JSON object
                                 jsonText = text.substring(startIndex, endIndex + 1);
                             } else {
-                                // Fallback if no clear JSON structure is found
                                 jsonText = text;
                             }
                             
@@ -613,7 +609,7 @@
             try {
                 // --- Phase 1: Warm-up ---
                 showTypingIndicator(true);
-                let prompt = `你是一位专业的用户研究主持人。请说一段非常简短的开场白，欢迎大家。最多不超过30个字。`;
+                let prompt = `你是一位用户研究主持人。请用非常口语化、平易近人的语气说一段开场白欢迎大家。严格遵守：1. 不超过25个字。 2. 直接输出你说的这句话，不要带任何前缀。`;
                 let response = await callAIModel(prompt, false, false);
                 showTypingIndicator(false);
                 if (!response || !appState.isInterviewRunning) return;
@@ -621,12 +617,12 @@
                 
                 await think(500);
                 if (!appState.isInterviewRunning) return;
-                lastMessage = addChatMessage('主持人', '我们开始前，大家能用一句话介绍下自己吗？', 'moderator');
+                lastMessage = addChatMessage('主持人', '开始前，大家能简单介绍下自己不？一句话就行。', 'moderator');
 
                 for (const participant of appState.participants) {
                     if (!appState.isInterviewRunning) return;
                     showTypingIndicator(true);
-                    prompt = `你正在参与一场座谈会，你的身份是: ${JSON.stringify(participant)}。主持人请你做个简短的自我介绍。你的回答必须非常简短，像一条聊天消息，最多不超过30个字。`;
+                    prompt = `你正在参与一场座谈会，你的身份是: ${JSON.stringify(participant)}。主持人请你做个简短的自我介绍。严格遵守：1. 语气非常口语化。 2. 不超过25个字。 3. 直接输出你说的这句话，不要带你的名字或任何前缀。`;
                     response = await callAIModel(prompt, false, false);
                     showTypingIndicator(false);
                     if (response && appState.isInterviewRunning) lastMessage = addChatMessage(participant.name, response, 'user');
@@ -643,7 +639,7 @@
                 for (const question of coreQuestions) {
                     if (!appState.isInterviewRunning) return;
                     showTypingIndicator(true);
-                    prompt = `你是一位专业的主持人。现在请根据大纲，正式提出以下这个问题，语言要自然。问题：“${question}”`;
+                    prompt = `你是一位用户研究主持人。现在请用非常口语化、平易近人的语气，提出这个问题。严格遵守：1. 不超过25个字。 2. 直接输出你说的这句话，不要带任何前缀。问题：“${question}”`;
                     response = await callAIModel(prompt, false, false);
                     showTypingIndicator(false);
                     if (!response || !appState.isInterviewRunning) return;
@@ -667,16 +663,12 @@ ${formatChatHistory()}
 请你完全代入你的角色，针对他的发言和当前的核心问题，做出一个**高度仿真、像真人聊天一样**的回应。
 
 **严格遵守以下规则:**
-1.  **极度简短:** 你的发言**绝对不能超过30个字**。就像一条真实的聊天消息。
-2.  **互动性:** 你的回应必须是针对 **${lastMessage.name}** 的话。可以表示同意、反对、补充，甚至提出质疑。
-3.  **角色扮演:** 你的语气、观点必须完全符合你的角色设定(${nextSpeaker.profession}, ${nextSpeaker.bio})。
-4.  **多样性:** 不要总是同意。偶尔可以这样回应:
-    - **直接反驳:** "我不这么认为，其实..."
-    - **提出疑问:** "但如果那样的话，会不会...?"
-    - **@另一位用户:** "这个观点让我想起刚才@${appState.participants.find(p => p.name !== nextSpeaker.name)?.name || '张三'} 说的..."
-    - **情绪化表达:** "对对对！我也是这么想的！" 或 "有点没太明白你的意思。"
+1.  **极度简短:** 你的发言**绝对不能超过25个字**。
+2.  **绝对口语化:** 语气必须非常接地气，就像在和朋友微信聊天。
+3.  **互动第一:** 你的回应必须是针对 **${lastMessage.name}** 的话。可以同意、反对、补充，甚至提出质疑。
+4.  **不要带前缀:** 直接输出你扮演角色说的话，**绝对不要**包含你的名字或任何类似 '小李:' 的前缀。
 
-请直接输出你扮演角色说的话，不要包含任何其他解释。`;
+请开始你的表演。`;
                         response = await callAIModel(prompt, false, false);
                         showTypingIndicator(false);
                         if (response && appState.isInterviewRunning) {
@@ -687,7 +679,7 @@ ${formatChatHistory()}
 
                     if (!appState.isInterviewRunning) return;
                     showTypingIndicator(true);
-                    prompt = `你是一位专业的主持人。关于“${question}”的讨论暂时告一段落。刚才大家讨论得很好，甚至有一些不同观点。请你用一句话，自然地对刚才的讨论（包括共识和分歧）做个简短的小结，并准备引出下一个话题。不要说“下一个话题是...”，可以说“好的，感谢大家的分享，那我们接着聊聊...”`;
+                    prompt = `你是一位用户研究主持人。关于“${question}”的讨论暂时告一段落。请用非常口语化的语气做个简短的小结，并引出下一个话题。严格遵守：1. 不超过25个字。 2. 直接输出你说的这句话，不要带任何前缀。`;
                     response = await callAIModel(prompt, false, false);
                     showTypingIndicator(false);
                     if(response && appState.isInterviewRunning) lastMessage = addChatMessage('主持人', response, 'moderator');
@@ -697,7 +689,7 @@ ${formatChatHistory()}
                 // --- Phase 3: Closing ---
                 if (!appState.isInterviewRunning) return;
                 showTypingIndicator(true);
-                prompt = `你是一位专业的主持人。所有核心问题都讨论完了，请发表一段简短的结束语，感谢大家的参与。一句话就行。`;
+                prompt = `你是一位用户研究主持人。所有问题都讨论完了，请用非常口语化的语气发表结束语，感谢大家。严格遵守：1. 不超过25个字。 2. 直接输出你说的这句话，不要带任何前缀。`;
                 response = await callAIModel(prompt, false, false);
                 showTypingIndicator(false);
                 if (response) addChatMessage('主持人', response, 'moderator');
