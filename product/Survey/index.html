@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 用户研究模拟器 (流程优化版)</title>
+    <!-- 引入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入 Chart.js 用于数据可视化 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- 引入 Marked.js 用于解析Markdown -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        /* 自定义样式，增加一些过渡效果和细节 */
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+        }
+        .step-section {
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+        }
+        .hidden-step {
+            opacity: 0;
+            transform: translateY(20px);
+            display: none;
+        }
+        .visible-step {
+            opacity: 1;
+            transform: translateY(0);
+            display: block;
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        .ai-loader {
+             border-top: 4px solid #4f46e5;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .ai-feature-btn {
+            background-color: #4f46e5;
+            color: white;
+            border: none;
+            transition: background-color 0.3s;
+        }
+        .ai-feature-btn:hover {
+            background-color: #4338ca;
+        }
+        .user-card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .user-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        #progress-bar {
+            transition: width 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-5xl">
+        <!-- 网站头部 -->
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900">AI 用户研究模拟器</h1>
+            <p class="text-gray-600 mt-2">由硅基流动 (SiliconFlow) API 驱动</p>
+        </header>
+
+        <main>
+            <!-- 步骤条 (更新为5步) -->
+            <div class="grid grid-cols-5 gap-2 md:gap-4 mb-8 p-4 bg-white rounded-lg shadow-sm">
+                <div id="progress-step-1" class="text-center text-blue-600 font-semibold">
+                    <div class="w-8 h-8 mx-auto rounded-full bg-blue-600 text-white flex items-center justify-center mb-1">1</div>
+                    <p class="text-xs md:text-sm">输入需求</p>
+                </div>
+                <div id="progress-step-2" class="text-center text-gray-400">
+                    <div class="w-8 h-8 mx-auto rounded-full bg-gray-200 flex items-center justify-center mb-1">2</div>
+                    <p class="text-xs md:text-sm">确认目标</p>
+                </div>
+                <div id="progress-step-3" class="text-center text-gray-400">
+                    <div class="w-8 h-8 mx-auto rounded-full bg-gray-200 flex items-center justify-center mb-1">3</div>
+                    <p class="text-xs md:text-sm">用户招募</p>
+                </div>
+                <div id="progress-step-4" class="text-center text-gray-400">
+                    <div class="w-8 h-8 mx-auto rounded-full bg-gray-200 flex items-center justify-center mb-1">4</div>
+                    <p class="text-xs md:text-sm">数据处理</p>
+                </div>
+                <div id="progress-step-5" class="text-center text-gray-400">
+                    <div class="w-8 h-8 mx-auto rounded-full bg-gray-200 flex items-center justify-center mb-1">5</div>
+                    <p class="text-xs md:text-sm">生成报告</p>
+                </div>
+            </div>
+
+            <!-- 第一步: 输入研究需求 -->
+            <section id="step-1" class="step-section visible-step bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-bold mb-4">第一步：输入初步研究需求</h2>
+                <p class="mb-4 text-gray-600">请在此输入您宽泛的研究想法或问题，AI 将在下一步帮您优化。 </p>
+                <textarea id="research-goal-initial" class="w-full h-40 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="例如：我想了解一下年轻人对智能手表的看法。"></textarea>
+                <button id="optimize-goal-btn" class="ai-feature-btn mt-4 w-full font-bold py-3 px-4 rounded-md flex items-center justify-center disabled:opacity-50">
+                    <span id="optimize-btn-text">✨ 生成优化建议</span>
+                    <div id="optimize-btn-loader" class="loader ai-loader w-6 h-6 border-t-white ml-3 hidden"></div>
+                </button>
+                <div id="error-step-1" class="text-red-500 mt-4 text-sm hidden"></div>
+            </section>
+
+            <!-- 第二步: 确认并修改研究目标 -->
+            <section id="step-2" class="step-section hidden-step bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-bold mb-4">第二步：确认研究目标并生成问卷</h2>
+                <p class="mb-4 text-gray-600">这是 AI 为您优化的研究目标。您可以直接使用，或根据需要进行修改，然后生成专业问卷和招募用户。</p>
+                <textarea id="research-goal-final" class="w-full h-40 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"></textarea>
+                <button id="generate-questionnaire-btn" class="mt-4 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-md hover:bg-blue-700 transition-colors flex items-center justify-center disabled:bg-gray-400">
+                    <span id="btn-text">确认目标，生成问卷并招募用户</span>
+                    <div id="btn-loader" class="loader ai-loader w-6 h-6 border-t-white ml-3 hidden"></div>
+                </button>
+                <div id="error-step-2" class="text-red-500 mt-4 text-sm hidden"></div>
+            </section>
+
+            <!-- 第三步: 用户招募 -->
+            <section id="step-3" class="step-section hidden-step bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-bold mb-4">第三步：用户招募</h2>
+                <p class="mb-4 text-gray-600">已根据您的研究目标成功招募以下虚拟用户。他们将参与后续的问卷填写。</p>
+                <div id="recruitment-loader" class="text-center py-10">
+                    <div class="loader ai-loader mx-auto"></div>
+                    <p class="mt-4 text-gray-600">正在生成虚拟用户画像...</p>
+                </div>
+                <div id="recruited-users-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-96 overflow-y-auto hidden">
+                    <!-- 用户卡片将动态插入此处 -->
+                </div>
+                <button id="proceed-to-simulation-btn" class="mt-6 w-full bg-green-600 text-white font-bold py-3 px-4 rounded-md hover:bg-green-700 transition-colors flex items-center justify-center disabled:bg-gray-400 hidden">
+                    <span id="proceed-btn-text">开始数据处理</span>
+                    <div id="proceed-btn-loader" class="loader ai-loader w-6 h-6 border-t-white ml-3 hidden"></div>
+                </button>
+                <div id="error-step-3" class="text-red-500 mt-4 text-sm hidden"></div>
+            </section>
+
+            <!-- 第四步: 数据处理 -->
+             <section id="step-4" class="step-section hidden-step bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-bold mb-4">第四步：数据处理</h2>
+                <p class="mb-4 text-gray-600">AI 正在模拟已招募的用户填写问卷并处理数据，请稍候...</p>
+                <div id="simulation-progress" class="mt-4 text-center text-gray-600">
+                    <p id="progress-text">正在处理数据...</p>
+                    <div class="w-full bg-gray-200 rounded-full h-4 mt-2">
+                        <div id="progress-bar" class="bg-green-600 h-4 rounded-full text-xs font-medium text-blue-100 text-center p-0.5 leading-none" style="width: 0%">0%</div>
+                    </div>
+                </div>
+                 <div id="error-step-4" class="text-red-500 mt-4 text-sm hidden"></div>
+            </section>
+
+            <!-- 第五步: 可视化报告 -->
+            <section id="step-5" class="step-section hidden-step bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-bold mb-4">第五步：用户研究报告</h2>
+                <div id="report-content">
+                    <div class="text-center py-10" id="report-loader">
+                        <div class="loader ai-loader mx-auto"></div>
+                        <p class="mt-4 text-gray-600">正在分析数据并生成洞察结论...</p>
+                    </div>
+                    <div id="report-body" class="hidden">
+                        <div class="mb-8 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-r-lg">
+                            <h3 class="text-xl font-semibold text-blue-800">研究背景</h3>
+                            <p id="report-goal" class="text-gray-700 mt-2"></p>
+                        </div>
+                        <div class="mb-8">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">关键洞察</h3>
+                            <div id="report-insights" class="prose max-w-none p-4 bg-gray-50 rounded-md"></div>
+                        </div>
+
+                        <div id="persona-section" class="mb-8">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">用户画像总结</h3>
+                            <button id="generate-personas-btn" class="ai-feature-btn w-full font-bold py-2 px-4 rounded-md flex items-center justify-center disabled:opacity-50">
+                               <span id="persona-btn-text">✨ 生成用户画像总结</span>
+                               <div id="persona-btn-loader" class="loader ai-loader w-5 h-5 border-t-white ml-3 hidden"></div>
+                            </button>
+                            <div id="report-personas" class="prose max-w-none p-4 bg-gray-50 rounded-md mt-4 hidden"></div>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">数据可视化图表</h3>
+                            <div id="report-charts" class="space-y-8"></div>
+                        </div>
+                    </div>
+                </div>
+                <button id="restart-btn" class="mt-8 w-full bg-gray-600 text-white font-bold py-3 px-4 rounded-md hover:bg-gray-700 transition-colors">重新开始</button>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // --- 全局状态和配置 ---
+        const state = {
+            currentStep: 1,
+            researchGoal: '',
+            questionnaire: null,
+            recruitedUsers: [],
+            simulationResults: [],
+        };
+
+        const config = {
+            siliconflow: {
+                apiKey: 'sk-xifmrwnarxegowpdpwjmbpiodhjawjtacbkgtkoygpgszhec',
+                apiUrl: 'https://api.siliconflow.cn/v1/chat/completions',
+                model: 'Qwen/Qwen2-7B-Instruct',
+            },
+            simulationCount: 30,
+        };
+
+        // --- DOM 元素获取 ---
+        const stepSections = [
+            document.getElementById('step-1'),
+            document.getElementById('step-2'),
+            document.getElementById('step-3'),
+            document.getElementById('step-4'),
+            document.getElementById('step-5'),
+        ];
+
+        const optimizeGoalBtn = document.getElementById('optimize-goal-btn');
+        const generateBtn = document.getElementById('generate-questionnaire-btn');
+        const proceedToSimBtn = document.getElementById('proceed-to-simulation-btn');
+        const generatePersonasBtn = document.getElementById('generate-personas-btn');
+        const restartBtn = document.getElementById('restart-btn');
+
+        const researchGoalInitialInput = document.getElementById('research-goal-initial');
+        const researchGoalFinalInput = document.getElementById('research-goal-final');
+        const recruitmentLoader = document.getElementById('recruitment-loader');
+        const recruitedUsersContainer = document.getElementById('recruited-users-container');
+        const simulationProgress = document.getElementById('simulation-progress');
+        const progressText = document.getElementById('progress-text');
+        const progressBar = document.getElementById('progress-bar');
+        
+        const reportLoader = document.getElementById('report-loader');
+        const reportBody = document.getElementById('report-body');
+        const reportGoal = document.getElementById('report-goal');
+        const reportInsights = document.getElementById('report-insights');
+        const reportPersonas = document.getElementById('report-personas');
+        const reportCharts = document.getElementById('report-charts');
+        
+        const errorStep1 = document.getElementById('error-step-1');
+        const errorStep2 = document.getElementById('error-step-2');
+        const errorStep3 = document.getElementById('error-step-3');
+        const errorStep4 = document.getElementById('error-step-4');
+
+        // --- 核心AI调用函数 ---
+        async function callAI(prompt, retries = 3) {
+            const { apiKey, apiUrl, model } = config.siliconflow;
+            
+            const payload = {
+                model: model,
+                messages: [{ role: 'user', content: prompt }],
+                max_tokens: 4096,
+            };
+
+            for (let i = 0; i < retries; i++) {
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${apiKey}`,
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        let errorData = { message: `HTTP error! status: ${response.status}` };
+                        try {
+                            errorData = await response.json();
+                        } catch (e) {
+                            console.error("Could not parse error response JSON.", e);
+                        }
+                        throw new Error(`API 请求失败，状态码: ${response.status}. 详情: ${JSON.stringify(errorData)}`);
+                    }
+
+                    const result = await response.json();
+
+                    if (result.choices && result.choices.length > 0) {
+                        let content = result.choices[0].message.content;
+                        content = content.trim();
+                        if (content.startsWith("```json")) {
+                            content = content.substring(7);
+                        }
+                        if (content.endsWith("```")) {
+                            content = content.substring(0, content.length - 3);
+                        }
+                        return content.trim();
+                    } else {
+                        throw new Error(`API 调用成功但未返回有效内容。`);
+                    }
+                } catch (error) {
+                    console.error(`第 ${i + 1} 次调用 SiliconFlow API 失败:`, error);
+                    if (i === retries - 1) throw error;
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                }
+            }
+        }
+
+        // --- UI 和流程控制函数 ---
+        function updateProgressIndicator(step) {
+            const progressSteps = document.querySelectorAll('[id^="progress-step-"]');
+            progressSteps.forEach((s, index) => {
+                const circle = s.querySelector('div');
+                if (index < step) {
+                    s.classList.remove('text-gray-400');
+                    s.classList.add('text-blue-600', 'font-semibold');
+                    circle.classList.remove('bg-gray-200');
+                    circle.classList.add('bg-blue-600', 'text-white');
+                } else {
+                    s.classList.remove('text-blue-600', 'font-semibold');
+                    s.classList.add('text-gray-400');
+                    circle.classList.remove('bg-blue-600', 'text-white');
+                    circle.classList.add('bg-gray-200');
+                }
+            });
+        }
+        
+        function switchStep(stepToShow) {
+            state.currentStep = stepToShow;
+            stepSections.forEach((section, index) => {
+                if (index + 1 === stepToShow) {
+                    section.classList.remove('hidden-step');
+                    section.classList.add('visible-step');
+                } else {
+                    section.classList.remove('visible-step');
+                    section.classList.add('hidden-step');
+                }
+            });
+            updateProgressIndicator(stepToShow);
+        }
+
+        function setButtonLoading(button, isLoading) {
+            const textSpan = button.querySelector('span');
+            const loader = button.querySelector('.loader');
+            button.disabled = isLoading;
+            if (isLoading) {
+                textSpan.style.display = 'none';
+                loader.style.display = 'block';
+            } else {
+                textSpan.style.display = 'inline-block';
+                loader.style.display = 'none';
+            }
+        }
+
+        // --- 功能实现函数 ---
+
+        // Step 1: 优化目标
+        async function handleOptimizeGoal() {
+            const currentGoal = researchGoalInitialInput.value.trim();
+            if (!currentGoal) {
+                errorStep1.textContent = '请先输入一个初步的研究目标。';
+                errorStep1.classList.remove('hidden');
+                return;
+            }
+            errorStep1.classList.add('hidden');
+            setButtonLoading(optimizeGoalBtn, true);
+            const prompt = `作为一名顶尖的用户研究策略师，请将以下这个较为宽泛的研究想法，优化成一个更专业、更聚焦、更具可操作性的研究目标。请直接返回优化后的文本，无需任何额外解释。\n\n原始想法：\n"${currentGoal}"`;
+            try {
+                const optimizedGoal = await callAI(prompt);
+                researchGoalFinalInput.value = optimizedGoal;
+                switchStep(2);
+            } catch (error) {
+                console.error('优化目标失败:', error);
+                errorStep1.textContent = `AI 优化失败: ${error.message}`;
+                errorStep1.classList.remove('hidden');
+            } finally {
+                setButtonLoading(optimizeGoalBtn, false);
+            }
+        }
+
+        // Step 2: 生成问卷并招募用户
+        async function handleGenerateAndRecruit() {
+            state.researchGoal = researchGoalFinalInput.value.trim();
+            if (!state.researchGoal) {
+                errorStep2.textContent = '研究目标不能为空。';
+                errorStep2.classList.remove('hidden');
+                return;
+            }
+            errorStep2.classList.add('hidden');
+            setButtonLoading(generateBtn, true);
+
+            switchStep(3);
+            recruitmentLoader.classList.remove('hidden');
+            recruitedUsersContainer.classList.add('hidden');
+            proceedToSimBtn.classList.add('hidden');
+
+            try {
+                const [questionnaireResponse, usersResponse] = await Promise.all([
+                    generateQuestionnaire(),
+                    recruitUsers()
+                ]);
+
+                state.questionnaire = JSON.parse(questionnaireResponse);
+                state.recruitedUsers = JSON.parse(usersResponse);
+
+                displayRecruitedUsers();
+                recruitmentLoader.classList.add('hidden');
+                recruitedUsersContainer.classList.remove('hidden');
+                proceedToSimBtn.classList.remove('hidden');
+
+            } catch (error) {
+                console.error('生成问卷或招募用户失败:', error);
+                errorStep3.textContent = `处理失败: ${error.message}`;
+                errorStep3.classList.remove('hidden');
+            } finally {
+                setButtonLoading(generateBtn, false);
+            }
+        }
+
+        function generateQuestionnaire() {
+            const prompt = `作为一名资深的用户研究专家，请根据以下研究目的，设计一份专业的定量研究问卷。\n研究目的："${state.researchGoal}"\n\n你的输出必须是一个严格遵循以下JSON格式的字符串，不要包含任何额外的解释或Markdown标记，必须以 \`\`\`json 开始和结束：\n\`\`\`json\n{\n  "title": "关于...的研究问卷",\n  "screener": [\n    { "questionId": "s1", "questionText": "您在过去一年内是否使用或购买过相关产品/服务？", "questionType": "single-choice", "options": ["是", "否"] }\n  ],\n  "mainBody": [\n    { "questionId": "m1", "questionText": "您最常使用的品牌是什么？", "questionType": "single-choice", "options": ["品牌A", "品牌B", "品牌C", "其他"] },\n    { "questionId": "m2", "questionText": "您选择该品牌的主要原因是什么？(可多选)", "questionType": "multiple-choice", "options": ["价格实惠", "性能强大", "设计美观", "朋友推荐", "广告影响"] }\n  ],\n  "demographics": [\n    { "questionId": "d1", "questionText": "您的性别是？", "questionType": "single-choice", "options": ["男", "女", "其他"] },\n    { "questionId": "d2", "questionText": "您的年龄段是？", "questionType": "single-choice", "options": ["18岁以下", "18-25岁", "26-35岁", "36-45岁", "45岁以上"] },\n    { "questionId": "d3", "questionText": "您的职业是？", "questionType": "single-choice", "options": ["学生", "技术/IT", "设计/艺术", "教育/科研", "医疗/健康", "自由职业", "其他"] }\n  ]\n}\n\`\`\`\n请确保问题设计专业、逻辑严谨，并完整覆盖甄别、主体和个人信息三个部分。`;
+            return callAI(prompt);
+        }
+
+        // Step 3: 用户招募
+        function recruitUsers() {
+             const prompt = `作为一名专业的市场研究招募专员，请根据以下研究目标，为我生成 ${config.simulationCount} 位符合条件的虚拟用户画像。\n\n研究目标：\n"${state.researchGoal}"\n\n你的输出必须是一个严格的JSON数组，数组中包含 ${config.simulationCount} 个对象。每个对象都必须包含 "name" (一个常见的中文名), "age" (一个数字), "gender" (男或女), 和 "bio" (一段20-40字的生动自我介绍，需符合其画像特征)。不要包含任何额外的解释或Markdown标记，必须以 \`\`\`json 开始和结束：\n\`\`\`json\n[\n  {\n    "name": "李明",\n    "age": 28,\n    "gender": "男",\n    "bio": "我是一名在北京工作的软件工程师，平时喜欢研究各种数码产品，对新技术很敏感，业余时间会去健身和爬山。"\n  },\n  {\n    "name": "王秀英",\n    "age": 22,\n    "gender": "女",\n    "bio": "我是上海一所大学的设计系学生，热爱时尚和艺术，喜欢用Vlog记录生活，对产品的颜值和设计感有很高的要求。"\n  }\n]\n\`\`\`\n请确保生成的用户画像多样化，并能覆盖研究目标可能涉及的不同用户群体。`;
+            return callAI(prompt);
+        }
+
+        function displayRecruitedUsers() {
+            recruitedUsersContainer.innerHTML = '';
+            state.recruitedUsers.forEach(user => {
+                const card = document.createElement('div');
+                card.className = 'user-card bg-white p-4 rounded-lg border border-gray-200 flex items-center space-x-4';
+                // [新增] 动态生成头像
+                const avatarUrl = `https://api.multiavatar.com/${encodeURIComponent(user.name)}.svg`;
+                card.innerHTML = `
+                    <img src="${avatarUrl}" alt="用户头像" class="w-16 h-16 rounded-full bg-gray-200 border-2 border-white shadow">
+                    <div>
+                        <h4 class="font-bold text-lg text-blue-700">${user.name}</h4>
+                        <p class="text-sm text-gray-600 mb-2">${user.gender}, ${user.age}岁</p>
+                        <p class="text-sm text-gray-800">${user.bio}</p>
+                    </div>
+                `;
+                recruitedUsersContainer.appendChild(card);
+            });
+        }
+        
+        // Step 4: 数据处理
+        async function handleStartSimulation() {
+            switchStep(4);
+            state.simulationResults = [];
+            errorStep4.classList.add('hidden');
+            
+            for (let i = 0; i < state.recruitedUsers.length; i++) {
+                const user = state.recruitedUsers[i];
+                progressText.textContent = `正在处理用户数据 ${i + 1}/${state.recruitedUsers.length}: ${user.name}...`;
+                
+                const prompt = `你是一个高级数据模拟器。现在，请为以下这位已被招募的用户，填写这份问卷。 \n\n你的任务是生成一个JSON对象，代表这位用户的完整问卷回答。回答必须严格符合用户的个人简介(bio)和画像特征。\n\n[重要规则]：在生成JSON时，如果任何字符串值（特别是 "bio" 或 "answers"）内部包含双引号(")，你必须用反斜杠进行转义，例如 "他说: \\"你好\\""。这是一个强制性要求，以确保JSON的有效性。\n\n这是当前用户的信息：\n${JSON.stringify(user, null, 2)}\n\n这是需要填写的问卷：\n${JSON.stringify(state.questionnaire, null, 2)}\n\n你的输出必须是一个严格的、格式完全正确的JSON对象。不要包含任何额外的解释或Markdown标记，必须以 \`\`\`json 开始和结束：\n\`\`\`json\n{\n    "respondentId": "user-${i + 1}",\n    "persona": ${JSON.stringify(user)},\n    "answers": [\n      { "questionId": "s1", "answer": "是" },\n      { "questionId": "m1", "answer": "品牌A" },\n      { "questionId": "m2", "answer": ["性能强大"] },\n      { "questionId": "m3", "answer": "满意" },\n      { "questionId": "d1", "answer": "男" },\n      { "questionId": "d2", "answer": "26-35岁" },\n      { "questionId": "d3", "answer": "技术/IT" }\n    ]\n}\n\`\`\`\n请确保回答与用户的个人信息和简介高度一致。`;
+
+                try {
+                    const responseText = await callAI(prompt);
+                    const result = JSON.parse(responseText);
+                    state.simulationResults.push(result);
+                    
+                    const progress = ((i + 1) / state.recruitedUsers.length) * 100;
+                    progressBar.style.width = `${progress}%`;
+                    progressBar.textContent = `${Math.round(progress)}%`;
+
+                } catch (error) {
+                    console.error(`模拟用户 ${user.name} 失败:`, error);
+                    errorStep4.textContent = `处理用户 ${user.name} 数据时发生错误，已跳过。错误: ${error.message}`;
+                    errorStep4.classList.remove('hidden');
+                    continue; // Skip to the next user if one fails
+                }
+            }
+            
+            progressText.textContent = `数据处理完成！共获得 ${state.simulationResults.length} 份有效数据。`;
+            setTimeout(() => {
+                switchStep(5);
+                handleGenerateReport();
+            }, 1000);
+        }
+
+        // Step 5: 生成报告
+        async function handleGenerateReport() {
+            reportLoader.style.display = 'block';
+            reportBody.style.display = 'none';
+            reportGoal.textContent = state.researchGoal;
+            generateCharts();
+            
+            const dataSummary = summarizeDataForAI();
+            const prompt = `作为一名资深的数据分析师，请分析以下关于“${state.questionnaire.title}”的问卷调查数据摘要。\n研究背景: "${state.researchGoal}"\n\n数据摘要：\n${dataSummary}\n\n请根据以上数据，用中文总结出3-5个最关键的市场洞察和商业建议。你的输出必须是Markdown格式的无序列表。`;
+            try {
+                const insights = await callAI(prompt);
+                reportInsights.innerHTML = marked.parse(insights);
+            } catch (error) {
+                console.error('生成洞察失败:', error);
+                reportInsights.innerHTML = `<p class="text-red-500">无法生成洞察结论。错误: ${error.message}</p>`;
+            } finally {
+                reportLoader.style.display = 'none';
+                reportBody.style.display = 'block';
+            }
+        }
+        
+        async function handleGeneratePersonas() {
+            setButtonLoading(generatePersonasBtn, true);
+            reportPersonas.classList.remove('hidden');
+            reportPersonas.innerHTML = '<div class="loader ai-loader mx-auto"></div>';
+
+            const prompt = `基于以下 ${state.simulationResults.length} 份用户调研的原始数据，请为我深度分析并创造 2-3 个最具代表性的用户画像总结 (User Persona Summary)。\n\n请确保每个画像总结都包含以下部分，并以生动、具体、有故事性的叙事风格呈现：\n1.  **标题**: (例如: “务实的效率追求者 - 李伟”) \n2.  **核心特征与目标**: (一两句话总结他们的核心诉求) \n3.  **行为与习惯**: (描述他们与研究主题相关的具体行为) \n4.  **痛点与挑战**: (他们在使用相关产品/服务时遇到的主要问题) \n5.  **动机与期望**: (他们最看重什么？期望得到什么？)\n\n你的输出必须是结构清晰的 Markdown 格式。\n\n原始数据如下：\n${JSON.stringify(state.simulationResults, null, 2)}`;
+
+            try {
+                const personas = await callAI(prompt);
+                reportPersonas.innerHTML = marked.parse(personas);
+            } catch (error) {
+                console.error('生成用户画像失败:', error);
+                reportPersonas.innerHTML = `<p class="text-red-500">AI 生成用户画像失败: ${error.message}</p>`;
+            } finally {
+                setButtonLoading(generatePersonasBtn, false);
+                generatePersonasBtn.style.display = 'none';
+            }
+        }
+
+        function summarizeDataForAI() {
+            let summary = `总样本量: ${state.simulationResults.length}份\n\n`;
+            const allQuestions = [...state.questionnaire.screener, ...state.questionnaire.mainBody, ...state.questionnaire.demographics];
+            allQuestions.forEach(q => {
+                summary += `问题: "${q.questionText}"\n`;
+                const counts = {};
+                state.simulationResults.forEach(res => {
+                    const answerObj = res.answers.find(a => a.questionId === q.questionId);
+                    if (!answerObj || !answerObj.answer) return;
+                    if (Array.isArray(answerObj.answer)) {
+                        answerObj.answer.forEach(opt => { counts[opt] = (counts[opt] || 0) + 1; });
+                    } else {
+                        counts[answerObj.answer] = (counts[answerObj.answer] || 0) + 1;
+                    }
+                });
+                for (const [option, count] of Object.entries(counts)) {
+                    summary += `- ${option}: ${count}票 (${((count / state.simulationResults.length) * 100).toFixed(1)}%)\n`;
+                }
+                summary += "\n";
+            });
+            return summary;
+        }
+
+        function generateCharts() {
+            reportCharts.innerHTML = '';
+            const allQuestions = [...state.questionnaire.mainBody, ...state.questionnaire.demographics];
+            allQuestions.forEach((q, index) => {
+                if (q.questionType === 'single-choice' || q.questionType === 'multiple-choice' || q.questionType === 'scale-5') {
+                    const chartContainer = document.createElement('div');
+                    chartContainer.className = 'p-4 border rounded-lg bg-white';
+                    const title = document.createElement('h4');
+                    title.className = 'text-lg font-semibold mb-2 text-center';
+                    title.textContent = q.questionText;
+                    const canvas = document.createElement('canvas');
+                    canvas.id = `chart-${q.questionId}`;
+                    chartContainer.appendChild(title);
+                    chartContainer.appendChild(canvas);
+                    reportCharts.appendChild(chartContainer);
+
+                    const counts = {};
+                    let totalRespondentsForQuestion = 0;
+                    state.simulationResults.forEach(res => {
+                        const answerObj = res.answers.find(a => a.questionId === q.questionId);
+                        if (answerObj && answerObj.answer) {
+                            totalRespondentsForQuestion++;
+                            if (Array.isArray(answerObj.answer)) {
+                                answerObj.answer.forEach(opt => { counts[opt] = (counts[opt] || 0) + 1; });
+                            } else {
+                                counts[answerObj.answer] = (counts[answerObj.answer] || 0) + 1;
+                            }
+                        }
+                    });
+
+                    const totalBase = q.questionType === 'multiple-choice' ? state.simulationResults.length : totalRespondentsForQuestion;
+                    if (totalBase === 0) return; // Skip chart if no data
+
+                    const labels = Object.keys(counts);
+                    const percentageData = labels.map(label => {
+                        return ((counts[label] / totalBase) * 100).toFixed(1);
+                    });
+                    
+                    const backgroundColors = labels.map((_, i) => `hsl(${(i * 200 / labels.length + 200)}, 70%, 60%)`);
+                    
+                    new Chart(canvas, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{ 
+                                label: '选择百分比 (%)', 
+                                data: percentageData, 
+                                backgroundColor: backgroundColors, 
+                            }]
+                        },
+                        options: { 
+                            indexAxis: 'y',
+                            responsive: true, 
+                            scales: {
+                                x: {
+                                    beginAtZero: true,
+                                    max: 100,
+                                    ticks: {
+                                        callback: function(value) {
+                                            return value + "%"
+                                        }
+                                    }
+                                }
+                            },
+                            plugins: { 
+                                legend: { 
+                                    display: false
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            let label = context.dataset.label || '';
+                                            if (label) {
+                                                label += ': ';
+                                            }
+                                            if (context.parsed.x !== null) {
+                                                const originalCount = counts[context.label];
+                                                label += `${context.parsed.x}% (${originalCount}人)`;
+                                            }
+                                            return label;
+                                        }
+                                    }
+                                }
+                            } 
+                        }
+                    });
+                }
+            });
+        }
+        
+        function handleRestart() {
+            state.currentStep = 1;
+            state.researchGoal = '';
+            state.questionnaire = null;
+            state.recruitedUsers = [];
+            state.simulationResults = [];
+            researchGoalInitialInput.value = '';
+            researchGoalFinalInput.value = '';
+            recruitedUsersContainer.innerHTML = '';
+            reportCharts.innerHTML = '';
+            reportInsights.innerHTML = '';
+            reportPersonas.innerHTML = '';
+            reportPersonas.classList.add('hidden');
+            generatePersonasBtn.style.display = 'flex';
+            
+            document.querySelectorAll('[id^="error-step-"]').forEach(el => el.classList.add('hidden'));
+
+            simulationProgress.classList.add('hidden');
+            progressBar.style.width = '0%';
+            switchStep(1);
+        }
+
+        // --- 事件监听器 ---
+        
+        optimizeGoalBtn.addEventListener('click', handleOptimizeGoal);
+        generateBtn.addEventListener('click', handleGenerateAndRecruit);
+        proceedToSimBtn.addEventListener('click', handleStartSimulation);
+        generatePersonasBtn.addEventListener('click', handleGeneratePersonas);
+        restartBtn.addEventListener('click', handleRestart);
+
+        // 初始化
+        window.addEventListener('load', () => {
+            switchStep(1);
+        });
+    </script>
+
+</body>
+</html>
