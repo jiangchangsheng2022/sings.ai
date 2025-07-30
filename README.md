@@ -1,4 +1,4 @@
-Sings.AI 品牌定位与商业计划妈啊啊啊！
+Sings.AI 品牌定位与商业计划
 第一部分：品牌核心 (Brand Core)
 1. 公司名称
 Sings.AI
