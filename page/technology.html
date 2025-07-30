@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sings.ai 技术核心</title>
+    <!-- 引入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入 Google Fonts 的 Inter 字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* 自定义样式，使其更接近 sings.ai 的风格 */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000000;
+            color: #E5E7EB; /* text-gray-200 */
+        }
+        /* 背景辉光效果 */
+        .glow-background {
+            position: relative;
+            overflow-x: hidden;
+        }
+        .glow-background::before {
+            content: '';
+            position: absolute;
+            top: -15%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1400px;
+            height: 1200px;
+            background-image: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, rgba(99, 102, 241, 0) 55%);
+            z-index: -1;
+            pointer-events: none;
+        }
+        /* 标题渐变色 */
+        .gradient-text {
+            background-image: linear-gradient(to right, #A78BFA, #3B82F6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        /* 按钮渐变背景 */
+        .gradient-button {
+            background-image: linear-gradient(to right, #4F46E5, #3B82F6);
+            transition: all 0.3s ease;
+        }
+        .gradient-button:hover {
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+        }
+        /* 特性卡片样式 */
+        .feature-card {
+            background-color: rgba(31, 41, 55, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        .feature-card:hover {
+            transform: translateY(-8px);
+            border-color: #4F46E5;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        /* SVG 图标颜色 */
+        .icon-color {
+            color: #A78BFA;
+        }
+        /* 玻璃质感背景 */
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="glow-background">
+
+    <!-- 新增的导航栏 -->
+    <nav class="fixed top-0 left-0 right-0 z-50 p-4">
+        <div class="container mx-auto glass-morphism rounded-xl p-2 px-4 flex justify-between items-center">
+            <!-- 左侧: 返回按钮和 Logo -->
+            <div class="flex items-center space-x-4">
+                <a href="javascript:history.back()" class="flex items-center text-gray-300 hover:text-white transition-colors">
+                    <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    返回
+                </a>
+                <a href="#" class="text-xl font-bold text-white">sings.ai</a>
+            </div>
+
+            <!-- 中间: 导航链接 (桌面端显示) -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#" class="text-gray-300 hover:text-white transition-colors">产品</a>
+                <a href="#" class="text-gray-300 hover:text-white transition-colors">方案</a>
+                <a href="#" class="text-gray-300 hover:text-white transition-colors">资源</a>
+                <a href="#" class="text-gray-300 hover:text-white transition-colors">定价</a>
+            </div>
+
+            <!-- 右侧: 操作按钮 (桌面端显示) -->
+            <div class="hidden md:flex items-center space-x-4">
+                <a href="#" class="text-gray-300 hover:text-white transition-colors">登录</a>
+                <a href="#" class="gradient-button text-white font-semibold py-2 px-4 rounded-lg">免费开始</a>
+            </div>
+            
+            <!-- 移动端菜单按钮 -->
+            <div class="md:hidden">
+                <button class="text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 页面主体内容 (增加上边距以避开导航栏) -->
+    <div class="container mx-auto px-4 pt-32 md:pt-40 pb-16 md:pb-24">
+
+        <!-- 1. 页面主标题 -->
+        <header class="text-center max-w-4xl mx-auto mb-20 md:mb-32">
+            <h1 class="text-4xl md:text-6xl font-black tracking-tighter mb-4">
+                <span class="gradient-text">Insight Engine</span>
+            </h1>
+            <p class="text-2xl md:text-3xl font-bold text-white mb-6">下一代研究分析引擎，专为行业洞察而生</p>
+            <p class="text-lg text-gray-400">
+                在信息爆炸的时代，数据本身不是壁垒，从数据中提炼真知灼见的能力才是。我们打造的 Insight Engine，正是为了完成这“惊险的一跃”，将您的研究从“数据收集”时代，带入“智能洞察”时代。
+            </p>
+        </header>
+
+        <!-- 2. 为什么需要行业大模型 -->
+        <section class="max-w-5xl mx-auto mb-20 md:mb-32">
+            <h2 class="text-3xl font-bold text-center text-white mb-12">通用 AI vs. 行业专家</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="glass-morphism rounded-2xl p-8">
+                    <h3 class="text-xl font-bold text-gray-400 mb-4">通用大模型</h3>
+                    <p class="text-gray-400 mb-6">知识广博，但对特定行业的理解浮于表面。它们就像一个什么都懂一点的通才，可以回答“什么是用户画像”，但无法判断一份具体的用户画像是否精准、是否有商业价值。</p>
+                    <ul class="space-y-3">
+                        <li class="flex items-center text-red-400"><svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>缺乏行业术语的深度理解</li>
+                        <li class="flex items-center text-red-400"><svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>容易产生与业务无关的“幻觉”</li>
+                        <li class="flex items-center text-red-400"><svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>无法进行深度的因果关系推断</li>
+                    </ul>
+                </div>
+                <div class="glass-morphism rounded-2xl p-8 border-2 border-indigo-500">
+                    <h3 class="text-xl font-bold text-white mb-4">Sings.AI Insight Engine</h3>
+                    <p class="text-gray-300 mb-6">我们用数百万份行业文献、报告和一手调研材料进行深度训练，使其成为一个真正的“行业专家”。它不仅“认识”术语，更能“理解”其背后的商业逻辑和语境。</p>
+                    <ul class="space-y-3">
+                        <li class="flex items-center text-green-400"><svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>精准理解行业黑话与复杂概念</li>
+                        <li class="flex items-center text-green-400"><svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>洞察结论与业务强相关，可落地</li>
+                        <li class="flex items-center text-green-400"><svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>发现隐藏在数据背后的商业机会</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- 3. 核心技术能力 -->
+        <section class="max-w-7xl mx-auto mb-20 md:mb-32">
+            <h2 class="text-3xl font-bold text-center text-white mb-12">引擎核心能力</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- 能力一 -->
+                <div class="feature-card rounded-2xl p-8">
+                    <div class="flex justify-center mb-6"><svg class="w-12 h-12 icon-color" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg></div>
+                    <h3 class="text-xl font-bold text-white mb-3">多模态融合分析</h3>
+                    <p class="text-gray-400">打破数据孤岛，从语音语调、文本语义、甚至视频中的微表情，交叉验证信息，还原用户真实、完整的体验瞬间。</p>
+                </div>
+                <!-- 能力二 -->
+                <div class="feature-card rounded-2xl p-8">
+                    <div class="flex justify-center mb-6"><svg class="w-12 h-12 icon-color" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10s5 2 7 3 1.657 1.657 1.657 1.657zM9.343 17.343A7.965 7.965 0 016 12c0-1.772 1.433-5 1.433-5s4.286 1 7.143 4c.952 1 .952 2.571 0 3.571S9.343 17.343 9.343 17.343z"></path></svg></div>
+                    <h3 class="text-xl font-bold text-white mb-3">深度因果推断</h3>
+                    <p class="text-gray-400">超越简单的相关性分析。模型能推断出“因为某个功能设计复杂，所以用户流失率上升”这类深层因果链条，直击问题本质。</p>
+                </div>
+                <!-- 能力三 -->
+                <div class="feature-card rounded-2xl p-8">
+                    <div class="flex justify-center mb-6"><svg class="w-12 h-12 icon-color" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg></div>
+                    <h3 class="text-xl font-bold text-white mb-3">市场趋势预测</h3>
+                    <p class="text-gray-400">通过学习海量时间序列数据，模型能识别新兴需求和潜在爆点，帮助您在市场变化之前就提前布局，抢占先机。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. 工作流程 -->
+        <section class="text-center max-w-6xl mx-auto mb-20 md:mb-32">
+            <h2 class="text-3xl font-bold text-white mb-12">洞察生成之旅</h2>
+            <div class="relative">
+                <div class="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-gray-700"></div>
+                <div class="hidden md:block absolute top-1/2 left-0 w-full h-0.5" style="background: linear-gradient(to right, #4F46E5, #3B82F6, transparent);"></div>
+                <div class="relative flex flex-col md:flex-row justify-between items-center space-y-10 md:space-y-0">
+                    <div class="flex flex-col items-center w-48">
+                        <div class="w-16 h-16 rounded-full glass-morphism flex items-center justify-center mb-3 border-2 border-indigo-500">1</div>
+                        <h4 class="font-bold text-white">数据注入</h4>
+                        <p class="text-xs text-gray-400">安全上传各类原始数据</p>
+                    </div>
+                    <div class="flex flex-col items-center w-48">
+                        <div class="w-16 h-16 rounded-full glass-morphism flex items-center justify-center mb-3 border-2 border-indigo-400">2</div>
+                        <h4 class="font-bold text-white">AI预处理</h4>
+                        <p class="text-xs text-gray-400">转写、清洗、标准化</p>
+                    </div>
+                    <div class="flex flex-col items-center w-48">
+                        <div class="w-16 h-16 rounded-full glass-morphism flex items-center justify-center mb-3 border-2 border-blue-400">3</div>
+                        <h4 class="font-bold text-white">多维分析</h4>
+                        <p class="text-xs text-gray-400">情感、意图、因果、趋势</p>
+                    </div>
+                    <div class="flex flex-col items-center w-48">
+                        <div class="w-16 h-16 rounded-full glass-morphism flex items-center justify-center mb-3 border-2 border-purple-400">4</div>
+                        <h4 class="font-bold text-white">洞察合成</h4>
+                        <p class="text-xs text-gray-400">生成观点、画像、机会点</p>
+                    </div>
+                    <div class="flex flex-col items-center w-48">
+                        <div class="w-16 h-16 rounded-full glass-morphism flex items-center justify-center mb-3 border-2 border-purple-500">5</div>
+                        <h4 class="font-bold text-white">报告呈现</h4>
+                        <p class="text-xs text-gray-400">交互式可视化报告</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. 应用场景和 CTA -->
+        <section class="gradient-button rounded-2xl p-8 md:p-12 max-w-5xl mx-auto text-center">
+            <h2 class="text-3xl font-bold text-white mb-4">将洞察力转化为增长力</h2>
+            <p class="text-gray-200 mb-8 max-w-2xl mx-auto">
+                Insight Engine 不仅仅是一个分析工具，它是您业务增长的催化剂，将模糊的用户反馈，转化为清晰的商业行动指南。
+            </p>
+            <a href="#" class="inline-block w-full sm:w-auto text-center py-3 px-8 rounded-lg font-semibold bg-white text-indigo-600 hover:bg-gray-200 transition-colors">
+                预约专属演示
+            </a>
+        </section>
+
+    </div>
+
+</body>
+</html>
