@@ -119,8 +119,8 @@
             <!-- User cards will be inserted here by JavaScript -->
         </div>
 
-        <!-- Show More Button Container -->
-        <div id="show-more-container" class="text-center mt-10">
+        <!-- Show More/Less Button Container -->
+        <div id="toggle-users-container" class="text-center mt-10">
             <!-- Button will be inserted here by JavaScript -->
         </div>
     </div>
@@ -169,4 +169,121 @@
                 langZh: '简体中文',
                 langEn: 'English',
                 mainTitlePart1: 'AI ',
-                mainTitlePart2
+                mainTitlePart2: 'User',
+                mainSubtitle: '即刻访问您的专属 AI 用户池，获得源源不断的灵感与洞察。',
+                cityLabel: '城市',
+                familyLabel: '家庭结构',
+                showMoreBtn: '显示更多',
+                showLessBtn: '收起'
+            },
+            en: {
+                pageTitle: 'AI User - sings.ai',
+                navHome: 'Back to Home',
+                langCurrent: 'English',
+                langZh: '简体中文',
+                langEn: 'English',
+                mainTitlePart1: 'AI ',
+                mainTitlePart2: 'User',
+                mainSubtitle: 'Instantly access your exclusive AI user pool for continuous inspiration and insights.',
+                cityLabel: 'City',
+                familyLabel: 'Family Structure',
+                showMoreBtn: 'Show More',
+                showLessBtn: 'Show Less'
+            }
+        };
+
+        // --- Global State ---
+        let currentLanguage = 'zh';
+        let isExpanded = false; // Tracks if all users are shown
+
+        // --- Functions ---
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            document.documentElement.lang = lang;
+            
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.dataset.key;
+                if (translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+            
+            document.title = translations[lang].pageTitle;
+            renderUserGrid(); // Re-render grid to apply language changes
+        }
+
+        function renderUserGrid() {
+            const grid = document.getElementById('user-grid');
+            const toggleContainer = document.getElementById('toggle-users-container');
+            grid.innerHTML = ''; // Clear existing cards
+            toggleContainer.innerHTML = ''; // Clear button
+            
+            const langDict = translations[currentLanguage];
+            const usersToDisplayCount = isExpanded ? aiUsers.length : 9;
+            const usersToRender = aiUsers.slice(0, usersToDisplayCount);
+
+            usersToRender.forEach(user => {
+                const card = document.createElement('div');
+                card.className = 'user-card rounded-xl p-5 flex flex-col';
+                
+                card.innerHTML = `
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-purple-600 to-blue-500 flex items-center justify-center text-white text-xl font-bold">
+                            ${user.name.charAt(0)}
+                        </div>
+                        <h3 class="ml-4 text-lg font-bold text-white">${user.name}</h3>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-400"><strong class="font-medium text-gray-300">${langDict.cityLabel}:</strong> ${user.city}</p>
+                        <p class="text-sm text-gray-400 mt-1"><strong class="font-medium text-gray-300">${langDict.familyLabel}:</strong> ${user.family}</p>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+
+            // Add 'Show More' / 'Show Less' button if total users > 9
+            if (aiUsers.length > 9) {
+                const toggleBtn = document.createElement('button');
+                toggleBtn.className = 'btn-secondary';
+                toggleBtn.textContent = isExpanded ? langDict.showLessBtn : langDict.showMoreBtn;
+                
+                toggleBtn.onclick = () => {
+                    isExpanded = !isExpanded; // Toggle the state
+                    renderUserGrid(); // Re-render the grid
+                };
+                toggleContainer.appendChild(toggleBtn);
+            }
+        }
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Language Dropdown Logic
+            const langSwitcherButton = document.getElementById('lang-switcher-button');
+            const langDropdown = document.getElementById('lang-dropdown');
+
+            langSwitcherButton.addEventListener('click', (event) => {
+                event.stopPropagation();
+                langDropdown.classList.toggle('hidden');
+            });
+
+            document.addEventListener('click', (event) => {
+                if (!langSwitcherButton.contains(event.target)) {
+                    langDropdown.classList.add('hidden');
+                }
+            });
+
+            langDropdown.addEventListener('click', (event) => {
+                const target = event.target.closest('a');
+                if (target && target.dataset.lang) {
+                    event.preventDefault();
+                    setLanguage(target.dataset.lang);
+                    langDropdown.classList.add('hidden');
+                }
+            });
+
+            // Initial Render
+            setLanguage(currentLanguage);
+        });
+    </script>
+</body>
+</html>
