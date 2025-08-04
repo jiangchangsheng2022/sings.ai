@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sings.ai 产品介绍</title>
+    <!-- 引入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入 Google Fonts 的 Inter 字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <!-- 引入图标库 -->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <style>
+        /* 自定义样式 */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000000;
+            color: #E5E7EB; /* text-gray-200 */
+        }
+        /* 背景辉光效果 */
+        .glow-background {
+            position: relative;
+            overflow-x: hidden;
+        }
+        .glow-background::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1200px;
+            height: 800px;
+            background-image: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(99, 102, 241, 0) 60%);
+            z-index: -1;
+            pointer-events: none;
+        }
+        /* 标题渐变色 */
+        .gradient-text {
+            background-image: linear-gradient(to right, #A78BFA, #3B82F6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        /* 按钮渐变背景 */
+        .gradient-button {
+            background-image: linear-gradient(to right, #4F46E5, #3B82F6);
+            transition: all 0.3s ease;
+        }
+        .gradient-button:hover {
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+        }
+        /* 卡片和区块边框渐变 */
+        .gradient-border {
+            border: 1px solid transparent;
+            background-color: rgba(31, 41, 55, 0.3);
+            background-clip: padding-box;
+            border-image: linear-gradient(to bottom, rgba(79, 70, 229, 0.3), rgba(59, 130, 246, 0.3)) 1;
+        }
+        /* 导航栏所需的玻璃质感背景 */
+        .glass-morphism {
+            background: rgba(31, 41, 55, 0.3);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        /* 语言切换样式 */
+        .lang-zh .en, .lang-en .zh {
+            display: none;
+        }
+        /* 终端窗口样式 */
+        .terminal-window {
+            background-color: #111827; /* gray-900 */
+            border: 1px solid #374151; /* gray-700 */
+            border-radius: 0.75rem;
+            box-shadow: 0 0 40px rgba(99, 102, 241, 0.1);
+            overflow: hidden;
+        }
+        .terminal-header {
+            background-color: rgba(0,0,0,0.2);
+            border-bottom: 1px solid #374151; /* gray-700 */
+        }
+        .terminal-body {
+            color: #D1D5DB; /* gray-300 */
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 1.5rem;
+            min-height: 200px;
+        }
+        .terminal-body .user-input { color: #A78BFA; } /* violet-400 */
+        .terminal-body .ai-output { color: #60A5FA; } /* blue-400 */
+        .terminal-body .system-info { color: #34D399; } /* green-400 */
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 1.2em;
+            background-color: #A78BFA;
+            animation: blink 1s step-end infinite;
+            vertical-align: bottom;
+        }
+        @keyframes blink {
+            from, to { background-color: transparent }
+            50% { background-color: #A78BFA; }
+        }
+    </style>
+</head>
+<body class="glow-background">
+
+    <!-- 导航栏 -->
+    <nav class="fixed top-0 left-0 right-0 z-50 p-4">
+        <div class="container mx-auto glass-morphism rounded-xl p-2 px-4 flex justify-between items-center">
+            <a href="https://sings.ai/" class="text-xl font-bold text-white">sings.ai</a>
+            
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#" class="gradient-text font-semibold">
+                    <span class="zh">产品</span><span class="en">Products</span>
+                </a>
+                <a href="https://sings.ai/page/pricing.html" class="text-gray-300 hover:text-white transition-colors">
+                    <span class="zh">定价</span><span class="en">Pricing</span>
+                </a>
+            </div>
+
+            <div class="hidden md:flex items-center">
+                <a href="#" id="lang-toggle" class="text-gray-300 hover:text-white transition-colors border border-gray-600 hover:border-gray-400 rounded-lg px-3 py-2 text-sm font-medium">中 / EN</a>
+            </div>
+
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </div>
+        <!-- 移动端菜单 -->
+        <div id="mobile-menu" class="container mx-auto glass-morphism rounded-xl mt-2 p-4 hidden md:hidden">
+            <a href="#" class="block gradient-text font-semibold py-2"><span class="zh">产品</span><span class="en">Products</span></a>
+            <a href="https://sings.ai/page/pricing.html" class="block text-gray-300 hover:text-white py-2"><span class="zh">定价</span><span class="en">Pricing</span></a>
+            <div class="border-t border-gray-700 mt-2 pt-2">
+                 <a href="#" id="lang-toggle-mobile" class="block text-center text-gray-300 hover:text-white transition-colors py-2">
+                    <span class="zh">切换到 English</span><span class="en">Switch to 中文</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 页面主体内容 -->
+    <div class="container mx-auto px-4 pt-32 md:pt-40 pb-16 md:pb-24">
+
+        <!-- 1. 页面标题 -->
+        <header class="text-center max-w-3xl mx-auto mb-16 md:mb-24">
+            <h1 class="text-4xl md:text-6xl font-black tracking-tighter mb-6">
+                <span class="zh">用 <span class="gradient-text">AI</span> 驱动的洞察力</span>
+                <span class="en">Insight, Powered by <span class="gradient-text">AI</span></span>
+            </h1>
+            <p class="text-lg md:text-xl text-gray-400">
+                <span class="zh">Sings.ai 将前沿人工智能与经典用户研究方法论深度融合，为您提供前所未有的高效、精准、可规模化的研究工具。</span>
+                <span class="en">Sings.ai deeply integrates cutting-edge AI with classic user research methodologies to provide you with unprecedentedly efficient, accurate, and scalable research tools.</span>
+            </p>
+        </header>
+
+        <!-- 2. 核心产品介绍 -->
+        <div class="space-y-20 md:space-y-28">
+
+            <!-- 特性 1: AI 智能问卷 -->
+            <section class="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+                <div class="md:w-1/2 text-center md:text-left">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+                        <span class="zh">AI 智能问卷</span><span class="en">AI Smart Questionnaire</span>
+                    </h2>
+                    <p class="text-gray-300 leading-relaxed">
+                        <span class="zh">这不只是简单的在线表单。我们的 AI 问卷能够根据用户的回答进行实时追问和逻辑跳转，像一位经验丰富的研究员一样，挖掘更深层次的动机和原因。告别静态问卷，让每一次回答都充满价值。</span>
+                        <span class="en">This is more than just an online form. Our AI questionnaire can conduct real-time follow-up questions and logical jumps based on user responses, just like an experienced researcher, digging into deeper motivations and reasons. Say goodbye to static questionnaires and make every answer valuable.</span>
+                    </p>
+                    <div class="mt-6">
+                        <a href="#" class="gradient-button text-white font-semibold py-2 px-6 rounded-lg inline-block">
+                            <span class="zh">了解更多</span><span class="en">Learn More</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 w-full">
+                    <div class="terminal-window" data-terminal-id="questionnaire">
+                        <div class="terminal-header flex items-center p-3">
+                            <div class="flex space-x-2"><span class="block w-3 h-3 bg-red-500 rounded-full"></span><span class="block w-3 h-3 bg-yellow-500 rounded-full"></span><span class="block w-3 h-3 bg-green-500 rounded-full"></span></div>
+                        </div>
+                        <div class="terminal-body"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 特性 2: AI 智能访谈 -->
+            <section class="flex flex-col md:flex-row-reverse items-center gap-8 md:gap-12">
+                <div class="md:w-1/2 text-center md:text-left">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+                        <span class="zh">AI 智能访谈</span><span class="en">AI Smart Interview</span>
+                    </h2>
+                    <p class="text-gray-300 leading-relaxed">
+                        <span class="zh">让 AI 成为您的研究助理，7x24 小时不间断执行第一轮用户访谈。它能标准化执行访谈流程，并实时完成语音转写、情绪分析和关键信息提取，将您从繁琐的重复劳动中解放出来，专注于真正需要洞察的环节。</span>
+                        <span class="en">Let AI be your research assistant, conducting the first round of user interviews 24/7. It standardizes the interview process and performs real-time transcription, sentiment analysis, and key information extraction, freeing you from tedious repetitive work to focus on what truly requires insight.</span>
+                    </p>
+                    <div class="mt-6">
+                        <a href="#" class="gradient-button text-white font-semibold py-2 px-6 rounded-lg inline-block">
+                            <span class="zh">了解更多</span><span class="en">Learn More</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 w-full">
+                    <div class="terminal-window" data-terminal-id="interview">
+                        <div class="terminal-header flex items-center p-3">
+                            <div class="flex space-x-2"><span class="block w-3 h-3 bg-red-500 rounded-full"></span><span class="block w-3 h-3 bg-yellow-500 rounded-full"></span><span class="block w-3 h-3 bg-green-500 rounded-full"></span></div>
+                        </div>
+                        <div class="terminal-body"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 特性 3: AI 仿真用户 -->
+            <section class="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+                <div class="md:w-1/2 text-center md:text-left">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+                        <span class="zh">AI 仿真用户</span><span class="en">AI Simulated User</span>
+                    </h2>
+                    <p class="text-gray-300 leading-relaxed">
+                        <span class="zh">我们最具创新性的功能。在产品上线前，与数千个基于真实数据训练的“虚拟用户”进行对话和测试。高效验证产品概念、测试用户流程、优化文案细节，以极低成本获得高价值的迭代方向，规避上线风险。</span>
+                        <span class="en">Our most innovative feature. Before your product goes live, converse with and test it on thousands of "virtual users" trained on real data. Efficiently validate product concepts, test user flows, and optimize copy details to gain high-value iteration directions at a minimal cost, mitigating launch risks.</span>
+                    </p>
+                    <div class="mt-6">
+                        <a href="#" class="gradient-button text-white font-semibold py-2 px-6 rounded-lg inline-block">
+                            <span class="zh">了解更多</span><span class="en">Learn More</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 w-full">
+                    <div class="terminal-window" data-terminal-id="simulation">
+                        <div class="terminal-header flex items-center p-3">
+                            <div class="flex space-x-2"><span class="block w-3 h-3 bg-red-500 rounded-full"></span><span class="block w-3 h-3 bg-yellow-500 rounded-full"></span><span class="block w-3 h-3 bg-green-500 rounded-full"></span></div>
+                        </div>
+                        <div class="terminal-body"></div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- 3. AI 研究工具箱 -->
+        <section class="max-w-5xl mx-auto mt-24 md:mt-32">
+            <h2 class="text-3xl font-bold text-center text-white mb-4">
+                <span class="zh">探索更多可能</span><span class="en">Explore More Possibilities</span>
+            </h2>
+            <p class="text-lg text-gray-400 text-center mb-12">
+                <span class="zh">我们正在不断探索，将 AI 的能力注入研究的每一个环节。</span>
+                <span class="en">We are constantly exploring, infusing the power of AI into every aspect of research.</span>
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="gradient-border rounded-xl p-6 text-center transition-transform hover:-translate-y-1">
+                    <i class='bx bxs-report text-4xl mb-3 gradient-text'></i>
+                    <h3 class="text-xl font-semibold text-white"><span class="zh">AI 报告生成</span><span class="en">AI Report Generation</span></h3>
+                </div>
+                <div class="gradient-border rounded-xl p-6 text-center transition-transform hover:-translate-y-1">
+                    <i class='bx bx-list-plus text-4xl mb-3 gradient-text'></i>
+                    <h3 class="text-xl font-semibold text-white"><span class="zh">AI 问卷生成</span><span class="en">AI Questionnaire Generation</span></h3>
+                </div>
+                <div class="gradient-border rounded-xl p-6 text-center transition-transform hover:-translate-y-1">
+                    <i class='bx bx-sitemap text-4xl mb-3 gradient-text'></i>
+                    <h3 class="text-xl font-semibold text-white"><span class="zh">AI 访谈大纲生成</span><span class="en">AI Interview Outline Generation</span></h3>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. 行动号召 -->
+        <section class="text-center mt-24 md:mt-32">
+             <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+                <span class="zh">准备好革新你的研究方式了吗？</span>
+                <span class="en">Ready to Revolutionize Your Research?</span>
+            </h2>
+            <p class="text-lg text-gray-400 mb-8 max-w-2xl mx-auto">
+                <span class="zh">查看我们的定价方案，选择最适合你的计划，或者直接免费开始体验。</span>
+                <span class="en">Check out our pricing plans, choose the one that's right for you, or start for free right away.</span>
+            </p>
+            <a href="https://sings.ai/page/pricing.html" class="gradient-button text-white font-semibold py-3 px-8 rounded-lg text-lg inline-block">
+                <span class="zh">查看定价</span><span class="en">View Pricing</span>
+            </a>
+        </section>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- DOM Elements ---
+            const body = document.body;
+            const langToggleBtn = document.getElementById('lang-toggle');
+            const langToggleMobileBtn = document.getElementById('lang-toggle-mobile');
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            // --- Language Toggle Function ---
+            function toggleLanguage() {
+                body.classList.toggle('lang-zh');
+                body.classList.toggle('lang-en');
+            }
+
+            // --- Event Listeners ---
+            langToggleBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                toggleLanguage();
+            });
+
+            langToggleMobileBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                toggleLanguage();
+                mobileMenu.classList.add('hidden'); // Close menu after selection
+            });
+
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // --- Terminal Animation ---
+            const terminalContents = {
+                questionnaire: {
+                    zh: [
+                        { text: '> 用户: 我觉得这个新功能还不错。', class: 'user-input' },
+                        { text: '> AI: 感谢您的反馈！您提到“还不错”，具体是指哪些方面呢？是操作更方便了，还是解决了您之前的问题？', class: 'ai-output', delay: 1000 }
+                    ],
+                    en: [
+                        { text: '> User: I think this new feature is pretty good.', class: 'user-input' },
+                        { text: '> AI: Thanks for the feedback! When you say "pretty good," what specific aspects do you mean? Is it easier to use, or did it solve a previous problem?', class: 'ai-output', delay: 1000 }
+                    ]
+                },
+                interview: {
+                    zh: [
+                        { text: '[00:15] 用户: ...这个包装有点过度了，感觉很浪费。', class: 'user-input' },
+                        { text: '[系统] 正在转写... 完成。', class: 'system-info', delay: 500 },
+                        { text: '[系统] 正在分析...', class: 'system-info', delay: 800 },
+                        { text: '[系统] 已添加标签: #包装, #可持续性, #负面情绪', class: 'system-info', delay: 500 }
+                    ],
+                    en: [
+                        { text: '[00:15] User: ...the packaging is a bit too much, feels wasteful.', class: 'user-input' },
+                        { text: '[SYSTEM] Transcribing... Done.', class: 'system-info', delay: 500 },
+                        { text: '[SYSTEM] Analyzing...', class: 'system-info', delay: 800 },
+                        { text: '[SYSTEM] Tags added: #packaging, #sustainability, #negative_sentiment', class: 'system-info', delay: 500 }
+                    ]
+                },
+                simulation: {
+                    zh: [
+                        { text: '$ 执行仿真 --用户画像=科技达人 --场景=新用户引导', class: 'user-input' },
+                        { text: '[信息] 正在启动仿真... 1000个代理已初始化。', class: 'system-info', delay: 800 },
+                        { text: '[虚拟用户_482] 反馈: "教程弹窗有点烦人，可以跳过吗？"', class: 'ai-output', delay: 1200 },
+                        { text: '[虚拟用户_719] 反馈: "喜欢这个深色模式！初始设置非常顺畅。"', class: 'ai-output', delay: 1000 }
+                    ],
+                    en: [
+                        { text: '$ run simulation --persona=tech_savvy --scenario=onboarding', class: 'user-input' },
+                        { text: '[INFO] Starting simulation... 1000 agents initialized.', class: 'system-info', delay: 800 },
+                        { text: '[VIRTUAL_USER_482] Feedback: "The tutorial pop-ups are a bit intrusive. Can I skip them?"', class: 'ai-output', delay: 1200 },
+                        { text: '[VIRTUAL_USER_719] Feedback: "Love the dark mode! The initial setup was super smooth."', class: 'ai-output', delay: 1000 }
+                    ]
+                }
+            };
+
+            function typeWriter(element, lines, lineIndex = 0) {
+                if (!lines || lineIndex >= lines.length) {
+                     const cursor = element.querySelector('.cursor');
+                     if(cursor) cursor.remove();
+                     setTimeout(() => {
+                        element.innerHTML = ''; // Clear and restart
+                        typeWriter(element, lines, 0);
+                     }, 5000); // Restart after 5 seconds
+                    return;
+                }
+
+                const line = lines[lineIndex];
+                const p = document.createElement('p');
+                p.className = line.class;
+                element.appendChild(p);
+
+                const cursor = document.createElement('span');
+                cursor.className = 'cursor';
+
+                let charIndex = 0;
+                const typingInterval = setInterval(() => {
+                    if (charIndex < line.text.length) {
+                        p.textContent += line.text.charAt(charIndex);
+                        charIndex++;
+                        p.appendChild(cursor); // Keep cursor at the end
+                    } else {
+                        clearInterval(typingInterval);
+                        const delay = line.delay || 500;
+                        setTimeout(() => typeWriter(element, lines, lineIndex + 1), delay);
+                    }
+                }, 50); // Typing speed
+            }
+
+            const observers = {};
+            const terminals = document.querySelectorAll('.terminal-window');
+
+            terminals.forEach(terminal => {
+                const terminalId = terminal.dataset.terminalId;
+                const terminalBody = terminal.querySelector('.terminal-body');
+
+                observers[terminalId] = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            terminalBody.innerHTML = ''; // Clear previous content
+                            const currentLang = body.classList.contains('lang-zh') ? 'zh' : 'en';
+                            typeWriter(terminalBody, terminalContents[terminalId][currentLang]);
+                            observers[terminalId].unobserve(entry.target); // Animate only once
+                        }
+                    });
+                }, { threshold: 0.6 }); // Trigger when 60% of the element is visible
+
+                observers[terminalId].observe(terminal);
+            });
+
+
+            // --- Initial Setup ---
+            body.classList.add('lang-zh');
+            body.classList.remove('lang-en');
+        });
+    </script>
+
+</body>
+</html>
