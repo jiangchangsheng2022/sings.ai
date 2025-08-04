@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 用户研究模拟器 - sings.ai</title>
+    <title>AI Test Engine - sings.ai</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -126,13 +126,6 @@
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        .gradient-button {
-            background-image: linear-gradient(to right, #4F46E5, #3B82F6);
-            transition: all 0.3s ease;
-        }
-        .gradient-button:hover {
-            box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
-        }
     </style>
 </head>
 <body class="antialiased">
@@ -142,24 +135,27 @@
             <div class="flex items-center space-x-4">
                 <a href="https://sings.ai/#" class="flex items-center text-gray-300 hover:text-white transition-colors">
                     <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-                    返回主页
+                    <span id="nav-back">返回主页</span>
                 </a>
                 <a href="https://sings.ai/#" class="text-xl font-bold text-white">sings.ai</a>
             </div>
-            <div class="hidden md:flex items-center space-x-8">
-                <a href="#" class="text-gray-300 hover:text-white transition-colors">产品</a>
-                <a href="#" class="text-gray-300 hover:text-white transition-colors">方案</a>
-                <a href="#" class="text-gray-300 hover:text-white transition-colors">资源</a>
-                <a href="#" class="text-gray-300 hover:text-white transition-colors">定价</a>
-            </div>
-            <div class="hidden md:flex items-center space-x-4">
-                <a href="#" class="text-gray-300 hover:text-white transition-colors">登录</a>
-                <a href="#" class="gradient-button text-white font-semibold py-2 px-4 rounded-lg">免费开始</a>
-            </div>
-            <div class="md:hidden">
-                <button class="text-white">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            <!-- Language Switcher Dropdown -->
+            <div class="relative" id="lang-switcher-container">
+                <button id="lang-switch-toggle" type="button" class="inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-gray-300 hover:text-white transition-colors focus:outline-none">
+                    <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
+                    </svg>
+                    <span id="current-lang-text">简体中文</span>
+                    <svg class="w-4 h-4 ml-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                    </svg>
                 </button>
+                <div id="lang-switch-menu" class="hidden absolute right-0 mt-2 w-32 origin-top-right bg-gray-800/90 backdrop-blur-sm divide-y divide-gray-700 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <div class="py-1" role="none">
+                        <a href="#" class="lang-option text-gray-300 hover:bg-gray-700 hover:text-white block px-4 py-2 text-sm" role="menuitem" data-lang="zh">简体中文</a>
+                        <a href="#" class="lang-option text-gray-300 hover:bg-gray-700 hover:text-white block px-4 py-2 text-sm" role="menuitem" data-lang="en">English</a>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
@@ -173,8 +169,8 @@
 
     <div class="container mx-auto max-w-5xl px-4 md:px-8 pb-4 md:pb-8 pt-32 md:pt-40">
         <header class="text-center my-10">
-            <h1 class="text-3xl md:text-5xl font-extrabold text-white">AI 用户研究模拟器</h1>
-            <p class="mt-3 text-lg text-gray-400">由 <span class="gradient-text font-semibold">SiliconFlow</span> 模型驱动的定量研究工具</p>
+            <h1 id="header-title" class="text-3xl md:text-5xl font-extrabold text-white">AI <span class="gradient-text">Test</span> Engine</h1>
+            <p id="header-subtitle" class="mt-3 text-lg text-gray-400">由 <span class="gradient-text font-semibold">SiliconFlow</span> 模型驱动的定量研究工具</p>
         </header>
 
         <main>
@@ -202,64 +198,60 @@
             </div>
 
             <section id="step-1" class="step-section visible-step">
-                <h2 class="text-2xl font-bold mb-4">第一步：输入初步研究需求</h2>
-                <p class="mb-4 text-gray-400">请在此输入您宽泛的研究想法或问题，AI 将在下一步帮您优化。</p>
+                <h2 id="step1-title" class="text-2xl font-bold mb-4">第一步：输入初步研究需求</h2>
+                <p id="step1-desc" class="mb-4 text-gray-400">请在此输入您宽泛的研究想法或问题，AI 将在下一步帮您优化。</p>
                 <textarea id="research-goal-initial" class="h-40" placeholder="例如：我想了解一下年轻人对智能手表的看法。"></textarea>
                 <button id="optimize-goal-btn" class="btn-primary mt-4 w-full font-bold py-3 px-4 rounded-md flex items-center justify-center disabled:opacity-50">
-                    <span>✨ 生成优化建议</span>
+                    <span id="step1-button-text">✨ 生成优化建议</span>
                     <div class="ai-thinking-animation w-6 h-6 ml-3 hidden"></div>
                 </button>
-                <div id="error-step-1" class="text-red-500 mt-4 text-sm hidden"></div>
             </section>
 
             <section id="step-2" class="step-section hidden-step">
-                <h2 class="text-2xl font-bold mb-4">第二步：确认研究目标并生成问卷</h2>
-                <p class="mb-4 text-gray-400">这是 AI 为您优化的研究目标。您可以直接使用，或根据需要进行修改，然后生成专业问卷和招募用户。</p>
+                <h2 id="step2-title" class="text-2xl font-bold mb-4">第二步：确认研究目标并生成问卷</h2>
+                <p id="step2-desc" class="mb-4 text-gray-400">这是 AI 为您优化的研究目标。您可以直接使用，或根据需要进行修改，然后生成专业问卷和招募用户。</p>
                 <textarea id="research-goal-final" class="h-40"></textarea>
                 <button id="generate-questionnaire-btn" class="btn-primary mt-4 w-full font-bold py-3 px-4 rounded-md flex items-center justify-center disabled:bg-gray-400">
-                    <span>确认目标，生成问卷并招募用户</span>
+                    <span id="step2-button-text">确认目标，生成问卷并招募用户</span>
                     <div class="ai-thinking-animation w-6 h-6 ml-3 hidden"></div>
                 </button>
-                <div id="error-step-2" class="text-red-500 mt-4 text-sm hidden"></div>
             </section>
 
             <section id="step-3" class="step-section hidden-step">
-                <h2 class="text-2xl font-bold mb-4">第三步：用户招募</h2>
-                <p class="mb-4 text-gray-400">已根据您的研究目标成功招募以下虚拟用户。他们将参与后续的问卷填写。</p>
+                <h2 id="step3-title" class="text-2xl font-bold mb-4">第三步：用户招募</h2>
+                <p id="step3-desc" class="mb-4 text-gray-400">已根据您的研究目标成功招募以下虚拟用户。他们将参与后续的问卷填写。</p>
                 <div id="recruited-users-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-96 overflow-y-auto"></div>
                 <button id="proceed-to-simulation-btn" class="btn-primary mt-6 w-full font-bold py-3 px-4 rounded-md flex items-center justify-center disabled:bg-gray-400 hidden">
-                    <span>开始数据处理</span>
+                    <span id="step3-button-text">开始数据处理</span>
                     <div class="ai-thinking-animation w-6 h-6 ml-3 hidden"></div>
                 </button>
-                <div id="error-step-3" class="text-red-500 mt-4 text-sm hidden"></div>
             </section>
 
             <section id="step-4" class="step-section hidden-step">
-                <h2 class="text-2xl font-bold mb-4">第四步：数据处理</h2>
-                <p class="mb-4 text-gray-400">AI 正在模拟已招募的用户填写问卷并处理数据，请稍候...</p>
+                <h2 id="step4-title" class="text-2xl font-bold mb-4">第四步：数据处理</h2>
+                <p id="step4-desc" class="mb-4 text-gray-400">AI 正在模拟已招募的用户填写问卷并处理数据，请稍候...</p>
                 <div class="mt-4 text-center text-gray-400">
                     <p id="progress-text">正在处理数据...</p>
                     <div class="w-full bg-gray-700 rounded-full h-4 mt-2">
                         <div id="progress-bar" class="bg-green-600 h-4 rounded-full text-xs font-medium text-blue-100 text-center p-0.5 leading-none" style="width: 0%; background: linear-gradient(90deg, #8A2BE2, #4F46E5);">0%</div>
                     </div>
                 </div>
-                <div id="error-step-4" class="text-red-500 mt-4 text-sm hidden"></div>
             </section>
 
             <section id="step-5" class="step-section hidden-step">
-                <h2 class="text-2xl font-bold mb-4">第五步：用户研究报告</h2>
+                <h2 id="step5-title" class="text-2xl font-bold mb-4">第五步：用户研究报告</h2>
                 <div id="report-content">
                     <div id="report-body">
                         <div class="mb-8 p-6 bg-gray-900/50 border-l-4 border-indigo-500 rounded-r-lg">
-                            <h3 class="text-xl font-semibold text-indigo-300">研究背景</h3>
+                            <h3 id="report-background-title" class="text-xl font-semibold text-indigo-300">研究背景</h3>
                             <p id="report-goal" class="text-gray-300 mt-2"></p>
                         </div>
                         <div class="mb-8">
-                            <h3 class="text-xl font-semibold text-gray-200 mb-4">关键洞察</h3>
+                            <h3 id="report-insights-title" class="text-xl font-semibold text-gray-200 mb-4">关键洞察</h3>
                             <div id="report-insights" class="prose prose-invert max-w-none p-4 bg-gray-900/50 rounded-md"></div>
                         </div>
                         <div>
-                            <h3 class="text-xl font-semibold text-gray-200 mb-4">数据可视化图表</h3>
+                            <h3 id="report-charts-title" class="text-xl font-semibold text-gray-200 mb-4">数据可视化图表</h3>
                             <div id="report-charts" class="space-y-8"></div>
                         </div>
                     </div>
@@ -270,7 +262,7 @@
                         <button id="share-report-btn" class="btn-secondary w-full justify-center">分享报告</button>
                     </div>
                     <div id="share-link-container" class="mt-4 hidden">
-                        <label for="share-link-input" class="block text-sm font-medium text-gray-400">分享链接:</label>
+                        <label id="share-link-label" for="share-link-input" class="block text-sm font-medium text-gray-400">分享链接:</label>
                         <div class="mt-1 flex rounded-md shadow-sm">
                             <input type="text" id="share-link-input" class="form-input flex-1 block w-full rounded-none rounded-l-md" readonly>
                             <button id="copy-link-btn" class="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-600 bg-gray-700 text-gray-300 text-sm hover:bg-gray-600">复制</button>
@@ -284,8 +276,15 @@
 
     <script>
         const state = {
-            currentStep: 1, researchGoal: '', questionnaire: null, recruitedUsers: [], simulationResults: [], insightsHTML: '',
+            currentStep: 1,
+            researchGoal: '',
+            questionnaire: null,
+            recruitedUsers: [],
+            simulationResults: [],
+            insightsHTML: '',
+            currentLanguage: 'zh',
         };
+
         const config = {
             siliconflow: {
                 apiKey: 'sk-xifmrwnarxegowpdpwjmbpiodhjawjtacbkgtkoygpgszhec',
@@ -293,6 +292,160 @@
                 model: 'alibaba/Qwen2-7B-Instruct',
             },
             simulationCount: 30,
+        };
+
+        // --- I18N Translations ---
+        const translations = {
+            zh: {
+                // Nav
+                nav_back: '返回主页',
+                current_lang_display: '简体中文',
+                // Header
+                header_title: 'AI <span class="gradient-text">Test</span> Engine',
+                header_subtitle: '由 <span class="gradient-text font-semibold">SiliconFlow</span> 模型驱动的定量研究工具',
+                // Progress Steps
+                progress_step_1: '输入需求',
+                progress_step_2: '确认目标',
+                progress_step_3: '用户招募',
+                progress_step_4: '数据处理',
+                progress_step_5: '生成报告',
+                // Step 1
+                step1_title: '第一步：输入初步研究需求',
+                step1_desc: '请在此输入您宽泛的研究想法或问题，AI 将在下一步帮您优化。',
+                step1_placeholder: '例如：我想了解一下年轻人对智能手表的看法。',
+                step1_button_text: '✨ 生成优化建议',
+                // Step 2
+                step2_title: '第二步：确认研究目标并生成问卷',
+                step2_desc: '这是 AI 为您优化的研究目标。您可以直接使用，或根据需要进行修改，然后生成专业问卷和招募用户。',
+                step2_button_text: '确认目标，生成问卷并招募用户',
+                // Step 3
+                step3_title: '第三步：用户招募',
+                step3_desc: '已根据您的研究目标成功招募以下虚拟用户。他们将参与后续的问卷填写。',
+                step3_button_text: '开始数据处理',
+                // Step 4
+                step4_title: '第四步：数据处理',
+                step4_desc: 'AI 正在模拟已招募的用户填写问卷并处理数据，请稍候...',
+                progress_text_processing: '正在处理用户数据 {current}/{total}: {name}...',
+                progress_text_done: '数据处理完成！共获得 {count} 份有效数据。',
+                // Step 5
+                step5_title: '第五步：用户研究报告',
+                report_background_title: '研究背景',
+                report_insights_title: '关键洞察',
+                report_charts_title: '数据可视化图表',
+                download_pdf_btn: '下载PDF报告',
+                share_report_btn: '分享报告',
+                share_link_label: '分享链接:',
+                copy_link_btn: '复制',
+                copy_link_btn_copied: '已复制!',
+                restart_btn: '重新开始',
+                // Loader Text
+                loader_thinking: 'AI 正在思考...',
+                loader_optimizing: '正在优化研究目标...',
+                loader_recruiting: '正在生成问卷并招募用户...',
+                loader_analyzing: '正在分析数据并生成洞察...',
+                loader_generating_pdf: '正在生成PDF报告...',
+                loader_loading_report: '正在加载分享的报告...',
+                // Modals
+                modal_ok_btn: '好的',
+                modal_no_initial_goal: '请先输入一个初步的研究目标。',
+                modal_goal_empty: '研究目标不能为空。',
+                modal_api_optimize_fail: 'AI 优化失败: {message}',
+                modal_json_parse_error: 'AI返回的数据格式不正确，无法解析: {message}',
+                modal_process_fail: '处理失败: {message}',
+                modal_insight_fail: '无法生成洞察结论: {message}',
+                modal_pdf_fail: '生成PDF报告时出错，请重试。',
+                modal_bad_link: '分享链接无效或已损坏。',
+                // User Card
+                user_card_age: '岁',
+                user_card_gender_male: '男',
+                user_card_gender_female: '女',
+                // Chart
+                chart_label_percentage: '选择百分比 (%)',
+                chart_tooltip_people: '人',
+                // PDF
+                pdf_filename: 'AI用户研究报告-{title}.pdf',
+                // AI Prompts
+                prompt_optimize: `作为一名顶尖的用户研究策略师，请将以下这个较为宽泛的研究想法，优化成一个更专业、更聚焦、更具可操作性的研究目标。请直接返回优化后的文本，无需任何额外解释。\n\n原始想法：\n"{goal}"`,
+                prompt_questionnaire: `作为一名资深的用户研究专家，请根据以下研究目的，设计一份专业的定量研究问卷。\n研究目的："${state.researchGoal}"\n\n你的输出必须是一个严格遵循以下JSON格式的字符串，不要包含任何额外的解释或Markdown标记，必须以 \`\`\`json 开始和结束：\n\`\`\`json\n{\n  "title": "关于...的研究问卷",\n  "screener": [\n    { "questionId": "s1", "questionText": "您在过去一年内是否使用或购买过相关产品/服务？", "questionType": "single-choice", "options": ["是", "否"] }\n  ],\n  "mainBody": [\n    { "questionId": "m1", "questionText": "您最常使用的品牌是什么？", "questionType": "single-choice", "options": ["品牌A", "品牌B", "品牌C", "其他"] },\n    { "questionId": "m2", "questionText": "您选择该品牌的主要原因是什么？(可多选)", "questionType": "multiple-choice", "options": ["价格实惠", "性能强大", "设计美观", "朋友推荐", "广告影响"] }\n  ],\n  "demographics": [\n    { "questionId": "d1", "questionText": "您的性别是？", "questionType": "single-choice", "options": ["男", "女", "其他"] },\n    { "questionId": "d2", "questionText": "您的年龄段是？", "questionType": "single-choice", "options": ["18岁以下", "18-25岁", "26-35岁", "36-45岁", "45岁以上"] },\n    { "questionId": "d3", "questionText": "您的职业是？", "questionType": "single-choice", "options": ["学生", "技术/IT", "设计/艺术", "教育/科研", "医疗/健康", "自由职业", "其他"] }\n  ]\n}\n\`\`\`\n请确保问题设计专业、逻辑严谨，并完整覆盖甄别、主体和个人信息三个部分。`,
+                prompt_recruit: `作为一名专业的市场研究招募专员，请根据以下研究目标，为我生成 ${config.simulationCount} 位符合条件的虚拟用户画像。\n\n研究目标：\n"${state.researchGoal}"\n\n你的输出必须是一个严格的JSON数组，数组中包含 ${config.simulationCount} 个对象。每个对象都必须包含 "name" (一个常见的中文名), "age" (一个数字), "gender" (男或女), 和 "bio" (一段20-40字的生动自我介绍，需符合其画像特征)。不要包含任何额外的解释或Markdown标记，必须以 \`\`\`json 开始和结束：\n\`\`\`json\n[\n  {\n    "name": "李明",\n    "age": 28,\n    "gender": "男",\n    "bio": "我是一名在北京工作的软件工程师，平时喜欢研究各种数码产品，对新技术很敏感，业余时间会去健身和爬山。"\n  },\n  {\n    "name": "王秀英",\n    "age": 22,\n    "gender": "女",\n    "bio": "我是上海一所大学的设计系学生，热爱时尚和艺术，喜欢用Vlog记录生活，对产品的颜值和设计感有很高的要求。"\n  }\n]\n\`\`\`\n请确保生成的用户画像多样化，并能覆盖研究目标可能涉及的不同用户群体。`,
+                prompt_simulate: `你是一个高级数据模拟器。现在，请为以下这位已被招募的用户，填写这份问卷。 \n\n你的任务是生成一个JSON对象，代表这位用户的完整问卷回答。回答必须严格符合用户的个人简介(bio)和画像特征。\n\n[重要规则]：在生成JSON时，如果任何字符串值（特别是 "bio" 或 "answers"）内部包含双引号(")，你必须用反斜杠进行转义，例如 "他说: \\"你好\\""。这是一个强制性要求，以确保JSON的有效性。\n\n这是当前用户的信息：\n{user}\n\n这是需要填写的问卷：\n{questionnaire}\n\n你的输出必须是一个严格的、格式完全正确的JSON对象。不要包含任何额外的解释或Markdown标记，必须以 \`\`\`json 开始和结束：\n\`\`\`json\n{\n    "respondentId": "user-{index}",\n    "persona": {persona},\n    "answers": [\n      { "questionId": "s1", "answer": "是" },\n      { "questionId": "m1", "answer": "品牌A" },\n      { "questionId": "m2", "answer": ["性能强大"] },\n      { "questionId": "m3", "answer": "满意" },\n      { "questionId": "d1", "answer": "男" },\n      { "questionId": "d2", "answer": "26-35岁" },\n      { "questionId": "d3", "answer": "技术/IT" }\n    ]\n}\n\`\`\`\n请确保回答与用户的个人信息和简介高度一致。`,
+                prompt_analyze: `As a senior data analyst, please analyze the following survey data summary for "{title}"... \nData Summary:\n{summary}\n...and summarize 3-5 key market insights and business recommendations. Please reply in Chinese.`
+            },
+            en: {
+                // Nav
+                nav_back: 'Back to Home',
+                current_lang_display: 'English',
+                // Header
+                header_title: 'AI <span class="gradient-text">Test</span> Engine',
+                header_subtitle: 'Quantitative research tool powered by <span class="gradient-text font-semibold">SiliconFlow</span> models',
+                // Progress Steps
+                progress_step_1: 'Input Demand',
+                progress_step_2: 'Confirm Goal',
+                progress_step_3: 'Recruit Users',
+                progress_step_4: 'Process Data',
+                progress_step_5: 'Generate Report',
+                // Step 1
+                step1_title: 'Step 1: Input Initial Research Demand',
+                step1_desc: 'Please enter your broad research idea or question here. The AI will help you refine it in the next step.',
+                step1_placeholder: 'e.g., I want to understand young people\'s opinions on smartwatches.',
+                step1_button_text: '✨ Generate Refinement Suggestions',
+                // Step 2
+                step2_title: 'Step 2: Confirm Research Goal and Generate Questionnaire',
+                step2_desc: 'This is the research goal refined by the AI. You can use it directly or modify it as needed, then generate a professional questionnaire and recruit users.',
+                step2_button_text: 'Confirm Goal, Generate Questionnaire & Recruit Users',
+                // Step 3
+                step3_title: 'Step 3: User Recruitment',
+                step3_desc: 'The following virtual users have been successfully recruited based on your research goal. They will participate in the subsequent survey.',
+                step3_button_text: 'Start Data Processing',
+                // Step 4
+                step4_title: 'Step 4: Data Processing',
+                step4_desc: 'The AI is simulating the recruited users filling out the questionnaire and processing the data. Please wait...',
+                progress_text_processing: 'Processing user data {current}/{total}: {name}...',
+                progress_text_done: 'Data processing complete! {count} valid responses obtained.',
+                // Step 5
+                step5_title: 'Step 5: User Research Report',
+                report_background_title: 'Research Background',
+                report_insights_title: 'Key Insights',
+                report_charts_title: 'Data Visualization Charts',
+                download_pdf_btn: 'Download PDF Report',
+                share_report_btn: 'Share Report',
+                share_link_label: 'Share Link:',
+                copy_link_btn: 'Copy',
+                copy_link_btn_copied: 'Copied!',
+                restart_btn: 'Start Over',
+                // Loader Text
+                loader_thinking: 'AI is thinking...',
+                loader_optimizing: 'Refining research goal...',
+                loader_recruiting: 'Generating questionnaire and recruiting users...',
+                loader_analyzing: 'Analyzing data and generating insights...',
+                loader_generating_pdf: 'Generating PDF report...',
+                loader_loading_report: 'Loading shared report...',
+                // Modals
+                modal_ok_btn: 'OK',
+                modal_no_initial_goal: 'Please enter an initial research goal first.',
+                modal_goal_empty: 'The research goal cannot be empty.',
+                modal_api_optimize_fail: 'AI refinement failed: {message}',
+                modal_json_parse_error: 'The data format returned by the AI is incorrect and cannot be parsed: {message}',
+                modal_process_fail: 'Processing failed: {message}',
+                modal_insight_fail: 'Failed to generate insights: {message}',
+                modal_pdf_fail: 'An error occurred while generating the PDF report. Please try again.',
+                modal_bad_link: 'The share link is invalid or corrupted.',
+                 // User Card
+                user_card_age: 'years old',
+                user_card_gender_male: 'Male',
+                user_card_gender_female: 'Female',
+                // Chart
+                chart_label_percentage: 'Selection Percentage (%)',
+                chart_tooltip_people: 'people',
+                // PDF
+                pdf_filename: 'AI-User-Research-Report-{title}.pdf',
+                // AI Prompts
+                prompt_optimize: `As a top-tier user research strategist, please refine the following broad research idea into a more professional, focused, and actionable research goal. Return only the optimized text without any extra explanation.\n\nOriginal idea:\n"{goal}"`,
+                prompt_questionnaire: `As a senior user research expert, please design a professional quantitative research questionnaire based on the following research objective.\nResearch Objective: "${state.researchGoal}"\n\nYour output must be a string in strict JSON format, without any extra explanations or Markdown tags. It must start with \`\`\`json and end with \`\`\`:\n\`\`\`json\n{\n  "title": "Questionnaire on...",\n  "screener": [\n    { "questionId": "s1", "questionText": "Have you used or purchased related products/services in the past year?", "questionType": "single-choice", "options": ["Yes", "No"] }\n  ],\n  "mainBody": [\n    { "questionId": "m1", "questionText": "What brand do you use most often?", "questionType": "single-choice", "options": ["Brand A", "Brand B", "Brand C", "Other"] },\n    { "questionId": "m2", "questionText": "What are the main reasons for choosing this brand? (Multiple choice)", "questionType": "multiple-choice", "options": ["Affordable Price", "High Performance", "Aesthetic Design", "Friend's Recommendation", "Advertising Influence"] }\n  ],\n  "demographics": [\n    { "questionId": "d1", "questionText": "What is your gender?", "questionType": "single-choice", "options": ["Male", "Female", "Other"] },\n    { "questionId": "d2", "questionText": "What is your age range?", "questionType": "single-choice", "options": ["Under 18", "18-25", "26-35", "36-45", "Over 45"] },\n    { "questionId": "d3", "questionText": "What is your occupation?", "questionType": "single-choice", "options": ["Student", "Tech/IT", "Design/Art", "Education/Research", "Medical/Health", "Freelancer", "Other"] }\n  ]\n}\n\`\`\`\nEnsure the questions are professional, logical, and cover screening, main body, and demographic sections completely.`,
+                prompt_recruit: `As a professional market research recruiter, please generate ${config.simulationCount} qualified virtual user personas based on the following research objective.\n\nResearch Objective:\n"${state.researchGoal}"\n\nYour output must be a strict JSON array containing ${config.simulationCount} objects. Each object must include "name" (a common English name), "age" (a number), "gender" (Male or Female), and "bio" (a vivid 20-40 word self-introduction that matches their persona). Do not include any extra explanations or Markdown tags. It must start with \`\`\`json and end with \`\`\`:\n\`\`\`json\n[\n  {\n    "name": "John Smith",\n    "age": 28,\n    "gender": "Male",\n    "bio": "I'm a software engineer in New York, passionate about exploring new gadgets and technology. I enjoy hiking and going to the gym in my spare time."\n  },\n  {\n    "name": "Emily White",\n    "age": 22,\n    "gender": "Female",\n    "bio": "As a design student in Los Angeles, I love fashion and art. I vlog about my life and have high standards for product aesthetics and design."\n  }\n]\n\`\`\`\nEnsure the generated personas are diverse and cover different user groups relevant to the research objective.`,
+                prompt_simulate: `You are an advanced data simulator. Your task is to fill out this questionnaire for the following recruited user. \n\nGenerate a JSON object representing the user's complete survey response. The answers must strictly align with the user's bio and persona.\n\n[CRITICAL RULE]: When generating the JSON, if any string value (especially in "bio" or "answers") contains double quotes ("), you must escape them with a backslash, e.g., "He said: \\"Hello\\"". This is mandatory to ensure the JSON is valid.\n\nUser Information:\n{user}\n\nQuestionnaire to be filled:\n{questionnaire}\n\nYour output must be a single, strictly formatted JSON object. Do not include any extra explanations or Markdown tags. It must start with \`\`\`json and end with \`\`\`:\n\`\`\`json\n{\n    "respondentId": "user-{index}",\n    "persona": {persona},\n    "answers": [\n      { "questionId": "s1", "answer": "Yes" },\n      { "questionId": "m1", "answer": "Brand A" },\n      { "questionId": "m2", "answer": ["High Performance"] },\n      { "questionId": "m3", "answer": "Satisfied" },\n      { "questionId": "d1", "answer": "Male" },\n      { "questionId": "d2", "answer": "26-35" },\n      { "questionId": "d3", "answer": "Tech/IT" }\n    ]\n}\n\`\`\`\nEnsure the answers are highly consistent with the user's personal information and bio.`,
+                prompt_analyze: `As a senior data analyst, please analyze the following survey data summary for "{title}"... \nData Summary:\n{summary}\n...and summarize 3-5 key market insights and business recommendations. Please reply in English.`
+            }
         };
 
         const stepSections = Array.from({length: 5}, (_, i) => document.getElementById(`step-${i + 1}`));
@@ -314,12 +467,61 @@
         const reportActions = document.getElementById('report-actions');
         const shareLinkContainer = document.getElementById('share-link-container');
         const shareLinkInput = document.getElementById('share-link-input');
-        const errorElements = Array.from({length: 4}, (_, i) => document.getElementById(`error-step-${i + 1}`));
         const loaderOverlay = document.getElementById('loader-overlay');
         const loaderText = document.getElementById('loader-text');
+        const langSwitchContainer = document.getElementById('lang-switcher-container');
+        const langSwitchToggle = document.getElementById('lang-switch-toggle');
+        const langSwitchMenu = document.getElementById('lang-switch-menu');
+        const currentLangText = document.getElementById('current-lang-text');
 
-        // Store original chart color for PDF export/restore
         const originalChartColor = Chart.defaults.color;
+
+        function T(key, replacements = {}) {
+            let text = translations[state.currentLanguage][key] || key;
+            for (const placeholder in replacements) {
+                text = text.replace(`{${placeholder}}`, replacements[placeholder]);
+            }
+            return text;
+        }
+
+        function switchLanguage(lang) {
+            state.currentLanguage = lang;
+            document.documentElement.lang = lang;
+
+            // Update all static text
+            document.title = 'AI Test Engine - sings.ai';
+            document.getElementById('nav-back').textContent = T('nav_back');
+            currentLangText.textContent = T('current_lang_display');
+            document.getElementById('header-title').innerHTML = T('header_title');
+            document.getElementById('header-subtitle').innerHTML = T('header_subtitle');
+
+            for (let i = 1; i <= 5; i++) {
+                document.querySelector(`#progress-step-${i} p`).textContent = T(`progress_step_${i}`);
+                const stepTitle = document.getElementById(`step${i}-title`);
+                if (stepTitle) stepTitle.textContent = T(`step${i}_title`);
+                const stepDesc = document.getElementById(`step${i}-desc`);
+                if (stepDesc) stepDesc.textContent = T(`step${i}_desc`);
+            }
+            
+            researchGoalInitialInput.placeholder = T('step1_placeholder');
+            document.getElementById('step1-button-text').textContent = T('step1_button_text');
+            document.getElementById('step2-button-text').textContent = T('step2_button_text');
+            document.getElementById('step3-button-text').textContent = T('step3_button_text');
+            
+            document.getElementById('report-background-title').textContent = T('report_background_title');
+            document.getElementById('report-insights-title').textContent = T('report_insights_title');
+            document.getElementById('report-charts-title').textContent = T('report_charts_title');
+            downloadPdfBtn.textContent = T('download_pdf_btn');
+            shareReportBtn.textContent = T('share_report_btn');
+            document.getElementById('share-link-label').textContent = T('share_link_label');
+            copyLinkBtn.textContent = T('copy_link_btn');
+            restartBtn.textContent = T('restart_btn');
+            
+            // If report is already generated, re-render it in the new language
+            if (state.currentStep === 5 && state.simulationResults.length > 0) {
+                 renderReportFromState();
+            }
+        }
 
         function updateProgressIndicator(step) {
             const progressSteps = document.querySelectorAll('[id^="progress-step-"]');
@@ -356,31 +558,39 @@
             if (loader) loader.style.display = isLoading ? 'block' : 'none';
         }
         
-        function showLoader(show, text = 'AI 正在思考...') {
-            loaderText.textContent = text;
+        function showLoader(show, textKey = 'loader_thinking') {
+            loaderText.textContent = T(textKey);
             loaderOverlay.style.display = show ? 'flex' : 'none';
         }
 
-        function showModal(message) {
+        function showModal(messageKey, replacements = {}) {
+            const message = T(messageKey, replacements);
             let existingModal = document.getElementById('custom-modal');
             if (existingModal) existingModal.remove();
+            
             const modalOverlay = document.createElement('div');
             modalOverlay.id = 'custom-modal';
             modalOverlay.className = 'fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4';
-            modalOverlay.onclick = () => modalOverlay.remove();
+            
             const modalContent = document.createElement('div');
             modalContent.className = 'bg-gray-900 border border-gray-700 text-white p-6 rounded-lg shadow-lg max-w-sm mx-auto text-center';
             modalContent.onclick = (e) => e.stopPropagation();
+            
             const messageP = document.createElement('p');
             messageP.textContent = message;
             messageP.className = 'mb-6 text-lg';
+            
             const closeButton = document.createElement('button');
-            closeButton.textContent = '好的';
+            closeButton.textContent = T('modal_ok_btn');
             closeButton.className = 'btn-primary w-full';
-            closeButton.onclick = () => modalOverlay.remove();
+            
+            modalOverlay.appendChild(modalContent);
             modalContent.append(messageP, closeButton);
-            modalOverlay.appendChild(modalOverlay);
             document.body.appendChild(modalOverlay);
+
+            const closeModal = () => modalOverlay.remove();
+            modalOverlay.addEventListener('click', closeModal);
+            closeButton.addEventListener('click', closeModal);
         }
 
         async function callAI(prompt, retries = 3) {
@@ -399,12 +609,9 @@
                     if (result.choices && result.choices.length > 0) {
                         let content = result.choices[0].message.content.trim();
                         if (content.startsWith("```json")) {
-                            content = content.substring(7);
+                            content = content.substring(7, content.lastIndexOf("```")).trim();
                         }
-                        if (content.endsWith("```")) {
-                            content = content.slice(0, -3);
-                        }
-                        return content.trim();
+                        return content;
                     } else throw new Error('API returned no valid content.');
                 } catch (error) {
                     console.error(`Attempt ${i + 1} failed:`, error);
@@ -416,16 +623,18 @@
 
         async function handleOptimizeGoal() {
             const currentGoal = researchGoalInitialInput.value.trim();
-            if (!currentGoal) return showModal('请先输入一个初步的研究目标。');
+            if (!currentGoal) return showModal('modal_no_initial_goal');
+            
             setButtonLoading(optimizeGoalBtn, true);
-            showLoader(true, '正在优化研究目标...');
-            const prompt = `作为一名顶尖的用户研究策略师，请将以下这个较为宽泛的研究想法，优化成一个更专业、更聚焦、更具可操作性的研究目标。请直接返回优化后的文本，无需任何额外解释。\n\n原始想法：\n"${currentGoal}"`;
+            showLoader(true, 'loader_optimizing');
+            const prompt = T('prompt_optimize', { goal: currentGoal });
+            
             try {
                 const optimizedGoal = await callAI(prompt);
                 researchGoalFinalInput.value = optimizedGoal;
                 switchStep(2);
             } catch (error) {
-                showModal(`AI 优化失败: ${error.message}`);
+                showModal('modal_api_optimize_fail', { message: error.message });
             } finally {
                 setButtonLoading(optimizeGoalBtn, false);
                 showLoader(false);
@@ -434,13 +643,15 @@
 
         async function handleGenerateAndRecruit() {
             state.researchGoal = researchGoalFinalInput.value.trim();
-            if (!state.researchGoal) return showModal('研究目标不能为空。');
+            if (!state.researchGoal) return showModal('modal_goal_empty');
+            
             setButtonLoading(generateBtn, true);
             switchStep(3);
-            showLoader(true, '正在生成问卷并招募用户...');
+            showLoader(true, 'loader_recruiting');
 
+            let questionnaireText, usersText;
             try {
-                const [questionnaireText, usersText] = await Promise.all([generateQuestionnaire(), recruitUsers()]);
+                [questionnaireText, usersText] = await Promise.all([generateQuestionnaire(), recruitUsers()]);
                 
                 state.questionnaire = JSON.parse(questionnaireText);
                 state.recruitedUsers = JSON.parse(usersText);
@@ -448,10 +659,11 @@
                 displayRecruitedUsers();
                 proceedToSimBtn.classList.remove('hidden');
             } catch (error) {
-                const errorMessage = error instanceof SyntaxError ? `AI返回的数据格式不正确，无法解析: ${error.message}` : `处理失败: ${error.message}`;
-                showModal(errorMessage);
+                const isSyntaxError = error instanceof SyntaxError;
+                const messageKey = isSyntaxError ? 'modal_json_parse_error' : 'modal_process_fail';
+                showModal(messageKey, { message: error.message });
                 console.error('Error in handleGenerateAndRecruit:', error, {questionnaireText, usersText});
-                switchStep(2); 
+                switchStep(2);  
             } finally {
                 setButtonLoading(generateBtn, false);
                 showLoader(false);
@@ -459,12 +671,12 @@
         }
 
         function generateQuestionnaire() {
-            const prompt = `作为一名资深的用户研究专家，请根据以下研究目的，设计一份专业的定量研究问卷。\n研究目的："${state.researchGoal}"\n\n你的输出必须是一个严格遵循以下JSON格式的字符串，不要包含任何额外的解释或Markdown标记，必须以 \`\`\`json 开始和结束：\n\`\`\`json\n{\n  "title": "关于...的研究问卷",\n  "screener": [\n    { "questionId": "s1", "questionText": "您在过去一年内是否使用或购买过相关产品/服务？", "questionType": "single-choice", "options": ["是", "否"] }\n  ],\n  "mainBody": [\n    { "questionId": "m1", "questionText": "您最常使用的品牌是什么？", "questionType": "single-choice", "options": ["品牌A", "品牌B", "品牌C", "其他"] },\n    { "questionId": "m2", "questionText": "您选择该品牌的主要原因是什么？(可多选)", "questionType": "multiple-choice", "options": ["价格实惠", "性能强大", "设计美观", "朋友推荐", "广告影响"] }\n  ],\n  "demographics": [\n    { "questionId": "d1", "questionText": "您的性别是？", "questionType": "single-choice", "options": ["男", "女", "其他"] },\n    { "questionId": "d2", "questionText": "您的年龄段是？", "questionType": "single-choice", "options": ["18岁以下", "18-25岁", "26-35岁", "36-45岁", "45岁以上"] },\n    { "questionId": "d3", "questionText": "您的职业是？", "questionType": "single-choice", "options": ["学生", "技术/IT", "设计/艺术", "教育/科研", "医疗/健康", "自由职业", "其他"] }\n  ]\n}\n\`\`\`\n请确保问题设计专业、逻辑严谨，并完整覆盖甄别、主体和个人信息三个部分。`;
+            const prompt = T('prompt_questionnaire');
             return callAI(prompt);
         }
 
         function recruitUsers() {
-            const prompt = `作为一名专业的市场研究招募专员，请根据以下研究目标，为我生成 ${config.simulationCount} 位符合条件的虚拟用户画像。\n\n研究目标：\n"${state.researchGoal}"\n\n你的输出必须是一个严格的JSON数组，数组中包含 ${config.simulationCount} 个对象。每个对象都必须包含 "name" (一个常见的中文名), "age" (一个数字), "gender" (男或女), 和 "bio" (一段20-40字的生动自我介绍，需符合其画像特征)。不要包含任何额外的解释或Markdown标记，必须以 \`\`\`json 开始和结束：\n\`\`\`json\n[\n  {\n    "name": "李明",\n    "age": 28,\n    "gender": "男",\n    "bio": "我是一名在北京工作的软件工程师，平时喜欢研究各种数码产品，对新技术很敏感，业余时间会去健身和爬山。"\n  },\n  {\n    "name": "王秀英",\n    "age": 22,\n    "gender": "女",\n    "bio": "我是上海一所大学的设计系学生，热爱时尚和艺术，喜欢用Vlog记录生活，对产品的颜值和设计感有很高的要求。"\n  }\n]\n\`\`\`\n请确保生成的用户画像多样化，并能覆盖研究目标可能涉及的不同用户群体。`;
+            const prompt = T('prompt_recruit');
             return callAI(prompt);
         }
 
@@ -474,7 +686,8 @@
                 const card = document.createElement('div');
                 card.className = 'user-card bg-gray-900/50 p-4 rounded-lg border border-gray-700 flex items-center space-x-4';
                 const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=252535&color=E0E0E0&font-size=0.5`;
-                card.innerHTML = `<img src="${avatarUrl}" alt="用户头像" class="w-16 h-16 rounded-full border-2 border-gray-600"><div class="flex-1"><h4 class="font-bold text-lg text-indigo-400">${user.name}</h4><p class="text-sm text-gray-400 mb-2">${user.gender}, ${user.age}岁</p><p class="text-sm text-gray-300">${user.bio}</p></div>`;
+                const genderText = user.gender.toLowerCase() === 'male' || user.gender === '男' ? T('user_card_gender_male') : T('user_card_gender_female');
+                card.innerHTML = `<img src="${avatarUrl}" alt="User Avatar" class="w-16 h-16 rounded-full border-2 border-gray-600"><div class="flex-1"><h4 class="font-bold text-lg text-indigo-400">${user.name}</h4><p class="text-sm text-gray-400 mb-2">${genderText}, ${user.age}${T('user_card_age')}</p><p class="text-sm text-gray-300">${user.bio}</p></div>`;
                 recruitedUsersContainer.appendChild(card);
                 setTimeout(() => {
                     card.style.opacity = '1';
@@ -488,8 +701,15 @@
             state.simulationResults = [];
             for (let i = 0; i < state.recruitedUsers.length; i++) {
                 const user = state.recruitedUsers[i];
-                progressText.textContent = `正在处理用户数据 ${i + 1}/${state.recruitedUsers.length}: ${user.name}...`;
-                const prompt = `你是一个高级数据模拟器。现在，请为以下这位已被招募的用户，填写这份问卷。 \n\n你的任务是生成一个JSON对象，代表这位用户的完整问卷回答。回答必须严格符合用户的个人简介(bio)和画像特征。\n\n[重要规则]：在生成JSON时，如果任何字符串值（特别是 "bio" 或 "answers"）内部包含双引号(")，你必须用反斜杠进行转义，例如 "他说: \\"你好\\""。这是一个强制性要求，以确保JSON的有效性。\n\n这是当前用户的信息：\n${JSON.stringify(user, null, 2)}\n\n这是需要填写的问卷：\n${JSON.stringify(state.questionnaire, null, 2)}\n\n你的输出必须是一个严格的、格式完全正确的JSON对象。不要包含任何额外的解释或Markdown标记，必须以 \`\`\`json 开始和结束：\n\`\`\`json\n{\n    "respondentId": "user-${i + 1}",\n    "persona": ${JSON.stringify(user)},\n    "answers": [\n      { "questionId": "s1", "answer": "是" },\n      { "questionId": "m1", "answer": "品牌A" },\n      { "questionId": "m2", "answer": ["性能强大"] },\n      { "questionId": "m3", "answer": "满意" },\n      { "questionId": "d1", "answer": "男" },\n      { "questionId": "d2", "answer": "26-35岁" },\n      { "questionId": "d3", "answer": "技术/IT" }\n    ]\n}\n\`\`\`\n请确保回答与用户的个人信息和简介高度一致。`;
+                progressText.textContent = T('progress_text_processing', { current: i + 1, total: state.recruitedUsers.length, name: user.name });
+                
+                const prompt = T('prompt_simulate', {
+                    user: JSON.stringify(user, null, 2),
+                    questionnaire: JSON.stringify(state.questionnaire, null, 2),
+                    index: i + 1,
+                    persona: JSON.stringify(user)
+                });
+
                 try {
                     const responseText = await callAI(prompt);
                     state.simulationResults.push(JSON.parse(responseText));
@@ -497,11 +717,11 @@
                     progressBar.style.width = `${progress}%`;
                     progressBar.textContent = `${Math.round(progress)}%`;
                 } catch (error) {
-                    console.error(`模拟用户 ${user.name} 失败:`, error);
+                    console.error(`Failed to simulate user ${user.name}:`, error);
                     continue;
                 }
             }
-            progressText.textContent = `数据处理完成！共获得 ${state.simulationResults.length} 份有效数据。`;
+            progressText.textContent = T('progress_text_done', { count: state.simulationResults.length });
             setTimeout(() => {
                 switchStep(5);
                 handleGenerateReport();
@@ -509,15 +729,19 @@
         }
 
         async function handleGenerateReport() {
-            showLoader(true, '正在分析数据并生成洞察...');
+            showLoader(true, 'loader_analyzing');
             const dataSummary = summarizeDataForAI();
-            const prompt = `作为一名资深的数据分析师，请分析以下关于“${state.questionnaire.title}”的问卷调查数据摘要...\n数据摘要：\n${dataSummary}\n...总结出3-5个最关键的市场洞察和商业建议...`;
+            const prompt = T('prompt_analyze', {
+                title: state.questionnaire.title,
+                summary: dataSummary
+            });
+
             try {
                 const insights = await callAI(prompt);
                 state.insightsHTML = marked.parse(insights);
                 renderReportFromState();
             } catch (error) {
-                showModal(`无法生成洞察结论: ${error.message}`);
+                showModal('modal_insight_fail', { message: error.message });
             } finally {
                 showLoader(false);
             }
@@ -531,10 +755,10 @@
         }
 
         function summarizeDataForAI() {
-            let summary = `总样本量: ${state.simulationResults.length}份\n\n`;
+            let summary = `Total Samples: ${state.simulationResults.length}\n\n`;
             const allQuestions = [...(state.questionnaire.screener || []), ...(state.questionnaire.mainBody || []), ...(state.questionnaire.demographics || [])];
             allQuestions.forEach(q => {
-                summary += `问题: "${q.questionText}"\n`;
+                summary += `Question: "${q.questionText}"\n`;
                 const counts = {};
                 state.simulationResults.forEach(res => {
                     const answerObj = res.answers.find(a => a.questionId === q.questionId);
@@ -546,7 +770,7 @@
                     }
                 });
                 for (const [option, count] of Object.entries(counts)) {
-                    summary += `- ${option}: ${count}票 (${((count / state.simulationResults.length) * 100).toFixed(1)}%)\n`;
+                    summary += `- ${option}: ${count} votes (${((count / state.simulationResults.length) * 100).toFixed(1)}%)\n`;
                 }
                 summary += "\n";
             });
@@ -592,7 +816,7 @@
                         type: 'bar',
                         data: {
                             labels: labels,
-                            datasets: [{ label: '选择百分比 (%)', data: percentageData, backgroundColor: backgroundColors }]
+                            datasets: [{ label: T('chart_label_percentage'), data: percentageData, backgroundColor: backgroundColors }]
                         },
                         options: {
                             indexAxis: 'y', responsive: true,
@@ -606,7 +830,7 @@
                                     callbacks: {
                                         label: function(context) {
                                             const originalCount = counts[context.label];
-                                            return `${context.parsed.x}% (${originalCount}人)`;
+                                            return `${context.parsed.x}% (${originalCount}${T('chart_tooltip_people')})`;
                                         }
                                     }
                                 }
@@ -632,41 +856,33 @@
             switchStep(1);
         }
 
-        // --- MODIFIED: PDF Download Function ---
         async function handleDownloadPDF() {
             const element = document.getElementById('report-body');
-            showLoader(true, '正在生成PDF报告...');
+            showLoader(true, 'loader_generating_pdf');
             
             try {
-                // Temporarily set chart colors for light background
-                Chart.defaults.color = '#374151'; // Dark gray for text
-                generateCharts(); // Redraw charts with new colors
+                Chart.defaults.color = '#374151'; 
+                generateCharts(); 
 
+                const filename = T('pdf_filename', { title: state.questionnaire.title || 'Untitled' });
                 const opt = {
                     margin: 1,
-                    filename: `AI用户研究报告-${state.questionnaire.title || '未命名'}.pdf`,
+                    filename: filename,
                     image: { type: 'jpeg', quality: 0.98 },
-                    html2canvas: { 
-                        scale: 2, 
-                        useCORS: true, 
-                        backgroundColor: '#ffffff' // Force white background
-                    },
+                    html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
                     jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
                 };
 
-                // Temporarily disable animations for PDF generation
                 Chart.defaults.animation = false;
                 
                 await html2pdf().set(opt).from(element).save();
 
             } catch(error) {
                 console.error("PDF generation failed:", error);
-                showModal("生成PDF报告时出错，请重试。");
+                showModal("modal_pdf_fail");
             } finally {
-                // Restore original chart colors and settings
                 Chart.defaults.color = originalChartColor;
                 Chart.defaults.animation = true;
-                // Redraw charts with original colors for the webpage
                 generateCharts(); 
                 showLoader(false);
             }
@@ -677,7 +893,8 @@
                 researchGoal: state.researchGoal,
                 questionnaire: state.questionnaire,
                 simulationResults: state.simulationResults,
-                insightsHTML: state.insightsHTML
+                insightsHTML: state.insightsHTML,
+                lang: state.currentLanguage // Save language state
             };
             const jsonString = JSON.stringify(shareData);
             const compressed = pako.deflate(jsonString, { to: 'string' });
@@ -690,23 +907,29 @@
         function copyLinkToClipboard() {
             shareLinkInput.select();
             document.execCommand('copy');
-            copyLinkBtn.textContent = '已复制!';
-            setTimeout(() => { copyLinkBtn.textContent = '复制'; }, 2000);
+            copyLinkBtn.textContent = T('copy_link_btn_copied');
+            setTimeout(() => { copyLinkBtn.textContent = T('copy_link_btn'); }, 2000);
         }
 
         async function loadReportFromURL() {
             if (window.location.hash.startsWith('#data=')) {
-                showLoader(true, '正在加载分享的报告...');
+                showLoader(true, 'loader_loading_report');
                 try {
                     const encodedData = window.location.hash.substring(6);
                     const compressed = atob(encodedData);
                     const jsonString = pako.inflate(compressed, { to: 'string' });
                     const sharedData = JSON.parse(jsonString);
+                    
+                    // Set language from shared data first
+                    if (sharedData.lang) {
+                        switchLanguage(sharedData.lang);
+                    }
+
                     Object.assign(state, sharedData);
                     switchStep(5);
                     renderReportFromState();
                 } catch (error) {
-                    showModal("分享链接无效或已损坏。");
+                    showModal("modal_bad_link");
                     window.location.hash = '';
                 } finally {
                     showLoader(false);
@@ -716,6 +939,7 @@
             }
         }
 
+        // --- Event Listeners ---
         optimizeGoalBtn.addEventListener('click', handleOptimizeGoal);
         generateBtn.addEventListener('click', handleGenerateAndRecruit);
         proceedToSimBtn.addEventListener('click', handleStartSimulation);
@@ -723,8 +947,31 @@
         downloadPdfBtn.addEventListener('click', handleDownloadPDF);
         shareReportBtn.addEventListener('click', handleShareReport);
         copyLinkBtn.addEventListener('click', copyLinkToClipboard);
+        
+        langSwitchToggle.addEventListener('click', () => {
+            langSwitchMenu.classList.toggle('hidden');
+        });
 
-        window.addEventListener('load', loadReportFromURL);
+        langSwitchMenu.addEventListener('click', (e) => {
+            const langOption = e.target.closest('.lang-option');
+            if (langOption) {
+                e.preventDefault();
+                const newLang = langOption.dataset.lang;
+                switchLanguage(newLang);
+                langSwitchMenu.classList.add('hidden');
+            }
+        });
+
+        window.addEventListener('click', (e) => {
+            if (!langSwitchContainer.contains(e.target)) {
+                langSwitchMenu.classList.add('hidden');
+            }
+        });
+
+        window.addEventListener('load', () => {
+            switchLanguage('zh'); // Set default language
+            loadReportFromURL();
+        });
     </script>
 </body>
-</ht
+</html>
