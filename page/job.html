@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>加入我们 - Sings.ai</title>
+    <!-- 引入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入 Google Fonts 的 Inter 字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <!-- 引入 Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        /* 自定义样式 */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000000;
+            color: #E5E7EB; /* text-gray-200 */
+        }
+        /* 背景辉光效果 */
+        .glow-background {
+            position: relative;
+            overflow-x: hidden;
+        }
+        .glow-background::before {
+            content: '';
+            position: absolute;
+            top: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 900px;
+            height: 900px;
+            background-image: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, rgba(99, 102, 241, 0) 65%);
+            z-index: -1;
+            pointer-events: none;
+        }
+        /* 标题渐变色 */
+        .gradient-text {
+            background-image: linear-gradient(to right, #A78BFA, #3B82F6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        /* 卡片和区块边框渐变 */
+        .gradient-border {
+            border: 1px solid;
+            border-image-slice: 1;
+            border-image-source: linear-gradient(to bottom, rgba(79, 70, 229, 0.3), rgba(59, 130, 246, 0.3));
+            background-color: rgba(255, 255, 255, 0.03);
+            transition: all 0.3s ease;
+        }
+        .gradient-border:hover {
+            border-image-source: linear-gradient(to bottom, rgba(79, 70, 229, 0.6), rgba(59, 130, 246, 0.6));
+            box-shadow: 0 0 25px rgba(99, 102, 241, 0.2);
+        }
+        /* 导航栏毛玻璃效果 */
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        /* 职位折叠面板 */
+        .job-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.7s ease-in-out;
+        }
+        .rotate-180 {
+            transform: rotate(180deg);
+        }
+        .transition-transform {
+            transition: transform 0.3s ease;
+        }
+        .gradient-button {
+            background-image: linear-gradient(to right, #4F46E5, #3B82F6);
+            transition: all 0.3s ease;
+        }
+        .gradient-button:hover {
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+        }
+    </style>
+</head>
+<body class="glow-background">
+
+    <!-- 导航栏 -->
+    <nav class="fixed top-0 left-0 right-0 z-50 p-4">
+        <div class="container mx-auto glass-morphism rounded-xl p-2 px-4 flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <a href="https://sings.ai/" class="text-xl font-bold text-white">sings.ai</a>
+            </div>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#culture" class="text-gray-300 hover:text-white transition-colors">公司文化</a>
+                <a href="#jobs" class="text-gray-300 hover:text-white transition-colors">开放职位</a>
+                <a href="#perks" class="text-gray-300 hover:text-white transition-colors">我们提供</a>
+            </div>
+            <div class="hidden md:flex items-center">
+                 <a href="#" class="text-gray-300 hover:text-white transition-colors border border-gray-600 hover:border-gray-400 rounded-lg px-3 py-2 text-sm font-medium">中 / EN</a>
+            </div>
+            <div class="md:hidden">
+                <button class="text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 页面主要内容容器 -->
+    <div class="container mx-auto px-6 pt-32 md:pt-40 pb-16 md:pb-24">
+        
+        <!-- 页面标题 -->
+        <header class="text-center max-w-4xl mx-auto mb-16 md:mb-24 relative z-10">
+            <h1 class="text-4xl md:text-6xl font-black tracking-tighter mb-6">
+                <span class="gradient-text">与我们一起，重塑洞察的未来</span>
+            </h1>
+            <p class="text-lg md:text-xl text-gray-400">
+                我们正在寻找充满激情、才华横溢的你。在 Sings.ai，你将有机会参与到最具挑战性的项目中，与顶尖人才协作，用技术的力量，让每一个伟大的创新都能被用户深刻理解。
+            </p>
+        </header>
+
+        <!-- 各个章节 -->
+        <div class="space-y-24 md:space-y-32">
+
+            <!-- 1. 公司文化 -->
+            <section id="culture" class="max-w-6xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-bold text-white text-center mb-12">我们的文化</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- 文化卡片 1 -->
+                    <div class="gradient-border rounded-2xl p-8 text-center">
+                        <i class="ph-light ph-rocket-launch text-5xl gradient-text mb-4 inline-block"></i>
+                        <h3 class="text-xl font-bold text-white mb-2">创新驱动</h3>
+                        <p class="text-gray-400 text-sm">我们鼓励大胆尝试，拥抱并引领行业最前沿的技术与思想。</p>
+                    </div>
+                    <!-- 文化卡片 2 -->
+                    <div class="gradient-border rounded-2xl p-8 text-center">
+                        <i class="ph-light ph-users text-5xl gradient-text mb-4 inline-block"></i>
+                        <h3 class="text-xl font-bold text-white mb-2">用户至上</h3>
+                        <p class="text-gray-400 text-sm">我们痴迷于理解用户，一切决策都源于为用户创造真实的价值。</p>
+                    </div>
+                    <!-- 文化卡片 3 -->
+                    <div class="gradient-border rounded-2xl p-8 text-center">
+                        <i class="ph-light ph-handshake text-5xl gradient-text mb-4 inline-block"></i>
+                        <h3 class="text-xl font-bold text-white mb-2">坦诚透明</h3>
+                        <p class="text-gray-400 text-sm">我们相信开放的沟通能激发最好的想法，鼓励直接而有建设性的反馈。</p>
+                    </div>
+                    <!-- 文化卡片 4 -->
+                    <div class="gradient-border rounded-2xl p-8 text-center">
+                        <i class="ph-light ph-medal text-5xl gradient-text mb-4 inline-block"></i>
+                        <h3 class="text-xl font-bold text-white mb-2">追求卓越</h3>
+                        <p class="text-gray-400 text-sm">我们对产出有极高的标准，关注细节，并持续学习与成长。</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. 开放职位 -->
+            <section id="jobs" class="max-w-4xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-bold text-white text-center mb-12">
+                    <span class="gradient-text">开放职位</span>
+                </h2>
+                <div class="space-y-4">
+                    <!-- 职位 1 -->
+                    <div class="gradient-border rounded-xl">
+                        <button class="job-toggle w-full flex justify-between items-center text-left p-6">
+                            <div>
+                                <h3 class="text-xl font-semibold text-white">AI 研究科学家 (虚拟用户方向)</h3>
+                                <p class="text-gray-400">上海 / 远程</p>
+                            </div>
+                            <svg class="w-6 h-6 text-gray-400 transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="job-details">
+                            <div class="p-6 pt-2 border-t border-gray-700/50">
+                                <h4 class="font-bold text-white mb-2">岗位职责:</h4>
+                                <ul class="list-disc list-inside text-gray-300 space-y-1 mb-4">
+                                    <li>负责“虚拟用户”模拟系统的核心算法研究与实现。</li>
+                                    <li>基于大规模、多模态用户数据，构建可解释、高精度的用户行为与偏好模型。</li>
+                                    <li>探索前沿的 LLM、Agent 技术，并将其应用于提升虚拟用户的真实性与交互能力。</li>
+                                    <li>与产品和工程团队紧密合作，推动算法模型的落地与迭代。</li>
+                                </ul>
+                                <h4 class="font-bold text-white mb-2">任职要求:</h4>
+                                <ul class="list-disc list-inside text-gray-300 space-y-1">
+                                    <li>计算机科学、人工智能或相关领域的博士或优秀硕士。</li>
+                                    <li>在机器学习、深度学习、自然语言处理等领域有深厚积累，熟悉主流框架。</li>
+                                    <li>有用户建模、推荐系统、对话系统或相关项目经验者优先。</li>
+                                    <li>具备优秀的编程能力和快速学习能力，对解决挑战性问题充满热情。</li>
+                                </ul>
+                                <a href="https://sings.ai/page/email.html" class="gradient-button text-white font-semibold py-2 px-5 rounded-lg inline-block mt-6">立即申请</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 职位 2 -->
+                    <div class="gradient-border rounded-xl">
+                        <button class="job-toggle w-full flex justify-between items-center text-left p-6">
+                            <div>
+                                <h3 class="text-xl font-semibold text-white">SaaS 产品经理</h3>
+                                <p class="text-gray-400">上海</p>
+                            </div>
+                            <svg class="w-6 h-6 text-gray-400 transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="job-details">
+                             <div class="p-6 pt-2 border-t border-gray-700/50">
+                                <h4 class="font-bold text-white mb-2">岗位职责:</h4>
+                                <ul class="list-disc list-inside text-gray-300 space-y-1 mb-4">
+                                    <li>负责 Sings.ai 智能研究平台（SaaS）的产品规划、设计和生命周期管理。</li>
+                                    <li>深入理解用户需求与业务场景，定义产品路线图，撰写高质量的需求文档。</li>
+                                    <li>协同设计、研发、测试团队，确保产品功能高效、高质量上线。</li>
+                                    <li>通过数据分析和用户反馈，持续优化产品体验和商业价值。</li>
+                                </ul>
+                                <h4 class="font-bold text-white mb-2">任职要求:</h4>
+                                <ul class="list-disc list-inside text-gray-300 space-y-1">
+                                    <li>3年以上互联网或软件行业产品管理经验，有成功的 ToB 或 SaaS 产品经验者优先。</li>
+                                    <li>具备优秀的用户同理心、逻辑思维和数据分析能力。</li>
+                                    <li>出色的沟通协调能力和项目推动能力，能应对复杂和不确定的环境。</li>
+                                    <li>对 AI 技术和用户研究领域有浓厚兴趣。</li>
+                                </ul>
+                                <a href="https://sings.ai/page/email.html" class="gradient-button text-white font-semibold py-2 px-5 rounded-lg inline-block mt-6">立即申请</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 职位 3 -->
+                    <div class="gradient-border rounded-xl">
+                        <button class="job-toggle w-full flex justify-between items-center text-left p-6">
+                            <div>
+                                <h3 class="text-xl font-semibold text-white">高级前端工程师</h3>
+                                <p class="text-gray-400">上海 / 远程</p>
+                            </div>
+                            <svg class="w-6 h-6 text-gray-400 transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="job-details">
+                             <div class="p-6 pt-2 border-t border-gray-700/50">
+                                <h4 class="font-bold text-white mb-2">岗位职责:</h4>
+                                <ul class="list-disc list-inside text-gray-300 space-y-1 mb-4">
+                                    <li>负责 Sings.ai 平台 Web 前端的设计、开发和性能优化。</li>
+                                    <li>与产品经理和设计师合作，实现复杂的数据可视化和交互界面。</li>
+                                    <li>构建可复用、高质量的前端组件和基础架构。</li>
+                                    <li>探索和应用前端前沿技术，提升团队开发效率和产品体验。</li>
+                                </ul>
+                                <h4 class="font-bold text-white mb-2">任职要求:</h4>
+                                <ul class="list-disc list-inside text-gray-300 space-y-1">
+                                    <li>精通 JavaScript/TypeScript、HTML、CSS，熟悉 React/Vue 等现代前端框架。</li>
+                                    <li>在数据可视化（如 D3.js, ECharts）、性能优化、前端工程化方面有丰富经验。</li>
+                                    <li>对代码质量和用户体验有极致追求。</li>
+                                    <li>良好的团队合作精神和沟通能力。</li>
+                                </ul>
+                                <a href="https://sings.ai/page/email.html" class="gradient-button text-white font-semibold py-2 px-5 rounded-lg inline-block mt-6">立即申请</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 3. 我们提供 -->
+            <section id="perks" class="max-w-6xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-bold text-white text-center mb-12">我们提供</h2>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-8 text-center">
+                    <div class="p-4">
+                        <i class="ph-light ph-money text-4xl gradient-text mb-3 inline-block"></i>
+                        <h3 class="text-lg font-semibold text-white">有竞争力的薪酬</h3>
+                    </div>
+                    <div class="p-4">
+                        <i class="ph-light ph-chart-line-up text-4xl gradient-text mb-3 inline-block"></i>
+                        <h3 class="text-lg font-semibold text-white">期权激励计划</h3>
+                    </div>
+                    <div class="p-4">
+                        <i class="ph-light ph-house-line text-4xl gradient-text mb-3 inline-block"></i>
+                        <h3 class="text-lg font-semibold text-white">灵活办公制度</h3>
+                    </div>
+                    <div class="p-4">
+                        <i class="ph-light ph-airplane-takeoff text-4xl gradient-text mb-3 inline-block"></i>
+                        <h3 class="text-lg font-semibold text-white">带薪年假</h3>
+                    </div>
+                    <div class="p-4">
+                        <i class="ph-light ph-books text-4xl gradient-text mb-3 inline-block"></i>
+                        <h3 class="text-lg font-semibold text-white">学习成长基金</h3>
+                    </div>
+                     <div class="p-4">
+                        <i class="ph-light ph-brain text-4xl gradient-text mb-3 inline-block"></i>
+                        <h3 class="text-lg font-semibold text-white">解决前沿挑战</h3>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 结尾 -->
+            <footer class="text-center max-w-3xl mx-auto mt-16 md:mt-24 relative z-10">
+                <h3 class="text-2xl md:text-3xl font-bold text-white mb-4">
+                    未找到合适的职位？
+                </h3>
+                <p class="text-lg text-gray-400 mb-8">
+                    我们一直在寻找杰出的人才。如果你对我们的事业充满热情，请将你的简历和作品集发送给我们，让我们有机会认识你。
+                </p>
+                <a href="https://sings.ai/page/email.html" class="gradient-button text-white font-bold py-3 px-8 rounded-lg text-lg">
+                    开放申请
+                </a>
+            </footer>
+
+        </div>
+
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // 职位折叠面板 JavaScript
+            const jobToggles = document.querySelectorAll('.job-toggle');
+            jobToggles.forEach(toggle => {
+                toggle.addEventListener('click', () => {
+                    const details = toggle.nextElementSibling;
+                    const arrow = toggle.querySelector('svg');
+
+                    // 关闭其他所有已打开的
+                    jobToggles.forEach(otherToggle => {
+                        if (otherToggle !== toggle) {
+                            otherToggle.nextElementSibling.style.maxHeight = null;
+                            otherToggle.querySelector('svg').classList.remove('rotate-180');
+                        }
+                    });
+
+                    // 切换当前的
+                    if (details.style.maxHeight) {
+                        details.style.maxHeight = null;
+                        arrow.classList.remove('rotate-180');
+                    } else {
+                        details.style.maxHeight = details.scrollHeight + "px";
+                        arrow.classList.add('rotate-180');
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
