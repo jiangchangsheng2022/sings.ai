@@ -143,6 +143,17 @@
             from { transform: translateX(0); }
             to { transform: translateX(-100%); }
         }
+        /* Show more transition */
+        #more-features-grid {
+            transition: max-height 0.7s ease-in-out, opacity 0.5s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+        #more-features-grid.show {
+            max-height: 1000px; /* Adjust if more features are added */
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -151,15 +162,15 @@
         <!-- Header -->
         <header id="header" class="fixed top-0 left-0 right-0 z-50 p-4 transition-all duration-300">
              <div id="header-inner" class="container mx-auto glass-morphism rounded-xl p-2 px-4 flex justify-between items-center transition-all duration-300">
-                <a href="#home" class="flex items-center text-2xl font-bold text-white"><span class="text-blue-400">Sings</span><span>.AI</span></a>
+                <a href="index.html" class="flex items-center text-2xl font-bold text-white"><span class="text-blue-400">Sings</span><span>.AI</span></a>
                 <nav class="hidden md:flex items-center space-x-8">
                     <div class="relative" id="products-menu">
                         <button class="nav-link text-gray-300 hover:text-white transition-colors flex items-center" data-lang="navProducts">
                             产品 <i class="ph ph-caret-down ml-1 transition-transform duration-300"></i>
                         </button>
                         <div id="products-dropdown" class="dropdown absolute top-full left-1/2 -translate-x-1/2 mt-4 w-56 bg-gray-900/80 backdrop-blur-lg border border-gray-700 rounded-lg shadow-lg opacity-0 pointer-events-none transform -translate-y-2">
-                            <a href="product/Survey/index.html" class="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-gray-700/50 hover:text-white transition-colors rounded-t-lg"><i class="ph ph-chart-pie-slice text-lg text-blue-400"></i> AI 智能问卷</a>
-                            <a href="product/FGD/index.html" class="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-gray-700/50 hover:text-white transition-colors rounded-b-lg"><i class="ph ph-users-three text-lg text-purple-400"></i> AI 深度访谈</a>
+                            <a href="https://sings.ai/product/" class="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-gray-700/50 hover:text-white transition-colors rounded-t-lg"><i class="ph ph-chart-pie-slice text-lg text-blue-400"></i> AI 智能问卷</a>
+                            <a href="https://sings.ai/product/" class="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-gray-700/50 hover:text-white transition-colors rounded-b-lg"><i class="ph ph-users-three text-lg text-purple-400"></i> AI 深度访谈</a>
                         </div>
                     </div>
                     <a href="#solutions" class="nav-link text-gray-300 hover:text-white transition-colors" data-lang="navSolutions">解决方案</a>
@@ -168,7 +179,7 @@
                 </nav>
                 <div class="hidden md:flex items-center space-x-4">
                     <a href="#login" class="text-gray-300 hover:text-white transition-colors text-sm font-medium" data-lang="login">登录</a>
-                    <a href="#demo" class="py-2 px-4 rounded-lg font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-500 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300" data-lang="bookDemo">预约演示</a>
+                    <a href="https://sings.ai/product/" class="py-2 px-4 rounded-lg font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-500 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300" data-lang="bookDemo">立即体验</a>
                     <div class="lang-switcher flex items-center bg-gray-800/50 border border-gray-700 rounded-lg p-0.5">
                         <button id="lang-zh" class="px-2 py-0.5 text-sm rounded-md transition-colors duration-300">中</button>
                         <button id="lang-en" class="px-2 py-0.5 text-sm rounded-md transition-colors duration-300">EN</button>
@@ -186,8 +197,8 @@
                         产品 <i class="ph ph-caret-down ml-2 transition-transform duration-300"></i>
                     </button>
                     <div id="mobile-products-links" class="hidden mt-4 space-y-4">
-                        <a href="product/Survey/index.html" class="block text-lg text-gray-400 hover:text-white">AI 智能问卷</a>
-                        <a href="product/FGD/index.html" class="block text-lg text-gray-400 hover:text-white">AI 深度访谈</a>
+                        <a href="https://sings.ai/product/" class="block text-lg text-gray-400 hover:text-white">AI 智能问卷</a>
+                        <a href="https://sings.ai/product/" class="block text-lg text-gray-400 hover:text-white">AI 深度访谈</a>
                     </div>
                 </div>
                 <a href="#solutions" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="navSolutionsMobile">解决方案</a>
@@ -195,7 +206,7 @@
                 <a href="#faq" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="navFaqMobile">常见问题</a>
                 <hr class="w-full border-gray-700 my-4">
                 <a href="#login" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="loginMobile">登录</a>
-                <a href="#demo" class="w-full max-w-xs px-6 py-3 rounded-lg text-white font-semibold bg-gradient-to-r from-blue-600 to-indigo-500 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300" data-lang="bookDemoMobile">预约演示</a>
+                <a href="https://sings.ai/product/" class="w-full max-w-xs px-6 py-3 rounded-lg text-white font-semibold bg-gradient-to-r from-blue-600 to-indigo-500 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300" data-lang="bookDemoMobile">立即体验</a>
             </div>
         </div>
         
@@ -206,9 +217,8 @@
                 <div class="container mx-auto px-4 relative z-10">
                     <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight tracking-tight" data-lang="heroTitle">数小时获得深度洞察，<br class="hidden md:block" /> 而非数周</h1>
                     <p class="mt-6 max-w-3xl mx-auto text-lg md:text-xl text-gray-400" data-lang="heroSubtitle">Sings.AI 智能调研平台，整合AI问卷、AI访谈与AI数据分析，帮助产品、市场和研究团队更快、更准地做出商业决策。</p>
-                    <div class="mt-10 flex flex-col sm:flex-row justify-center items-center gap-4">
-                        <a href="#demo" class="w-full sm:w-auto px-8 py-4 rounded-lg text-white font-semibold bg-gradient-to-r from-blue-600 to-indigo-500 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300" data-lang="heroBtnPrimary">预约免费演示</a>
-                        <a href="#products" class="w-full sm:w-auto px-8 py-4 rounded-lg text-white font-semibold bg-white/10 border border-white/20 hover:bg-white/20 transition-all duration-300" data-lang="heroBtnSecondary">查看产品</a>
+                    <div class="mt-10 flex justify-center items-center">
+                        <a href="https://sings.ai/product/" class="w-full sm:w-auto px-8 py-4 rounded-lg text-white font-semibold bg-gradient-to-r from-blue-600 to-indigo-500 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300" data-lang="heroBtnPrimary">立即体验</a>
                     </div>
                 </div>
             </section>
@@ -228,71 +238,45 @@
             <section id="products" class="py-12 md:py-24 bg-gray-900/30">
                 <div class="container mx-auto px-4">
                     <div class="text-center mb-16">
-                        <h2 class="text-3xl md:text-4xl font-bold text-white" data-lang="productsTitle">一个平台，满足您所有的研究需求</h2>
-                        <p class="mt-4 max-w-2xl mx-auto text-lg text-gray-400" data-lang="productsSubtitle">从数据收集、AI分析到洞察交付，我们覆盖研究工作的全流程。</p>
+                        <h2 class="text-3xl md:text-4xl font-bold text-white" data-lang="productsTitle">我们的核心产品</h2>
                     </div>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                        <div class="glass-card rounded-xl p-6 fade-in">
-                            <i class="ph-fill ph-database text-3xl text-blue-400 mb-4"></i>
-                            <h3 class="text-lg font-bold text-white" data-lang="feature1Title">AI 智能问卷</h3>
-                            <p class="mt-2 text-sm text-gray-400" data-lang="feature1Desc">支持超过20种题型和高级逻辑，AI辅助生成专业问卷。</p>
+                    <div class="space-y-20">
+                        <!-- AI Smart Survey -->
+                        <div class="grid md:grid-cols-2 gap-12 items-center fade-in">
+                            <div>
+                                <h3 class="text-2xl md:text-3xl font-bold text-white" data-lang="product1Title">AI 智能问卷</h3>
+                                <p class="mt-4 text-lg text-gray-400" data-lang="product1Desc">从问卷设计、投放到分析报告，全程自动化。利用AI仿真用户或真实样本，快速完成高质量的数据采集。</p>
+                                <a href="https://sings.ai/product/" class="mt-8 inline-block px-6 py-3 rounded-lg text-white font-semibold bg-blue-600 hover:bg-blue-500 transition-all duration-300" data-lang="learnMore1">立即体验</a>
+                            </div>
+                            <div class="bg-gray-900/50 border border-gray-800 rounded-xl p-2">
+                                <svg class="w-full h-auto" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg"><rect x="10" y="70" width="30" height="30" fill="#3B82F6" class="chart-bar" style="animation-delay: 0s;"></rect><rect x="50" y="40" width="30" height="60" fill="#60A5FA" class="chart-bar" style="animation-delay: 0.1s;"></rect><rect x="90" y="20" width="30" height="80" fill="#A78BFA" class="chart-bar" style="animation-delay: 0.2s;"></rect><rect x="130" y="50" width="30" height="50" fill="#60A5FA" class="chart-bar" style="animation-delay: 0.3s;"></rect><line x1="0" y1="100" x2="200" y2="100" stroke="#4B5563" stroke-width="2"></line></svg>
+                            </div>
                         </div>
-                        <div class="glass-card rounded-xl p-6 fade-in" style="transition-delay: 50ms;">
-                            <i class="ph-fill ph-users-three text-3xl text-blue-400 mb-4"></i>
-                            <h3 class="text-lg font-bold text-white" data-lang="feature2Title">AI 深度访谈</h3>
-                            <p class="mt-2 text-sm text-gray-400" data-lang="feature2Desc">支持1对1和焦点小组座谈会，AI辅助主持与追问。</p>
+
+                        <!-- AI In-depth Interview -->
+                        <div class="grid md:grid-cols-2 gap-12 items-center fade-in">
+                            <div class="bg-gray-900/50 border border-gray-800 rounded-xl p-2 order-last md:order-first">
+                                <svg viewBox="0 0 600 450" class="rounded-lg w-full" xmlns="http://www.w3.org/2000/svg" aria-label="AI深度访谈模拟界面"><rect width="600" height="450" rx="8" fill="#111827"></rect><text x="50" y="60" font-family="sans-serif" font-size="18" fill="#9CA3AF">AI 主持人</text><rect x="50" y="80" width="400" height="60" rx="10" fill="#1F2937"></rect><rect x="65" y="95" width="300" height="8" rx="4" fill="#4B5563"></rect><rect x="65" y="115" width="250" height="8" rx="4" fill="#4B5563"></rect><text x="550" y="180" font-family="sans-serif" font-size="18" fill="#60A5FA" text-anchor="end">AI 受访者</text><rect x="150" y="200" width="400" height="80" rx="10" fill="#1E40AF"></rect><rect x="165" y="215" width="350" height="8" rx="4" fill="#DBEAFE"></rect><rect x="165" y="235" width="370" height="8" rx="4" fill="#DBEAFE"></rect><rect x="165" y="255" width="310" height="8" rx="4" fill="#DBEAFE"></rect><text x="50" y="320" font-family="sans-serif" font-size="18" fill="#9CA3AF">AI 主持人</text><rect x="50" y="340" width="350" height="40" rx="10" fill="#1F2937"></rect><rect x="65" y="355" width="280" height="8" rx="4" fill="#4B5563"></rect></svg>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl md:text-3xl font-bold text-white" data-lang="product2Title">AI 深度访谈</h3>
+                                <p class="mt-4 text-lg text-gray-400" data-lang="product2Desc">大规模、低成本地挖掘用户行为背后的“为什么”。AI访谈员可以与数百名用户同时进行1v1对话，并自动提炼观点。</p>
+                                <a href="https://sings.ai/product/" class="mt-8 inline-block px-6 py-3 rounded-lg text-white font-semibold bg-blue-600 hover:bg-blue-500 transition-all duration-300" data-lang="learnMore2">立即体验</a>
+                            </div>
                         </div>
-                        <div class="glass-card rounded-xl p-6 fade-in" style="transition-delay: 100ms;">
-                            <i class="ph-fill ph-files text-3xl text-blue-400 mb-4"></i>
-                            <h3 class="text-lg font-bold text-white" data-lang="feature3Title">全渠道文本导入</h3>
-                            <p class="mt-2 text-sm text-gray-400" data-lang="feature3Desc">整合社交媒体、应用评论、客服记录等非结构化数据。</p>
-                        </div>
-                        <div class="glass-card rounded-xl p-6 fade-in" style="transition-delay: 150ms;">
-                            <i class="ph-fill ph-globe text-3xl text-blue-400 mb-4"></i>
-                            <h3 class="text-lg font-bold text-white" data-lang="feature4Title">全球千万级样本库</h3>
-                            <p class="mt-2 text-sm text-gray-400" data-lang="feature4Desc">快速触达全球范围内的真实消费者，或使用AI仿真用户。</p>
-                        </div>
-                        <div class="glass-card rounded-xl p-6 fade-in" style="transition-delay: 200ms;">
-                            <i class="ph-fill ph-robot text-3xl text-purple-400 mb-4"></i>
-                            <h3 class="text-lg font-bold text-white" data-lang="feature5Title">洞察副驾 (Copilot)</h3>
-                            <p class="mt-2 text-sm text-gray-400" data-lang="feature5Desc">与您的所有数据进行自然语言对话，即时获得答案。</p>
-                        </div>
-                        <div class="glass-card rounded-xl p-6 fade-in" style="transition-delay: 250ms;">
-                            <i class="ph-fill ph-smiley text-3xl text-purple-400 mb-4"></i>
-                            <h3 class="text-lg font-bold text-white" data-lang="feature6Title">情感与主题分析</h3>
-                            <p class="mt-2 text-sm text-gray-400" data-lang="feature6Desc">自动识别文本中的情绪倾向，并聚类出核心讨论主题。</p>
-                        </div>
-                        <div class="glass-card rounded-xl p-6 fade-in" style="transition-delay: 300ms;">
-                            <i class="ph-fill ph-trend-up text-3xl text-purple-400 mb-4"></i>
-                            <h3 class="text-lg font-bold text-white" data-lang="feature7Title">趋势与异常检测</h3>
-                            <p class="mt-2 text-sm text-gray-400" data-lang="feature7Desc">自动发现数据中的新兴趋势、热点话题和异常信号。</p>
-                        </div>
-                        <div class="glass-card rounded-xl p-6 fade-in" style="transition-delay: 350ms;">
-                            <i class="ph-fill ph-video text-3xl text-purple-400 mb-4"></i>
-                            <h3 class="text-lg font-bold text-white" data-lang="feature8Title">关键时刻视频剪辑</h3>
-                            <p class="mt-2 text-sm text-gray-400" data-lang="feature8Desc">AI自动从访谈录像中剪辑出表达关键观点的视频片段。</p>
-                        </div>
-                        <div class="glass-card rounded-xl p-6 fade-in" style="transition-delay: 400ms;">
-                            <i class="ph-fill ph-presentation-chart text-3xl text-green-400 mb-4"></i>
-                            <h3 class="text-lg font-bold text-white" data-lang="feature9Title">可定制仪表板</h3>
-                            <p class="mt-2 text-sm text-gray-400" data-lang="feature9Desc">通过拖拽，自由组合图表和洞察，创建个性化报告看板。</p>
-                        </div>
-                        <div class="glass-card rounded-xl p-6 fade-in" style="transition-delay: 450ms;">
-                            <i class="ph-fill ph-file-pdf text-3xl text-green-400 mb-4"></i>
-                            <h3 class="text-lg font-bold text-white" data-lang="feature10Title">一键生成报告</h3>
-                            <p class="mt-2 text-sm text-gray-400" data-lang="feature10Desc">自动生成PPT、PDF和Word格式的专业研究报告。</p>
-                        </div>
-                        <div class="glass-card rounded-xl p-6 fade-in" style="transition-delay: 500ms;">
-                            <i class="ph-fill ph-users text-3xl text-green-400 mb-4"></i>
-                            <h3 class="text-lg font-bold text-white" data-lang="feature11Title">团队协作空间</h3>
-                            <p class="mt-2 text-sm text-gray-400" data-lang="feature11Desc">支持多人在线协作，共同标注、分析数据和撰写报告。</p>
-                        </div>
-                        <div class="glass-card rounded-xl p-6 fade-in" style="transition-delay: 550ms;">
-                            <i class="ph-fill ph-plugs-connected text-3xl text-green-400 mb-4"></i>
-                            <h3 class="text-lg font-bold text-white" data-lang="feature12Title">API与集成</h3>
-                            <p class="mt-2 text-sm text-gray-400" data-lang="feature12Desc">通过API将洞察集成到您现有的BI、CRM或办公系统中。</p>
-                        </div>
+                    </div>
+
+                    <div class="text-center mt-20">
+                        <h3 class="text-xl font-bold text-white" data-lang="moreFeaturesTitle">更多平台能力</h3>
+                        <button id="show-more-btn" class="mt-4 text-blue-400 font-semibold flex items-center mx-auto group">
+                            <span data-lang="showMore">显示更多</span>
+                            <i id="show-more-icon" class="ph ph-caret-down ml-2 transition-transform duration-300 group-hover:translate-y-0.5"></i>
+                        </button>
+                    </div>
+
+                    <div id="more-features-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-12">
+                        <!-- Other features will be populated here by JS -->
                     </div>
                 </div>
             </section>
@@ -362,7 +346,7 @@
                 <div class="container mx-auto px-4">
                      <h2 class="text-4xl md:text-5xl font-extrabold text-white leading-tight" data-lang="ctaTitle">准备好加速您的研究流程了吗？</h2>
                     <p class="mt-6 max-w-2xl mx-auto text-lg text-gray-400" data-lang="ctaSubtitle">立即预约1v1产品演示，我们将为您展示Sings.AI如何将数周的工作缩短至数小时。</p>
-                    <div class="mt-10"><a href="mailto:jiang.changsheng@foxmail.com" class="inline-block px-10 py-5 rounded-lg text-white font-semibold bg-gradient-to-r from-blue-600 to-indigo-500 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 text-lg" data-lang="ctaButton">免费预约演示</a></div>
+                    <div class="mt-10"><a href="https://sings.ai/product/" class="inline-block px-10 py-5 rounded-lg text-white font-semibold bg-gradient-to-r from-blue-600 to-indigo-500 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 text-lg" data-lang="ctaButton">立即体验</a></div>
                 </div>
             </section>
         </main>
@@ -372,7 +356,7 @@
             <div class="container mx-auto px-4 py-16">
                 <div class="grid grid-cols-2 md:grid-cols-5 gap-8">
                     <div class="col-span-2 md:col-span-1"><a href="#home" class="flex items-center text-2xl font-bold text-white"><span class="text-blue-400">Sings</span><span>.AI</span></a><p class="mt-4 text-gray-400 text-sm" data-lang="footerSlogan">加速您的商业决策</p></div>
-                    <div><h3 class="font-semibold text-white tracking-wider" data-lang="footerProducts">产品</h3><ul class="mt-4 space-y-3" data-lang="footerProductsLinks"><li><a href="product/Survey/index.html" class="text-gray-400 hover:text-white transition-colors">AI 智能问卷</a></li><li><a href="product/FGD/index.html" class="text-gray-400 hover:text-white transition-colors">AI 深度访谈</a></li><li><a href="#products" class="text-gray-400 hover:text-white transition-colors">洞察副驾</a></li></ul></div>
+                    <div><h3 class="font-semibold text-white tracking-wider" data-lang="footerProducts">产品</h3><ul class="mt-4 space-y-3" data-lang="footerProductsLinks"><li><a href="https://sings.ai/product/" class="text-gray-400 hover:text-white transition-colors">AI 智能问卷</a></li><li><a href="https://sings.ai/product/" class="text-gray-400 hover:text-white transition-colors">AI 深度访谈</a></li><li><a href="#products" class="text-gray-400 hover:text-white transition-colors">洞察副驾</a></li></ul></div>
                     <div><h3 class="font-semibold text-white tracking-wider" data-lang="footerSolutions">解决方案</h3><ul class="mt-4 space-y-3" data-lang="footerSolutionsLinks"><li><a href="#solutions" class="text-gray-400 hover:text-white transition-colors">产品开发</a></li><li><a href="#solutions" class="text-gray-400 hover:text-white transition-colors">市场营销</a></li><li><a href="#solutions" class="text-gray-400 hover:text-white transition-colors">用户研究</a></li></ul></div>
                     <div><h3 class="font-semibold text-white tracking-wider" data-lang="footerResources">资源</h3><ul class="mt-4 space-y-3" data-lang="footerResourcesLinks"><li><a href="#case-study" class="text-gray-400 hover:text-white transition-colors">客户案例</a></li><li><a href="#faq" class="text-gray-400 hover:text-white transition-colors">常见问题</a></li><li><a href="#resources" class="text-gray-400 hover:text-white transition-colors">博客</a></li></ul></div>
                      <div><h3 class="font-semibold text-white tracking-wider" data-lang="footerCompany">公司</h3><ul class="mt-4 space-y-3" data-lang="footerCompanyLinks"><li><a href="#about" class="text-gray-400 hover:text-white transition-colors">关于我们</a></li><li><a href="mailto:jiang.changsheng@foxmail.com" class="text-gray-400 hover:text-white transition-colors">联系方式</a></li></ul></div>
@@ -396,21 +380,25 @@
             const headerInner = document.getElementById('header-inner');
             const translations = {
                  navProducts: { zh: '产品', en: 'Products' }, navSolutions: { zh: '解决方案', en: 'Solutions' }, navCaseStudies: { zh: '客户案例', en: 'Case Studies' }, navFaq: { zh: '常见问题', en: 'FAQ' },
-                 login: { zh: '登录', en: 'Login' }, bookDemo: { zh: '预约演示', en: 'Book a Demo' },
+                 login: { zh: '登录', en: 'Login' }, bookDemo: { zh: '立即体验', en: 'Experience Now' },
                  navProductsMobile: { zh: '产品', en: 'Products' }, navSolutionsMobile: { zh: '解决方案', en: 'Solutions' }, navCaseStudiesMobile: { zh: '客户案例', en: 'Case Studies' }, navFaqMobile: { zh: '常见问题', en: 'FAQ' },
-                 loginMobile: { zh: '登录', en: 'Login' }, bookDemoMobile: { zh: '预约演示', en: 'Book a Demo' },
+                 loginMobile: { zh: '登录', en: 'Login' }, bookDemoMobile: { zh: '立即体验', en: 'Experience Now' },
                  heroTitle: { zh: '数小时获得深度洞察，<br class="hidden md:block" /> 而非数周', en: 'Get In-depth Insights in Hours,<br class="hidden md:block" /> Not Weeks' },
                  heroSubtitle: { zh: 'Sings.AI 智能调研平台，整合AI问卷、AI访谈与AI数据分析，帮助产品、市场和研究团队更快、更准地做出商业决策。', en: 'The Sings.AI intelligent research platform integrates AI surveys, interviews, and data analysis to help product, marketing, and research teams make faster, more accurate business decisions.' },
-                 heroBtnPrimary: { zh: '预约免费演示', en: 'Book a Free Demo' }, heroBtnSecondary: { zh: '查看产品', en: 'See Products' },
+                 heroBtnPrimary: { zh: '立即体验', en: 'Experience Now' }, heroBtnSecondary: { zh: '查看产品', en: 'See Products' },
                  socialProof: { zh: '众多领先企业信赖的AI洞察伙伴', en: 'The AI insight partner trusted by leading companies' },
                  demoTitle: { zh: '与您的数据“对话”', en: '“Talk” to Your Data' },
                  demoSubtitle: { zh: '上传任何文本数据，用自然语言提问，即刻获得洞察。体验Sings.AI洞察副驾的强大功能。', en: 'Upload any text data, ask questions in natural language, and get instant insights. Experience the power of Sings.AI Insights Copilot.' },
-                 productsTitle: { zh: '一个平台，满足您所有的研究需求', en: 'One Platform for All Your Research Needs' },
-                 productsSubtitle: { zh: '从数据收集、AI分析到洞察交付，我们覆盖研究工作的全流程。', en: 'From data collection and AI analysis to insight delivery, we cover the entire research workflow.' },
-                 feature1Title: { zh: 'AI 智能问卷', en: 'AI Smart Survey' },
-                 feature1Desc: { zh: '支持超过20种题型和高级逻辑，AI辅助生成专业问卷。', en: 'Supports 20+ question types and advanced logic, with AI-assisted professional questionnaire generation.' },
-                 feature2Title: { zh: 'AI 深度访谈', en: 'AI In-depth Interview' },
-                 feature2Desc: { zh: '支持1对1和焦点小组座谈会，AI辅助主持与追问。', en: 'Supports 1-on-1 and focus groups, with AI-assisted moderation and probing.' },
+                 productsTitle: { zh: '我们的核心产品', en: 'Our Core Products' },
+                 product1Title: { zh: 'AI 智能问卷', en: 'AI Smart Survey' },
+                 product1Desc: { zh: '从问卷设计、投放到分析报告，全程自动化。利用AI仿真用户或真实样本，快速完成高质量的数据采集。', en: 'Fully automated from survey design and deployment to analysis and reporting. Quickly complete high-quality data collection using AI-simulated or real samples.' },
+                 learnMore1: { zh: '立即体验', en: 'Experience Now' },
+                 product2Title: { zh: 'AI 深度访谈', en: 'AI In-depth Interview' },
+                 product2Desc: { zh: '大规模、低成本地挖掘用户行为背后的“为什么”。AI访谈员可以与数百名用户同时进行1v1对话，并自动提炼观点。', en: 'Uncover the "why" behind user behavior at scale and low cost. AI interviewers can conduct 1-on-1 conversations with hundreds of users simultaneously and automatically extract insights.' },
+                 learnMore2: { zh: '立即体验', en: 'Experience Now' },
+                 moreFeaturesTitle: { zh: '更多平台能力', en: 'More Platform Capabilities' },
+                 showMore: { zh: '显示更多', en: 'Show More' },
+                 showLess: { zh: '收起', en: 'Show Less' },
                  feature3Title: { zh: '全渠道文本导入', en: 'Omni-channel Text Import' },
                  feature3Desc: { zh: '整合社交媒体、应用评论、客服记录等非结构化数据。', en: 'Integrate unstructured data from social media, app reviews, support tickets, and more.' },
                  feature4Title: { zh: '全球千万级样本库', en: 'Global Panel Access' },
@@ -442,10 +430,10 @@
                  caseStudyResult3: { zh: '研究成本降低(%)', en: 'Reduction in Research Cost (%)' },
                  ctaTitle: { zh: '准备好加速您的研究流程了吗？', en: 'Ready to Accelerate Your Research Process?' },
                  ctaSubtitle: { zh: '立即预约1v1产品演示，我们将为您展示Sings.AI如何将数周的工作缩短至数小时。', en: 'Book a 1-on-1 demo now, and we’ll show you how Sings.AI can shorten weeks of work into hours.' },
-                 ctaButton: { zh: '免费预约演示', en: 'Book a Free Demo' },
+                 ctaButton: { zh: '立即体验', en: 'Experience Now' },
                  footerSlogan: { zh: '加速您的商业决策', en: 'Accelerate Your Business Decisions' },
                  footerProducts: { zh: '产品', en: 'Products' },
-                 footerProductsLinks: { zh: '<li><a href="product/Survey/index.html" class="text-gray-400 hover:text-white transition-colors">AI 智能问卷</a></li><li><a href="product/FGD/index.html" class="text-gray-400 hover:text-white transition-colors">AI 深度访谈</a></li><li><a href="#products" class="text-gray-400 hover:text-white transition-colors">洞察副驾</a></li>', en: '<li><a href="product/Survey/index.html" class="text-gray-400 hover:text-white transition-colors">AI Survey</a></li><li><a href="product/FGD/index.html" class="text-gray-400 hover:text-white transition-colors">AI Interview</a></li><li><a href="#products" class="text-gray-400 hover:text-white transition-colors">Insights Copilot</a></li>' },
+                 footerProductsLinks: { zh: '<li><a href="https://sings.ai/product/" class="text-gray-400 hover:text-white transition-colors">AI 智能问卷</a></li><li><a href="https://sings.ai/product/" class="text-gray-400 hover:text-white transition-colors">AI 深度访谈</a></li><li><a href="#products" class="text-gray-400 hover:text-white transition-colors">洞察副驾</a></li>', en: '<li><a href="https://sings.ai/product/" class="text-gray-400 hover:text-white transition-colors">AI Survey</a></li><li><a href="https://sings.ai/product/" class="text-gray-400 hover:text-white transition-colors">AI Interview</a></li><li><a href="#products" class="text-gray-400 hover:text-white transition-colors">Insights Copilot</a></li>' },
                  footerSolutions: { zh: '解决方案', en: 'Solutions' },
                  footerSolutionsLinks: { zh: '<li><a href="#solutions" class="text-gray-400 hover:text-white transition-colors">产品开发</a></li><li><a href="#solutions" class="text-gray-400 hover:text-white transition-colors">市场营销</a></li><li><a href="#solutions" class="text-gray-400 hover:text-white transition-colors">用户研究</a></li>', en: '<li><a href="#solutions" class="text-gray-400 hover:text-white transition-colors">Product Dev</a></li><li><a href="#solutions" class="text-gray-400 hover:text-white transition-colors">Marketing</a></li><li><a href="#solutions" class="text-gray-400 hover:text-white transition-colors">UX Research</a></li>' },
                  footerResources: { zh: '资源', en: 'Resources' },
