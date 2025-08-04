@@ -3,8 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sings.AI - 于千万回响中，洞见未来</title>
+    <title>Sings.AI - AI驱动的智能调研与洞察平台</title>
     
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HCWQKQNN47"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'G-HCWQKQNN47');
+    </script>
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -13,12 +23,23 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
+    <!-- Phosphor Icons for better iconography -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
     <style>
-        /* Custom styles for Sings.AI */
+        /* 自定义全局样式 */
+        html {
+            scroll-behavior: smooth;
+        }
         body {
             font-family: 'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
             background-color: #050608;
             color: #E2E8F0;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            /* subtle grid background */
+            background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
         }
         .hero-bg {
             background-color: #050608;
@@ -33,29 +54,16 @@
             position: relative;
             overflow: hidden;
         }
-        .btn-primary {
-            background-image: linear-gradient(to right, #4F46E5, #3B82F6);
-            transition: all 0.3s ease;
-        }
-        .btn-primary:hover {
-            box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
-        }
-        .btn-secondary {
-            background-color: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .btn-secondary:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.3);
-        }
         .glass-card, .glass-morphism {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: background 0.3s ease, border-color 0.3s ease;
         }
-        .highlight-text {
-            color: #60A5FA; /* A lighter, standout blue */
+        .glass-card:hover {
+             background: rgba(255, 255, 255, 0.08);
+             border-color: rgba(255, 255, 255, 0.2);
         }
         .fade-in {
             opacity: 0;
@@ -66,374 +74,386 @@
             opacity: 1;
             transform: translateY(0);
         }
-        /* Language switcher styles */
-        .lang-switcher button {
-            transition: all 0.2s ease-in-out;
+        .lang-switcher .active-lang { background-color: #2563EB; color: white; }
+        .tab-button.active { color: white; background-color: #2563EB; }
+        .video-placeholder { position: relative; cursor: pointer; }
+        .video-placeholder .play-button {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 80px; height: 80px; background: rgba(0,0,0,0.5); border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            transition: transform 0.3s ease, background-color 0.3s ease;
         }
-        .lang-switcher .active-lang {
-            background-color: #2563EB;
-            color: white;
+        .video-placeholder:hover .play-button {
+            transform: translate(-50%, -50%) scale(1.1);
+            background: rgba(37, 99, 235, 0.8);
         }
-        .page-section {
-            transition: opacity 0.5s ease-in-out;
+        .faq-item .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out, padding-top 0.5s ease, padding-bottom 0.5s ease;
+            padding-top: 0; padding-bottom: 0;
+        }
+        .faq-item.open .faq-answer {
+            max-height: 200px;
+            padding-top: 1rem; padding-bottom: 1rem;
+        }
+        .faq-item.open .faq-arrow { transform: rotate(180deg); }
+        .demo-console { font-family: 'Courier New', Courier, monospace; }
+        .demo-line::after {
+            content: '▋';
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+        .gradient-text {
+            background-image: linear-gradient(to right, #A78BFA, #3B82F6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #60A5FA; /* text-blue-400 */
+            transition: width 0.3s ease-in-out;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .dropdown {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        /* Scrolling logos animation */
+        .logos-container {
+            -webkit-mask-image: linear-gradient(to right, transparent, white 20%, white 80%, transparent);
+            mask-image: linear-gradient(to right, transparent, white 20%, white 80%, transparent);
+        }
+        .logos-slide {
+            display: inline-block;
+            animation: 30s slide infinite linear;
+        }
+        @keyframes slide {
+            from { transform: translateX(0); }
+            to { transform: translateX(-100%); }
         }
     </style>
 </head>
-<body class="antialiased">
+<body>
 
     <div id="page-container">
         <!-- Header -->
-        <header id="header" class="fixed top-0 left-0 right-0 z-50 p-4">
-             <div class="container mx-auto glass-morphism rounded-xl p-2 px-4 flex justify-between items-center">
-                <a href="#home" class="flex items-center text-2xl font-bold text-white page-link">
-                    <span class="text-blue-400">Sings</span><span>.AI</span>
-                </a>
+        <header id="header" class="fixed top-0 left-0 right-0 z-50 p-4 transition-all duration-300">
+             <div id="header-inner" class="container mx-auto glass-morphism rounded-xl p-2 px-4 flex justify-between items-center transition-all duration-300">
+                <a href="#home" class="flex items-center text-2xl font-bold text-white"><span class="text-blue-400">Sings</span><span>.AI</span></a>
                 <nav class="hidden md:flex items-center space-x-8">
-                    <a href="#services" class="text-gray-300 hover:text-white transition-colors page-link" data-lang="navProduct">产品</a>
-                    <a href="https://sings.ai/page/technology.html" class="text-gray-300 hover:text-white transition-colors" data-lang="navTechnology">技术</a>
-                    <a href="https://sings.ai/page/price.html" class="text-gray-300 hover:text-white transition-colors" data-lang="navPricing">定价</a>
-                    <a href="https://sings.ai/page/about.html" class="text-gray-300 hover:text-white transition-colors" data-lang="navAbout">关于</a>
+                    <div class="relative" id="products-menu">
+                        <button class="nav-link text-gray-300 hover:text-white transition-colors flex items-center" data-lang="navProducts">
+                            产品 <i class="ph ph-caret-down ml-1 transition-transform duration-300"></i>
+                        </button>
+                        <div id="products-dropdown" class="dropdown absolute top-full left-1/2 -translate-x-1/2 mt-4 w-56 bg-gray-900/80 backdrop-blur-lg border border-gray-700 rounded-lg shadow-lg opacity-0 pointer-events-none transform -translate-y-2">
+                            <a href="product/Survey/index.html" class="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-gray-700/50 hover:text-white transition-colors rounded-t-lg"><i class="ph ph-chart-pie-slice text-lg text-blue-400"></i> AI 智能问卷</a>
+                            <a href="product/FGD/index.html" class="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-gray-700/50 hover:text-white transition-colors rounded-b-lg"><i class="ph ph-users-three text-lg text-purple-400"></i> AI 深度访谈</a>
+                        </div>
+                    </div>
+                    <a href="#solutions" class="nav-link text-gray-300 hover:text-white transition-colors" data-lang="navSolutions">解决方案</a>
+                    <a href="#case-study" class="nav-link text-gray-300 hover:text-white transition-colors" data-lang="navCaseStudies">客户案例</a>
+                    <a href="#faq" class="nav-link text-gray-300 hover:text-white transition-colors" data-lang="navFaq">常见问题</a>
                 </nav>
                 <div class="hidden md:flex items-center space-x-4">
-                    <a href="#login" class="text-gray-300 hover:text-white transition-colors page-link" data-lang="login">登录</a>
-                    <a href="#services" class="py-2 px-4 rounded-lg font-semibold btn-primary page-link" data-lang="bookDemo">预约演示</a>
-                    <div class="lang-switcher flex items-center border border-gray-600 rounded-lg">
-                        <button id="lang-zh" class="px-3 py-1 text-sm rounded-l-md">中</button>
-                        <button id="lang-en" class="px-3 py-1 text-sm rounded-r-md">EN</button>
+                    <a href="#login" class="text-gray-300 hover:text-white transition-colors text-sm font-medium" data-lang="login">登录</a>
+                    <a href="#demo" class="py-2 px-4 rounded-lg font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-500 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300" data-lang="bookDemo">预约演示</a>
+                    <div class="lang-switcher flex items-center bg-gray-800/50 border border-gray-700 rounded-lg p-0.5">
+                        <button id="lang-zh" class="px-2 py-0.5 text-sm rounded-md transition-colors duration-300">中</button>
+                        <button id="lang-en" class="px-2 py-0.5 text-sm rounded-md transition-colors duration-300">EN</button>
                     </div>
                 </div>
-                <div class="md:hidden">
-                    <button id="mobile-menu-button" class="text-white">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-                    </button>
-                </div>
+                <div class="md:hidden"><button id="mobile-menu-button" class="text-white"><i class="ph ph-list text-2xl"></i></button></div>
             </div>
         </header>
         
+        <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden md:hidden fixed inset-0 bg-gray-900/90 backdrop-blur-sm z-40 pt-28">
             <div class="container mx-auto px-4 flex flex-col items-center text-center space-y-6">
-                <a href="#services" class="text-xl text-gray-300 hover:text-white transition-colors page-link" data-lang="navProductMobile">产品</a>
-                <a href="https://sings.ai/page/technology.html" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="navTechnologyMobile">技术</a>
-                <a href="https://sings.ai/page/price.html" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="navPricingMobile">定价</a>
-                <a href="https://sings.ai/page/about.html" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="navAboutMobile">关于</a>
+                <div class="text-center w-full">
+                    <button id="mobile-products-toggle" class="text-xl text-gray-300 hover:text-white transition-colors w-full flex items-center justify-center" data-lang="navProductsMobile">
+                        产品 <i class="ph ph-caret-down ml-2 transition-transform duration-300"></i>
+                    </button>
+                    <div id="mobile-products-links" class="hidden mt-4 space-y-4">
+                        <a href="product/Survey/index.html" class="block text-lg text-gray-400 hover:text-white">AI 智能问卷</a>
+                        <a href="product/FGD/index.html" class="block text-lg text-gray-400 hover:text-white">AI 深度访谈</a>
+                    </div>
+                </div>
+                <a href="#solutions" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="navSolutionsMobile">解决方案</a>
+                <a href="#case-study" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="navCaseStudiesMobile">客户案例</a>
+                <a href="#faq" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="navFaqMobile">常见问题</a>
                 <hr class="w-full border-gray-700 my-4">
-                <a href="#login" class="text-xl text-gray-300 hover:text-white transition-colors page-link" data-lang="loginMobile">登录</a>
-                <a href="#services" class="w-full max-w-xs px-6 py-3 rounded-lg text-white font-semibold btn-primary page-link" data-lang="bookDemoMobile">预约演示</a>
+                <a href="#login" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="loginMobile">登录</a>
+                <a href="#demo" class="w-full max-w-xs px-6 py-3 rounded-lg text-white font-semibold bg-gradient-to-r from-blue-600 to-indigo-500 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300" data-lang="bookDemoMobile">预约演示</a>
             </div>
         </div>
         
-        <!-- Main Content (Home Page) -->
-        <div id="home-page" class="page-section">
-            <main>
-                <!-- Sections from Hero to Final CTA -->
-                <section class="hero-bg pt-48 pb-20 md:pt-56 md:pb-32 text-center">
-                    <div class="container mx-auto px-4 relative z-10">
-                        <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight tracking-tight" data-lang="heroTitle">
-                            于千万回响中，<span class="highlight-text">洞见未来</span>。
-                        </h1>
-                        <p class="mt-6 max-w-3xl mx-auto text-lg md:text-xl text-gray-400" data-lang="heroSubtitle">
-                            我们赋予数据歌唱的能力，将商业世界的嘈杂噪音，转化为指引您增长的清晰旋律。Sings.AI，您最智慧的商业指挥家。
-                        </p>
-                        <div class="mt-10 flex justify-center items-center">
-                            <a href="#services" class="w-full sm:w-auto px-8 py-4 rounded-lg text-white font-semibold btn-primary page-link" data-lang="heroBtnPrimary">预约免费演示</a>
-                        </div>
+        <!-- Main Content Container -->
+        <main id="main-content">
+            <!-- Hero Section -->
+            <section id="home" class="hero-bg pt-48 pb-20 md:pt-56 md:pb-32 text-center">
+                <div class="container mx-auto px-4 relative z-10">
+                    <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight tracking-tight" data-lang="heroTitle">数小时获得深度洞察，<br class="hidden md:block" /> 而非数周</h1>
+                    <p class="mt-6 max-w-3xl mx-auto text-lg md:text-xl text-gray-400" data-lang="heroSubtitle">Sings.AI 智能调研平台，整合AI问卷、AI访谈与AI数据分析，帮助产品、市场和研究团队更快、更准地做出商业决策。</p>
+                    <div class="mt-10 flex flex-col sm:flex-row justify-center items-center gap-4">
+                        <a href="#demo" class="w-full sm:w-auto px-8 py-4 rounded-lg text-white font-semibold bg-gradient-to-r from-blue-600 to-indigo-500 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300" data-lang="heroBtnPrimary">预约免费演示</a>
+                        <a href="#products" class="w-full sm:w-auto px-8 py-4 rounded-lg text-white font-semibold bg-white/10 border border-white/20 hover:bg-white/20 transition-all duration-300" data-lang="heroBtnSecondary">查看产品</a>
                     </div>
-                </section>
+                </div>
+            </section>
 
-                <section class="py-20 md:py-24">
-                    <div class="container mx-auto px-4 text-center">
-                        <h2 class="text-3xl md:text-4xl font-bold text-white" data-lang="problemTitle">您是否也被“数据噪音”所困扰？</h2>
-                        <p class="mt-4 max-w-2xl mx-auto text-lg text-gray-400" data-lang="problemSubtitle">
-                            企业从不缺少数据，缺的是穿透噪音的洞察力。孤立的报表、矛盾的用户反馈、海量的市场信息，它们本身不会“歌唱”，反而让您离真正的答案越来越远。
-                        </p>
-                    </div>
-                </section>
-                
-                <section id="three-echoes" class="py-12 md:py-24">
-                    <div class="container mx-auto px-4">
-                        <div class="text-center mb-16">
-                            <h2 class="text-3xl md:text-4xl font-bold text-white" data-lang="echoesTitle">Sings.AI 核心理念：<span class="highlight-text">三大回响</span></h2>
-                            <p class="mt-4 max-w-2xl mx-auto text-lg text-gray-400" data-lang="echoesSubtitle">任何单一维度的声音都可能产生误导。我们整合三大回响，助您获得最接近真相的全景洞察。</p>
-                        </div>
-                        <div class="grid md:grid-cols-3 gap-8">
-                            <div class="glass-card p-8 text-center fade-in">
-                                <h3 class="text-2xl font-bold text-white" data-lang="userEchoTitle">用户之声</h3>
-                                <p class="mt-4 text-gray-400" data-lang="userEchoDesc">源自用户互动中关于体验和需求的声音。我们通过定性与定量分析，助您建立用户同理心，打磨产品体验。</p>
-                            </div>
-                            <div class="glass-card p-8 text-center fade-in" style="transition-delay: 150ms;">
-                                <h3 class="text-2xl font-bold text-white" data-lang="dataEchoTitle">数据之声</h3>
-                                <p class="mt-4 text-gray-400" data-lang="dataEchoDesc">源自企业内部运营关于商业增长的声音。我们衡量增长健康度，优化商业模式，驱动ROI导向的精准决策。</p>
-                            </div>
-                            <div class="glass-card p-8 text-center fade-in" style="transition-delay: 300ms;">
-                                <h3 class="text-2xl font-bold text-white" data-lang="marketEchoTitle">市场之声</h3>
-                                <p class="mt-4 text-gray-400" data-lang="marketEchoDesc">源自宏观商业环境中关于竞争与趋势的声音。我们帮您明确战略定位，发现市场机会，预警外部风险。</p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <section id="services" class="py-12 md:py-24 space-y-24">
-                    <div class="container mx-auto px-4 fade-in">
-                        <div class="grid md:grid-cols-2 gap-12 items-center">
-                            <div>
-                                <span class="font-semibold text-blue-400" data-lang="service1Type">定量洞察</span>
-                                <h2 class="mt-2 text-3xl md:text-4xl font-bold text-white" data-lang="service1Title">AI 全景问卷调研</h2>
-                                <p class="mt-4 text-lg text-gray-400" data-lang="service1Desc">彻底颠覆传统问卷。从研究目标输入到洞察报告生成，全程由AI驱动，解决传统调研周期长、成本高、数据质量不稳的核心痛点。</p>
-                                <ul class="mt-6 space-y-3" data-lang="service1List">
-                                    <li class="flex items-start gap-3">
-                                        <span class="text-blue-400 font-bold">1.</span>
-                                        <span>部署数千<span class="highlight-text">AI仿真用户</span>，在数小时内完成海量高质量数据采集。</span>
-                                    </li>
-                                    <li class="flex items-start gap-3">
-                                        <span class="text-blue-400 font-bold">2.</span>
-                                        <span>AI自动完成数据清洗、处理与统计，直接生成<span class="highlight-text">深度洞察报告</span>。</span>
-                                    </li>
-                                </ul>
-                                <a href="https://sings.ai/product/Survey/" target="_blank" class="mt-8 inline-block px-6 py-3 rounded-lg text-white font-semibold btn-primary" data-lang="learnMore">即刻体验</a>
-                            </div>
-                            <div class="bg-gray-900/50 border border-gray-800 rounded-xl p-2">
-                                <svg viewBox="0 0 600 450" class="rounded-lg w-full" xmlns="http://www.w3.org/2000/svg" aria-label="自动化洞察报告仪表盘">
-                                    <rect width="600" height="450" rx="8" fill="#111827"></rect>
-                                    <rect x="50" y="50" width="350" height="200" rx="4" fill="#1F2937"></rect>
-                                    <text x="60" y="80" font-family="sans-serif" font-size="16" fill="#9CA3AF">用户增长趋势</text>
-                                    <path d="M 70 220 L 70 150 L 120 150 L 120 180 L 170 180 L 170 160 L 220 160 L 220 200 L 270 200 L 270 170 L 320 170 L 320 220 Z" fill="#2563EB" opacity="0.6"></path>
-                                    <line x1="70" y1="220" x2="370" y2="220" stroke="#4B5563" stroke-width="2"></line>
-                                    <rect x="420" y="50" width="130" height="200" rx="4" fill="#1F2937"></rect>
-                                    <text x="430" y="80" font-family="sans-serif" font-size="16" fill="#9CA3AF">用户来源</text>
-                                    <circle cx="485" cy="160" r="50" fill="#3B82F6"></circle>
-                                    <path d="M 485 160 L 485 110 A 50 50 0 0 1 535 160 Z" fill="#1D4ED8"></path>
-                                    <rect x="50" y="270" width="500" height="130" rx="4" fill="#1F2937"></rect>
-                                    <text x="60" y="300" font-family="sans-serif" font-size="16" fill="#9CA3AF">核心洞察</text>
-                                    <rect x="70" y="320" width="460" height="10" rx="5" fill="#4B5563"></rect>
-                                    <rect x="70" y="345" width="420" height="10" rx="5" fill="#4B5563"></rect>
-                                    <rect x="70" y="370" width="440" height="10" rx="5" fill="#4B5563"></rect>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="container mx-auto px-4 fade-in">
-                        <div class="grid md:grid-cols-2 gap-12 items-center">
-                            <div class="bg-gray-900/50 border border-gray-800 rounded-xl p-2 order-last md:order-first">
-                                <svg viewBox="0 0 600 450" class="rounded-lg w-full" xmlns="http://www.w3.org/2000/svg" aria-label="AI深度访谈模拟界面">
-                                    <rect width="600" height="450" rx="8" fill="#111827"></rect>
-                                    <text x="50" y="60" font-family="sans-serif" font-size="18" fill="#9CA3AF">AI 主持人</text>
-                                    <rect x="50" y="80" width="400" height="60" rx="10" fill="#1F2937"></rect>
-                                    <rect x="65" y="95" width="300" height="8" rx="4" fill="#4B5563"></rect>
-                                    <rect x="65" y="115" width="250" height="8" rx="4" fill="#4B5563"></rect>
-                                    <text x="550" y="180" font-family="sans-serif" font-size="18" fill="#60A5FA" text-anchor="end">AI 受访者</text>
-                                    <rect x="150" y="200" width="400" height="80" rx="10" fill="#1E40AF"></rect>
-                                    <rect x="165" y="215" width="350" height="8" rx="4" fill="#DBEAFE"></rect>
-                                    <rect x="165" y="235" width="370" height="8" rx="4" fill="#DBEAFE"></rect>
-                                    <rect x="165" y="255" width="310" height="8" rx="4" fill="#DBEAFE"></rect>
-                                    <text x="50" y="320" font-family="sans-serif" font-size="18" fill="#9CA3AF">AI 主持人</text>
-                                    <rect x="50" y="340" width="350" height="40" rx="10" fill="#1F2937"></rect>
-                                    <rect x="65" y="355" width="280" height="8" rx="4" fill="#4B5563"></rect>
-                                </svg>
-                            </div>
-                            <div>
-                                <span class="font-semibold text-blue-400" data-lang="service2Type">定性洞察</span>
-                                <h2 class="mt-2 text-3xl md:text-4xl font-bold text-white" data-lang="service2Title">AI 深度访谈模拟</h2>
-                                <p class="mt-4 text-lg text-gray-400" data-lang="service2Desc">革命性的定性研究工具。利用AI同时模拟研究主持人与受访用户，实现一对一或多对多深度访谈的完全仿真，深入探寻用户行为背后的“为什么”。</p>
-                                <ul class="mt-6 space-y-3" data-lang="service2List">
-                                    <li class="flex items-start gap-3">
-                                        <span class="text-blue-400 font-bold">1.</span>
-                                        <span>AI主持人与<span class="highlight-text">AI受访者</span>进行高度仿真的沉浸式对话。</span>
-                                    </li>
-                                    <li class="flex items-start gap-3">
-                                        <span class="text-blue-400 font-bold">2.</span>
-                                        <span>AI自动完成转写、语义分析与观点聚类，提炼<span class="highlight-text">关键主题与动机</span>。</span>
-                                    </li>
-                                </ul>
-                                <a href="https://sings.ai/product/FGD/" target="_blank" class="mt-8 inline-block px-6 py-3 rounded-lg text-white font-semibold btn-primary" data-lang="learnMore">即刻体验</a>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <section class="py-20 md:py-24 bg-gray-900/30">
-                    <div class="container mx-auto px-4 text-center">
-                        <h2 class="text-3xl md:text-4xl font-bold text-white" data-lang="audienceTitle">为追求精准决策的<span class="highlight-text">前瞻者</span>而设计</h2>
-                        <p class="mt-4 max-w-2xl mx-auto text-lg text-gray-400" data-lang="audienceSubtitle">无论您是产品、市场、增长负责人，还是企业高层决策者，Sings.AI 都将成为您不可或缺的 AI 洞察伙伴。</p>
-                        <div class="mt-8 flex flex-wrap justify-center gap-4 text-gray-300" data-lang="audienceTags">
-                            <span class="bg-gray-700/50 px-4 py-2 rounded-full">产品负责人</span>
-                            <span class="bg-gray-700/50 px-4 py-2 rounded-full">市场总监</span>
-                            <span class="bg-gray-700/50 px-4 py-2 rounded-full">增长负责人</span>
-                            <span class="bg-gray-700/50 px-4 py-2 rounded-full">用户研究负责人</span>
-                            <span class="bg-gray-700/50 px-4 py-2 rounded-full">CEO / CSO</span>
-                        </div>
-                    </div>
-                </section>
-
-                <section class="py-20 md:py-32 text-center">
-                    <div class="container mx-auto px-4">
-                         <h2 class="text-4xl md:text-5xl font-extrabold text-white leading-tight" data-lang="ctaTitle">
-                            停止盲目收集数据，<br>开始聆听<span class="highlight-text">真正的回响</span>。
-                        </h2>
-                        <div class="mt-10">
-                             <a href="#services" class="inline-block px-10 py-5 rounded-lg text-white font-semibold btn-primary text-lg page-link" data-lang="ctaButton">立即体验 Sings.AI</a>
-                        </div>
-                    </div>
-                </section>
-            </main>
-        </div>
-
-        <!-- Placeholder Pages -->
-        <div id="login-page" class="hidden page-section">
-             <main class="pt-48 md:pt-56 pb-20 text-center">
+            <!-- Interactive Demo Section -->
+            <section class="py-20 md:py-24">
                 <div class="container mx-auto px-4">
-                    <h1 class="text-4xl md:text-6xl font-extrabold text-white">登录</h1>
-                    <p class="mt-6 max-w-2xl mx-auto text-lg md:text-xl text-gray-400">登录功能正在开发中。</p>
+                    <div class="text-center mb-16"><h2 class="text-3xl md:text-4xl font-bold text-white" data-lang="demoTitle">与您的数据“对话”</h2><p class="mt-4 max-w-2xl mx-auto text-lg text-gray-400" data-lang="demoSubtitle">上传任何文本数据，用自然语言提问，即刻获得洞察。体验Sings.AI洞察副驾的强大功能。</p></div>
+                    <div class="max-w-4xl mx-auto bg-gray-900/50 border border-gray-800 rounded-xl shadow-2xl shadow-blue-500/10">
+                        <div class="p-4 border-b border-gray-800 flex items-center space-x-2"><span class="h-3 w-3 bg-red-500 rounded-full"></span><span class="h-3 w-3 bg-yellow-500 rounded-full"></span><span class="h-3 w-3 bg-green-500 rounded-full"></span></div>
+                        <div id="interactive-demo" class="p-6 h-80 demo-console text-gray-300 text-sm overflow-y-auto"></div>
+                    </div>
                 </div>
-            </main>
-        </div>
-        <div id="case-studies-page" class="hidden page-section">
-             <main class="pt-48 md:pt-56 pb-20 text-center">
-                <div class="container mx-auto px-4">
-                    <h1 class="text-4xl md:text-6xl font-extrabold text-white">客户案例</h1>
-                    <p class="mt-6 max-w-2xl mx-auto text-lg md:text-xl text-gray-400">我们正在整理成功的客户案例，很快与您分享。</p>
-                </div>
-            </main>
-        </div>
-        <div id="careers-page" class="hidden page-section">
-             <main class="pt-48 md:pt-56 pb-20 text-center">
-                <div class="container mx-auto px-4">
-                    <h1 class="text-4xl md:text-6xl font-extrabold text-white">加入我们</h1>
-                    <p class="mt-6 max-w-2xl mx-auto text-lg md:text-xl text-gray-400">我们一直在寻找优秀的人才，请将您的简历发送至我们的邮箱。</p>
-                </div>
-            </main>
-        </div>
-        <div id="privacy-page" class="hidden page-section">
-             <main class="pt-48 md:pt-56 pb-20">
-                <div class="container mx-auto px-4 max-w-4xl">
-                    <h1 class="text-4xl md:text-5xl font-extrabold text-white text-center">隐私政策</h1>
-                    <p class="mt-8 text-lg text-gray-400">隐私政策内容即将上线。</p>
-                </div>
-            </main>
-        </div>
-        <div id="terms-page" class="hidden page-section">
-             <main class="pt-48 md:pt-56 pb-20">
-                <div class="container mx-auto px-4 max-w-4xl">
-                    <h1 class="text-4xl md:text-5xl font-extrabold text-white text-center">服务条款</h1>
-                    <p class="mt-8 text-lg text-gray-400">服务条款内容即将上线。</p>
-                </div>
-            </main>
-        </div>
+            </section>
 
+            <!-- Products Section -->
+            <section id="products" class="py-12 md:py-24 bg-gray-900/30">
+                <div class="container mx-auto px-4">
+                    <div class="text-center mb-16">
+                        <h2 class="text-3xl md:text-4xl font-bold text-white" data-lang="productsTitle">一个平台，满足您所有的研究需求</h2>
+                        <p class="mt-4 max-w-2xl mx-auto text-lg text-gray-400" data-lang="productsSubtitle">从数据收集、AI分析到洞察交付，我们覆盖研究工作的全流程。</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        <div class="glass-card rounded-xl p-6 fade-in">
+                            <i class="ph-fill ph-database text-3xl text-blue-400 mb-4"></i>
+                            <h3 class="text-lg font-bold text-white" data-lang="feature1Title">AI 智能问卷</h3>
+                            <p class="mt-2 text-sm text-gray-400" data-lang="feature1Desc">支持超过20种题型和高级逻辑，AI辅助生成专业问卷。</p>
+                        </div>
+                        <div class="glass-card rounded-xl p-6 fade-in" style="transition-delay: 50ms;">
+                            <i class="ph-fill ph-users-three text-3xl text-blue-400 mb-4"></i>
+                            <h3 class="text-lg font-bold text-white" data-lang="feature2Title">AI 深度访谈</h3>
+                            <p class="mt-2 text-sm text-gray-400" data-lang="feature2Desc">支持1对1和焦点小组座谈会，AI辅助主持与追问。</p>
+                        </div>
+                        <div class="glass-card rounded-xl p-6 fade-in" style="transition-delay: 100ms;">
+                            <i class="ph-fill ph-files text-3xl text-blue-400 mb-4"></i>
+                            <h3 class="text-lg font-bold text-white" data-lang="feature3Title">全渠道文本导入</h3>
+                            <p class="mt-2 text-sm text-gray-400" data-lang="feature3Desc">整合社交媒体、应用评论、客服记录等非结构化数据。</p>
+                        </div>
+                        <div class="glass-card rounded-xl p-6 fade-in" style="transition-delay: 150ms;">
+                            <i class="ph-fill ph-globe text-3xl text-blue-400 mb-4"></i>
+                            <h3 class="text-lg font-bold text-white" data-lang="feature4Title">全球千万级样本库</h3>
+                            <p class="mt-2 text-sm text-gray-400" data-lang="feature4Desc">快速触达全球范围内的真实消费者，或使用AI仿真用户。</p>
+                        </div>
+                        <div class="glass-card rounded-xl p-6 fade-in" style="transition-delay: 200ms;">
+                            <i class="ph-fill ph-robot text-3xl text-purple-400 mb-4"></i>
+                            <h3 class="text-lg font-bold text-white" data-lang="feature5Title">洞察副驾 (Copilot)</h3>
+                            <p class="mt-2 text-sm text-gray-400" data-lang="feature5Desc">与您的所有数据进行自然语言对话，即时获得答案。</p>
+                        </div>
+                        <div class="glass-card rounded-xl p-6 fade-in" style="transition-delay: 250ms;">
+                            <i class="ph-fill ph-smiley text-3xl text-purple-400 mb-4"></i>
+                            <h3 class="text-lg font-bold text-white" data-lang="feature6Title">情感与主题分析</h3>
+                            <p class="mt-2 text-sm text-gray-400" data-lang="feature6Desc">自动识别文本中的情绪倾向，并聚类出核心讨论主题。</p>
+                        </div>
+                        <div class="glass-card rounded-xl p-6 fade-in" style="transition-delay: 300ms;">
+                            <i class="ph-fill ph-trend-up text-3xl text-purple-400 mb-4"></i>
+                            <h3 class="text-lg font-bold text-white" data-lang="feature7Title">趋势与异常检测</h3>
+                            <p class="mt-2 text-sm text-gray-400" data-lang="feature7Desc">自动发现数据中的新兴趋势、热点话题和异常信号。</p>
+                        </div>
+                        <div class="glass-card rounded-xl p-6 fade-in" style="transition-delay: 350ms;">
+                            <i class="ph-fill ph-video text-3xl text-purple-400 mb-4"></i>
+                            <h3 class="text-lg font-bold text-white" data-lang="feature8Title">关键时刻视频剪辑</h3>
+                            <p class="mt-2 text-sm text-gray-400" data-lang="feature8Desc">AI自动从访谈录像中剪辑出表达关键观点的视频片段。</p>
+                        </div>
+                        <div class="glass-card rounded-xl p-6 fade-in" style="transition-delay: 400ms;">
+                            <i class="ph-fill ph-presentation-chart text-3xl text-green-400 mb-4"></i>
+                            <h3 class="text-lg font-bold text-white" data-lang="feature9Title">可定制仪表板</h3>
+                            <p class="mt-2 text-sm text-gray-400" data-lang="feature9Desc">通过拖拽，自由组合图表和洞察，创建个性化报告看板。</p>
+                        </div>
+                        <div class="glass-card rounded-xl p-6 fade-in" style="transition-delay: 450ms;">
+                            <i class="ph-fill ph-file-pdf text-3xl text-green-400 mb-4"></i>
+                            <h3 class="text-lg font-bold text-white" data-lang="feature10Title">一键生成报告</h3>
+                            <p class="mt-2 text-sm text-gray-400" data-lang="feature10Desc">自动生成PPT、PDF和Word格式的专业研究报告。</p>
+                        </div>
+                        <div class="glass-card rounded-xl p-6 fade-in" style="transition-delay: 500ms;">
+                            <i class="ph-fill ph-users text-3xl text-green-400 mb-4"></i>
+                            <h3 class="text-lg font-bold text-white" data-lang="feature11Title">团队协作空间</h3>
+                            <p class="mt-2 text-sm text-gray-400" data-lang="feature11Desc">支持多人在线协作，共同标注、分析数据和撰写报告。</p>
+                        </div>
+                        <div class="glass-card rounded-xl p-6 fade-in" style="transition-delay: 550ms;">
+                            <i class="ph-fill ph-plugs-connected text-3xl text-green-400 mb-4"></i>
+                            <h3 class="text-lg font-bold text-white" data-lang="feature12Title">API与集成</h3>
+                            <p class="mt-2 text-sm text-gray-400" data-lang="feature12Desc">通过API将洞察集成到您现有的BI、CRM或办公系统中。</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
+            <!-- Solutions Section -->
+            <section id="solutions" class="py-20 md:py-24">
+                <div class="container mx-auto px-4">
+                    <div class="text-center mb-16"><h2 class="text-3xl md:text-4xl font-bold text-white" data-lang="solutionsTitle">为高效团队而生</h2><p class="mt-4 max-w-2xl mx-auto text-lg text-gray-400" data-lang="solutionsSubtitle">无论您的角色是什么，Sings.AI 都能提供量身定制的解决方案，加速您的工作流程。</p></div>
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <div class="glass-card rounded-xl p-8 fade-in"><h3 class="text-xl font-bold text-white" data-lang="role1Title">为产品经理</h3><p class="mt-4 text-gray-400" data-lang="role1Desc">快速验证产品概念、测试功能优先级、挖掘未被满足的用户需求，让每一个产品决策都有数据支撑。</p></div>
+                        <div class="glass-card rounded-xl p-8 fade-in" style="transition-delay: 150ms;"><h3 class="text-xl font-bold text-white" data-lang="role2Title">为市场营销</h3><p class="mt-4 text-gray-400" data-lang="role2Desc">评估广告创意效果、洞察目标客群、追踪品牌健康度，用精准洞察驱动营销活动的ROI增长。</p></div>
+                        <div class="glass-card rounded-xl p-8 fade-in" style="transition-delay: 300ms;"><h3 class="text-xl font-bold text-white" data-lang="role3Title">为用户研究员</h3><p class="mt-4 text-gray-400" data-lang="role3Desc">将数周的定性、定量研究压缩至数天甚至数小时，从繁琐的执行工作中解放，专注于更高价值的洞察分析。</p></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Case Study Section -->
+            <section id="case-study" class="py-20 md:py-24 bg-gray-900/30">
+                <div class="container mx-auto px-4">
+                    <div class="grid lg:grid-cols-2 gap-12 items-center">
+                        <div class="fade-in">
+                            <span class="font-semibold text-blue-400" data-lang="caseStudyLabel">客户成功故事</span>
+                            <h2 class="mt-2 text-3xl md:text-4xl font-bold text-white" data-lang="caseStudyTitle">一家快速增长的DTC生活方式品牌，新品上市决策时间缩短75%</h2>
+                            <p class="mt-4 text-lg text-gray-400" data-lang="caseStudyDesc">面对激烈竞争，该品牌需要在数款潜在新品中快速锁定最具爆款潜力的一个。传统调研流程无法满足其上市速度要求。</p>
+                            <div class="mt-8 pt-8 border-t border-gray-800"><blockquote class="text-xl italic text-white"><p data-lang="caseStudyQuote">“Sings.AI彻底改变了我们的产品决策流程。过去需要一个月才能完成的研究，现在一个周末就拿到了高质量的洞察报告。”</p><footer class="mt-4 text-base not-italic text-gray-400" data-lang="caseStudyAuthor">— 产品创新总监, 一家快速增长的DTC生活方式品牌</footer></blockquote></div>
+                        </div>
+                        <div class="glass-card rounded-xl p-8 lg:p-12 fade-in" style="transition-delay: 200ms;">
+                            <h3 class="text-2xl font-bold text-white text-center" data-lang="caseStudyResultsTitle">核心成果</h3>
+                            <div class="mt-8 grid grid-cols-3 gap-4 text-center">
+                                <div><p class="text-4xl md:text-5xl font-bold text-blue-400" data-count="75">0</p><p class="mt-1 text-gray-400" data-lang="caseStudyResult1">研究周期缩短(%)</p></div>
+                                <div><p class="text-4xl md:text-5xl font-bold text-blue-400" data-count="30">0</p><p class="mt-1 text-gray-400" data-lang="caseStudyResult2">新品爆款率提升(%)</p></div>
+                                <div><p class="text-4xl md:text-5xl font-bold text-blue-400" data-count="50">0</p><p class="mt-1 text-gray-400" data-lang="caseStudyResult3">研究成本降低(%)</p></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="py-20 md:py-24">
+                <div class="container mx-auto px-4 text-center fade-in">
+                    <p class="text-gray-500 text-sm mb-4" data-lang="socialProof">众多领先企业信赖的AI洞察伙伴</p>
+                    <div class="relative w-full overflow-hidden logos-container">
+                        <div class="whitespace-nowrap">
+                            <div class="logos-slide">
+                                <span class="inline-block mx-8 text-xl font-medium text-gray-400">InnovateTech</span>
+                                <span class="inline-block mx-8 text-xl font-bold text-gray-300">QuantumLeap</span>
+                                <span class="inline-block mx-8 text-xl font-light italic text-gray-400">Stellar Solutions</span>
+                                <span class="inline-block mx-8 text-xl font-semibold text-gray-300">Apex Digital</span>
+                                <span class="inline-block mx-8 text-xl font-medium text-gray-400">Visionary Inc.</span>
+                                <span class="inline-block mx-8 text-xl font-bold text-gray-300">NextGen Labs</span>
+                            </div>
+                            <div class="logos-slide">
+                                <span class="inline-block mx-8 text-xl font-medium text-gray-400">InnovateTech</span>
+                                <span class="inline-block mx-8 text-xl font-bold text-gray-300">QuantumLeap</span>
+                                <span class="inline-block mx-8 text-xl font-light italic text-gray-400">Stellar Solutions</span>
+                                <span class="inline-block mx-8 text-xl font-semibold text-gray-300">Apex Digital</span>
+                                <span class="inline-block mx-8 text-xl font-medium text-gray-400">Visionary Inc.</span>
+                                <span class="inline-block mx-8 text-xl font-bold text-gray-300">NextGen Labs</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Final CTA Section -->
+            <section id="demo" class="py-20 md:py-32 text-center hero-bg">
+                <div class="container mx-auto px-4">
+                     <h2 class="text-4xl md:text-5xl font-extrabold text-white leading-tight" data-lang="ctaTitle">准备好加速您的研究流程了吗？</h2>
+                    <p class="mt-6 max-w-2xl mx-auto text-lg text-gray-400" data-lang="ctaSubtitle">立即预约1v1产品演示，我们将为您展示Sings.AI如何将数周的工作缩短至数小时。</p>
+                    <div class="mt-10"><a href="mailto:jiang.changsheng@foxmail.com" class="inline-block px-10 py-5 rounded-lg text-white font-semibold bg-gradient-to-r from-blue-600 to-indigo-500 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 text-lg" data-lang="ctaButton">免费预约演示</a></div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
         <footer class="border-t border-gray-800">
             <div class="container mx-auto px-4 py-16">
                 <div class="grid grid-cols-2 md:grid-cols-5 gap-8">
-                    <div class="col-span-2 md:col-span-1">
-                        <a href="#home" class="flex items-center text-2xl font-bold text-white page-link">
-                            <span class="text-blue-400">Sings</span><span>.AI</span>
-                        </a>
-                        <p class="mt-4 text-gray-400 text-sm" data-lang="footerSlogan">于千万回响中，洞见未来。</p>
-                    </div>
-                    <div>
-                        <h3 class="font-semibold text-white tracking-wider" data-lang="footerProduct">产品</h3>
-                        <ul class="mt-4 space-y-3" data-lang="footerProductLinks">
-                            <li><a href="https://sings.ai/product/Survey/" target="_blank" class="text-gray-400 hover:text-white transition-colors">AI问卷调研</a></li>
-                            <li><a href="https://sings.ai/product/FGD/" target="_blank" class="text-gray-400 hover:text-white transition-colors">AI深度访谈</a></li>
-                            <li><a href="https://sings.ai/page/price.html" class="text-gray-400 hover:text-white transition-colors">定价</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h3 class="font-semibold text-white tracking-wider" data-lang="footerConcept">理念</h3>
-                        <ul class="mt-4 space-y-3" data-lang="footerConceptLinks">
-                            <li><a href="#three-echoes" class="text-gray-400 hover:text-white transition-colors page-link">三大回响</a></li>
-                            <li><a href="#case-studies" class="text-gray-400 hover:text-white transition-colors page-link">客户案例</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h3 class="font-semibold text-white tracking-wider" data-lang="footerCompany">公司</h3>
-                        <ul class="mt-4 space-y-3" data-lang="footerCompanyLinks">
-                            <li><a href="https://sings.ai/page/about.html" class="text-gray-400 hover:text-white transition-colors">关于</a></li>
-                            <li><a href="#careers" class="text-gray-400 hover:text-white transition-colors page-link">加入我们</a></li>
-                            <li><a href="mailto:jiang.changsheng@foxmail.com" class="text-gray-400 hover:text-white transition-colors">联系方式</a></li>
-                        </ul>
-                    </div>
-                     <div>
-                        <h3 class="font-semibold text-white tracking-wider" data-lang="footerLegal">法律</h3>
-                        <ul class="mt-4 space-y-3" data-lang="footerLegalLinks">
-                            <li><a href="#privacy" class="text-gray-400 hover:text-white transition-colors page-link">隐私政策</a></li>
-                            <li><a href="#terms" class="text-gray-400 hover:text-white transition-colors page-link">服务条款</a></li>
-                        </ul>
-                    </div>
+                    <div class="col-span-2 md:col-span-1"><a href="#home" class="flex items-center text-2xl font-bold text-white"><span class="text-blue-400">Sings</span><span>.AI</span></a><p class="mt-4 text-gray-400 text-sm" data-lang="footerSlogan">加速您的商业决策</p></div>
+                    <div><h3 class="font-semibold text-white tracking-wider" data-lang="footerProducts">产品</h3><ul class="mt-4 space-y-3" data-lang="footerProductsLinks"><li><a href="product/Survey/index.html" class="text-gray-400 hover:text-white transition-colors">AI 智能问卷</a></li><li><a href="product/FGD/index.html" class="text-gray-400 hover:text-white transition-colors">AI 深度访谈</a></li><li><a href="#products" class="text-gray-400 hover:text-white transition-colors">洞察副驾</a></li></ul></div>
+                    <div><h3 class="font-semibold text-white tracking-wider" data-lang="footerSolutions">解决方案</h3><ul class="mt-4 space-y-3" data-lang="footerSolutionsLinks"><li><a href="#solutions" class="text-gray-400 hover:text-white transition-colors">产品开发</a></li><li><a href="#solutions" class="text-gray-400 hover:text-white transition-colors">市场营销</a></li><li><a href="#solutions" class="text-gray-400 hover:text-white transition-colors">用户研究</a></li></ul></div>
+                    <div><h3 class="font-semibold text-white tracking-wider" data-lang="footerResources">资源</h3><ul class="mt-4 space-y-3" data-lang="footerResourcesLinks"><li><a href="#case-study" class="text-gray-400 hover:text-white transition-colors">客户案例</a></li><li><a href="#faq" class="text-gray-400 hover:text-white transition-colors">常见问题</a></li><li><a href="#resources" class="text-gray-400 hover:text-white transition-colors">博客</a></li></ul></div>
+                     <div><h3 class="font-semibold text-white tracking-wider" data-lang="footerCompany">公司</h3><ul class="mt-4 space-y-3" data-lang="footerCompanyLinks"><li><a href="#about" class="text-gray-400 hover:text-white transition-colors">关于我们</a></li><li><a href="mailto:jiang.changsheng@foxmail.com" class="text-gray-400 hover:text-white transition-colors">联系方式</a></li></ul></div>
                 </div>
-                <div class="mt-12 pt-8 border-t border-gray-800 text-center text-gray-500 text-sm">
-                    <p data-lang="footerCopyright">&copy; 2024 Sings.AI, Inc. 保留所有权利。</p>
-                </div>
+                <div class="mt-12 pt-8 border-t border-gray-800 text-center text-gray-500 text-sm"><p data-lang="footerCopyright">&copy; 2024 Sings.AI, Inc. 保留所有权利。</p></div>
             </div>
         </footer>
     </div>
 
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="fixed bottom-8 right-8 bg-blue-600/50 text-white p-3 rounded-full shadow-lg hover:bg-blue-600 transition-all duration-300 opacity-0 pointer-events-none">
+        <i class="ph ph-arrow-up text-xl"></i>
+    </button>
+    
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- Language Translation Logic ---
+            // All JS logic from previous version
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const header = document.getElementById('header');
+            const headerInner = document.getElementById('header-inner');
             const translations = {
-                // ... (all translation key-value pairs remain the same) ...
-                navCoreConcept: { zh: '核心理念', en: 'Core Concept' },
-                navProduct: { zh: '产品', en: 'Product' },
-                productSurvey: { zh: 'AI 全景问卷调研', en: 'AI Panoramic Surveys' },
-                productInterview: { zh: 'AI 深度访谈模拟', en: 'AI In-depth Interviews' },
-                navProductMobile: { zh: '产品', en: 'Product' },
-                productSurveyMobile: { zh: 'AI 全景问卷调研', en: 'AI Panoramic Surveys' },
-                productInterviewMobile: { zh: 'AI 深度访谈模拟', en: 'AI In-depth Interviews' },
-                navTechnology: { zh: '技术', en: 'Technology' },
-                navTechnologyMobile: { zh: '技术', en: 'Technology' },
-                navPricing: { zh: '定价', en: 'Pricing' },
-                navAbout: { zh: '关于', en: 'About' },
-                login: { zh: '登录', en: 'Login' },
-                bookDemo: { zh: '预约演示', en: 'Book a Demo' },
-                navCoreConceptMobile: { zh: '核心理念', en: 'Core Concept' },
-                navPricingMobile: { zh: '定价', en: 'Pricing' },
-                navAboutMobile: { zh: '关于', en: 'About' },
-                loginMobile: { zh: '登录', en: 'Login' },
-                bookDemoMobile: { zh: '预约演示', en: 'Book a Demo' },
-                heroTitle: { zh: '于千万回响中，<span class="highlight-text">洞见未来</span>。', en: 'From millions of echoes, <span class="highlight-text">see the future</span>.' },
-                heroSubtitle: { zh: '我们赋予数据歌唱的能力，将商业世界的嘈杂噪音，转化为指引您增长的清晰旋律。Sings.AI，您最智慧的商业指挥家。', en: 'We give data the ability to sing, turning the noise of the business world into a clear melody that guides your growth. Sings.AI, your wisest business conductor.' },
-                heroBtnPrimary: { zh: '预约免费演示', en: 'Book a Free Demo' },
-                heroBtnSecondary: { zh: '了解核心理念', en: 'Learn the Core Concept' },
-                problemTitle: { zh: '您是否也被“数据噪音”所困扰？', en: 'Are you troubled by "data noise"?' },
-                problemSubtitle: { zh: '企业从不缺少数据，缺的是穿透噪音的洞察力。孤立的报表、矛盾的用户反馈、海量的市场信息，它们本身不会“歌唱”，反而让您离真正的答案越来越远。', en: 'Businesses don\'t lack data; they lack the insight to penetrate the noise. Isolated reports, conflicting user feedback, and vast market information don\'t "sing" on their own, instead moving you further from the real answers.' },
-                echoesTitle: { zh: 'Sings.AI 核心理念：<span class="highlight-text">三大回响</span>', en: 'Sings.AI Core Concept: <span class="highlight-text">The Three Echoes</span>' },
-                echoesSubtitle: { zh: '任何单一维度的声音都可能产生误导。我们整合三大回响，助您获得最接近真相的全景洞察。', en: 'Any single dimension of sound can be misleading. We integrate the three echoes to help you get the most accurate panoramic insight.' },
-                userEchoTitle: { zh: '用户之声', en: 'Voice of the User' },
-                userEchoDesc: { zh: '源自用户互动中关于体验和需求的声音。我们通过定性与定量分析，助您建立用户同理心，打磨产品体验。', en: 'Sounds of experience and needs from user interactions. We help you build empathy and refine product experience through qualitative and quantitative analysis.' },
-                dataEchoTitle: { zh: '数据之声', en: 'Voice of Data' },
-                dataEchoDesc: { zh: '源自企业内部运营关于商业增长的声音。我们衡量增长健康度，优化商业模式，驱动ROI导向的精准决策。', en: 'Sounds of business growth from internal operations. We measure growth health, optimize business models, and drive ROI-oriented decisions.' },
-                marketEchoTitle: { zh: '市场之声', en: 'Voice of the Market' },
-                marketEchoDesc: { zh: '源自宏观商业环境中关于竞争与趋势的声音。我们帮您明确战略定位，发现市场机会，预警外部风险。', en: 'Sounds of competition and trends from the macro-environment. We help you define strategic positioning, discover opportunities, and mitigate external risks.' },
-                service1Type: { zh: '定量洞察', en: 'Quantitative Insights' },
-                service1Title: { zh: 'AI 全景问卷调研', en: 'AI Panoramic Surveys' },
-                service1Desc: { zh: '彻底颠覆传统问卷。从研究目标输入到洞察报告生成，全程由AI驱动，解决传统调研周期长、成本高、数据质量不稳的核心痛点。', en: 'Completely revolutionizing traditional surveys. From inputting research goals to generating insight reports, the entire process is AI-driven, solving the core pain points of long cycles, high costs, and unstable data quality.' },
-                service1List: { zh: `<li class="flex items-start gap-3"><span class="text-blue-400 font-bold">1.</span><span>部署数千<span class="highlight-text">AI仿真用户</span>，在数小时内完成海量高质量数据采集。</span></li><li class="flex items-start gap-3"><span class="text-blue-400 font-bold">2.</span><span>AI自动完成数据清洗、处理与统计，直接生成<span class="highlight-text">深度洞察报告</span>。</span></li>`, en: `<li class="flex items-start gap-3"><span class="text-blue-400 font-bold">1.</span><span>Deploy thousands of <span class="highlight-text">AI simulated users</span> to collect massive, high-quality data within hours.</span></li><li class="flex items-start gap-3"><span class="text-blue-400 font-bold">2.</span><span>AI automatically cleans, processes, and analyzes data to directly generate <span class="highlight-text">in-depth insight reports</span>.</span></li>` },
-                learnMore: { zh: '即刻体验', en: 'Experience Now' },
-                service2Type: { zh: '定性洞察', en: 'Qualitative Insights' },
-                service2Title: { zh: 'AI 深度访谈模拟', en: 'AI In-depth Interviews' },
-                service2Desc: { zh: '革命性的定性研究工具。利用AI同时模拟研究主持人与受访用户，实现一对一或多对多深度访谈的完全仿真，深入探寻用户行为背后的“为什么”。', en: 'A revolutionary qualitative research tool. AI simulates both the moderator and respondents for fully immersive one-on-one or group interviews to uncover the "why" behind user behavior.' },
-                service2List: { zh: `<li class="flex items-start gap-3"><span class="text-blue-400 font-bold">1.</span><span>AI主持人与<span class="highlight-text">AI受访者</span>进行高度仿真的沉浸式对话。</span></li><li class="flex items-start gap-3"><span class="text-blue-400 font-bold">2.</span><span>AI自动完成转写、语义分析与观点聚类，提炼<span class="highlight-text">关键主题与动机</span>。</span></li>`, en: `<li class="flex items-start gap-3"><span class="text-blue-400 font-bold">1.</span><span>AI moderators and <span class="highlight-text">AI respondents</span> engage in highly realistic, immersive conversations.</span></li><li class="flex items-start gap-3"><span class="text-blue-400 font-bold">2.</span><span>AI automatically transcribes, analyzes semantics, and clusters opinions to extract <span class="highlight-text">key themes and motivations</span>.</span></li>` },
-                audienceTitle: { zh: '为追求精准决策的<span class="highlight-text">前瞻者</span>而设计', en: 'Designed for <span class="highlight-text">Visionaries</span> Who Pursue Precision Decisions' },
-                audienceSubtitle: { zh: '无论您是产品、市场、增长负责人，还是企业高层决策者，Sings.AI 都将成为您不可或缺的 AI 洞察伙伴。', en: 'Whether you are a product, marketing, or growth leader, or a C-level executive, Sings.AI will be your indispensable AI insight partner.' },
-                audienceTags: { zh: `<span class="bg-gray-700/50 px-4 py-2 rounded-full">产品负责人</span><span class="bg-gray-700/50 px-4 py-2 rounded-full">市场总监</span><span class="bg-gray-700/50 px-4 py-2 rounded-full">增长负责人</span><span class="bg-gray-700/50 px-4 py-2 rounded-full">用户研究负责人</span><span class="bg-gray-700/50 px-4 py-2 rounded-full">CEO / CSO</span>`, en: `<span class="bg-gray-700/50 px-4 py-2 rounded-full">Product Leads</span><span class="bg-gray-700/50 px-4 py-2 rounded-full">Marketing Directors</span><span class="bg-gray-700/50 px-4 py-2 rounded-full">Growth Managers</span><span class="bg-gray-700/50 px-4 py-2 rounded-full">UX Researchers</span><span class="bg-gray-700/50 px-4 py-2 rounded-full">CEO / CSO</span>` },
-                ctaTitle: { zh: '停止盲目收集数据，<br>开始聆听<span class="highlight-text">真正的回响</span>。', en: 'Stop blindly collecting data,<br>start listening to <span class="highlight-text">the real echoes</span>.' },
-                ctaButton: { zh: '立即体验 Sings.AI', en: 'Experience Sings.AI Now' },
-                footerSlogan: { zh: '于千万回响中，洞见未来。', en: 'From millions of echoes, see the future.' },
-                footerProduct: { zh: '产品', en: 'Product' },
-                footerProductLinks: { zh: `<li><a href="https://sings.ai/product/Survey/" class="text-gray-400 hover:text-white transition-colors">AI问卷调研</a></li><li><a href="https://sings.ai/product/FGD/" class="text-gray-400 hover:text-white transition-colors">AI深度访谈</a></li><li><a href="https://sings.ai/page/price.html" class="text-gray-400 hover:text-white transition-colors">定价</a></li>`, en: `<li><a href="https://sings.ai/product/Survey/" class="text-gray-400 hover:text-white transition-colors">AI Surveys</a></li><li><a href="https://sings.ai/product/FGD/" class="text-gray-400 hover:text-white transition-colors">AI Interviews</a></li><li><a href="https://sings.ai/page/price.html" class="text-gray-400 hover:text-white transition-colors">Pricing</a></li>` },
-                footerConcept: { zh: '理念', en: 'Concept' },
-                footerConceptLinks: { zh: `<li><a href="#three-echoes" class="text-gray-400 hover:text-white transition-colors page-link">三大回响</a></li><li><a href="#case-studies" class="text-gray-400 hover:text-white transition-colors page-link">客户案例</a></li>`, en: `<li><a href="#three-echoes" class="text-gray-400 hover:text-white transition-colors page-link">The Three Echoes</a></li><li><a href="#case-studies" class="text-gray-400 hover:text-white transition-colors page-link">Case Studies</a></li>` },
-                footerCompany: { zh: '公司', en: 'Company' },
-                footerCompanyLinks: { zh: `<li><a href="https://sings.ai/page/about.html" class="text-gray-400 hover:text-white transition-colors">关于</a></li><li><a href="#careers" class="text-gray-400 hover:text-white transition-colors page-link">加入我们</a></li><li><a href="mailto:jiang.changsheng@foxmail.com" class="text-gray-400 hover:text-white transition-colors">联系方式</a></li>`, en: `<li><a href="https://sings.ai/page/about.html" class="text-gray-400 hover:text-white transition-colors">About</a></li><li><a href="#careers" class="text-gray-400 hover:text-white transition-colors page-link">Careers</a></li><li><a href="mailto:jiang.changsheng@foxmail.com" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>` },
-                footerLegal: { zh: '法律', en: 'Legal' },
-                footerLegalLinks: { zh: `<li><a href="#privacy" class="text-gray-400 hover:text-white transition-colors page-link">隐私政策</a></li><li><a href="#terms" class="text-gray-400 hover:text-white transition-colors page-link">服务条款</a></li>`, en: `<li><a href="#privacy" class="text-gray-400 hover:text-white transition-colors page-link">Privacy Policy</a></li><li><a href="#terms" class="text-gray-400 hover:text-white transition-colors page-link">Terms of Service</a></li>` },
-                footerCopyright: { zh: '&copy; 2024 Sings.AI, Inc. 保留所有权利。', en: '&copy; 2024 Sings.AI, Inc. All rights reserved.' },
-                modalTitle: { zh: '感谢您的体验', en: 'Thanks for your time' },
-                modalText: { zh: '您的研究方案已生成。如需进一步讨论或获取定制服务，请随时联系我们。', en: 'Your research plan has been generated. For further discussion or customized services, please feel free to contact us.'},
-                modalButton: { zh: '立即联系', en: 'Contact Us'}
+                 navProducts: { zh: '产品', en: 'Products' }, navSolutions: { zh: '解决方案', en: 'Solutions' }, navCaseStudies: { zh: '客户案例', en: 'Case Studies' }, navFaq: { zh: '常见问题', en: 'FAQ' },
+                 login: { zh: '登录', en: 'Login' }, bookDemo: { zh: '预约演示', en: 'Book a Demo' },
+                 navProductsMobile: { zh: '产品', en: 'Products' }, navSolutionsMobile: { zh: '解决方案', en: 'Solutions' }, navCaseStudiesMobile: { zh: '客户案例', en: 'Case Studies' }, navFaqMobile: { zh: '常见问题', en: 'FAQ' },
+                 loginMobile: { zh: '登录', en: 'Login' }, bookDemoMobile: { zh: '预约演示', en: 'Book a Demo' },
+                 heroTitle: { zh: '数小时获得深度洞察，<br class="hidden md:block" /> 而非数周', en: 'Get In-depth Insights in Hours,<br class="hidden md:block" /> Not Weeks' },
+                 heroSubtitle: { zh: 'Sings.AI 智能调研平台，整合AI问卷、AI访谈与AI数据分析，帮助产品、市场和研究团队更快、更准地做出商业决策。', en: 'The Sings.AI intelligent research platform integrates AI surveys, interviews, and data analysis to help product, marketing, and research teams make faster, more accurate business decisions.' },
+                 heroBtnPrimary: { zh: '预约免费演示', en: 'Book a Free Demo' }, heroBtnSecondary: { zh: '查看产品', en: 'See Products' },
+                 socialProof: { zh: '众多领先企业信赖的AI洞察伙伴', en: 'The AI insight partner trusted by leading companies' },
+                 demoTitle: { zh: '与您的数据“对话”', en: '“Talk” to Your Data' },
+                 demoSubtitle: { zh: '上传任何文本数据，用自然语言提问，即刻获得洞察。体验Sings.AI洞察副驾的强大功能。', en: 'Upload any text data, ask questions in natural language, and get instant insights. Experience the power of Sings.AI Insights Copilot.' },
+                 productsTitle: { zh: '一个平台，满足您所有的研究需求', en: 'One Platform for All Your Research Needs' },
+                 productsSubtitle: { zh: '从数据收集、AI分析到洞察交付，我们覆盖研究工作的全流程。', en: 'From data collection and AI analysis to insight delivery, we cover the entire research workflow.' },
+                 feature1Title: { zh: 'AI 智能问卷', en: 'AI Smart Survey' },
+                 feature1Desc: { zh: '支持超过20种题型和高级逻辑，AI辅助生成专业问卷。', en: 'Supports 20+ question types and advanced logic, with AI-assisted professional questionnaire generation.' },
+                 feature2Title: { zh: 'AI 深度访谈', en: 'AI In-depth Interview' },
+                 feature2Desc: { zh: '支持1对1和焦点小组座谈会，AI辅助主持与追问。', en: 'Supports 1-on-1 and focus groups, with AI-assisted moderation and probing.' },
+                 feature3Title: { zh: '全渠道文本导入', en: 'Omni-channel Text Import' },
+                 feature3Desc: { zh: '整合社交媒体、应用评论、客服记录等非结构化数据。', en: 'Integrate unstructured data from social media, app reviews, support tickets, and more.' },
+                 feature4Title: { zh: '全球千万级样本库', en: 'Global Panel Access' },
+                 feature4Desc: { zh: '快速触达全球范围内的真实消费者，或使用AI仿真用户。', en: 'Quickly reach real consumers worldwide or use AI-simulated respondents.' },
+                 feature5Title: { zh: '洞察副驾 (Copilot)', en: 'Insights Copilot' },
+                 feature5Desc: { zh: '与您的所有数据进行自然语言对话，即时获得答案。', en: 'Engage in natural language conversations with all your data to get instant answers.' },
+                 feature6Title: { zh: '情感与主题分析', en: 'Sentiment & Thematic Analysis' },
+                 feature6Desc: { zh: '自动识别文本中的情绪倾向，并聚类出核心讨论主题。', en: 'Automatically identify sentiment and cluster core discussion themes from text.' },
+                 feature7Title: { zh: '趋势与异常检测', en: 'Trend & Anomaly Detection' },
+                 feature7Desc: { zh: '自动发现数据中的新兴趋势、热点话题和异常信号。', en: 'Automatically discover emerging trends, hot topics, and anomalous signals in your data.' },
+                 feature8Title: { zh: '关键时刻视频剪辑', en: 'Video Highlight Reels' },
+                 feature8Desc: { zh: 'AI自动从访谈录像中剪辑出表达关键观点的视频片段。', en: 'AI automatically clips video segments from interview recordings that express key insights.' },
+                 feature9Title: { zh: '可定制仪表板', en: 'Customizable Dashboards' },
+                 feature9Desc: { zh: '通过拖拽，自由组合图表和洞察，创建个性化报告看板。', en: 'Drag and drop to combine charts and insights into personalized reporting dashboards.' },
+                 feature10Title: { zh: '一键生成报告', en: 'One-click Reporting' },
+                 feature10Desc: { zh: '自动生成PPT、PDF和Word格式的专业研究报告。', en: 'Automatically generate professional research reports in PPT, PDF, and Word formats.' },
+                 feature11Title: { zh: '团队协作空间', en: 'Team Collaboration' },
+                 feature11Desc: { zh: '支持多人在线协作，共同标注、分析数据和撰写报告。', en: 'Enable multiplayer collaboration to tag, analyze data, and write reports together.' },
+                 feature12Title: { zh: 'API与集成', en: 'API & Integrations' },
+                 feature12Desc: { zh: '通过API将洞察集成到您现有的BI、CRM或办公系统中。', en: 'Integrate insights into your existing BI, CRM, or productivity systems via API.' },
+                 caseStudyLabel: { zh: '客户成功故事', en: 'Customer Success Story' },
+                 caseStudyTitle: { zh: '一家快速增长的DTC生活方式品牌，新品上市决策时间缩短75%', en: 'Fast-Growing DTC Lifestyle Brand Cuts New Product Launch Decision Time by 75%' },
+                 caseStudyDesc: { zh: '面对激烈竞争，该品牌需要在数款潜在新品中快速锁定最具爆款潜力的一个。传统调研流程无法满足其上市速度要求。', en: 'Facing fierce competition, the brand needed to quickly identify the product with the highest potential among several candidates. Traditional research processes could not meet their time-to-market needs.' },
+                 caseStudyQuote: { zh: '“Sings.AI彻底改变了我们的产品决策流程。过去需要一个月才能完成的研究，现在一个周末就拿到了高质量的洞察报告。”', en: '"Sings.AI completely changed our product decision-making process. Research that used to take a month is now done over a weekend with high-quality insight reports."' },
+                 caseStudyAuthor: { zh: '— 产品创新总监, 一家快速增长的DTC生活方式品牌', en: '— Director of Product Innovation, Fast-Growing DTC Lifestyle Brand' },
+                 caseStudyResultsTitle: { zh: '核心成果', en: 'Key Results' },
+                 caseStudyResult1: { zh: '研究周期缩短(%)', en: 'Reduction in Research Cycle (%)' },
+                 caseStudyResult2: { zh: '新品爆款率提升(%)', en: 'Increase in Hit Rate (%)' },
+                 caseStudyResult3: { zh: '研究成本降低(%)', en: 'Reduction in Research Cost (%)' },
+                 ctaTitle: { zh: '准备好加速您的研究流程了吗？', en: 'Ready to Accelerate Your Research Process?' },
+                 ctaSubtitle: { zh: '立即预约1v1产品演示，我们将为您展示Sings.AI如何将数周的工作缩短至数小时。', en: 'Book a 1-on-1 demo now, and we’ll show you how Sings.AI can shorten weeks of work into hours.' },
+                 ctaButton: { zh: '免费预约演示', en: 'Book a Free Demo' },
+                 footerSlogan: { zh: '加速您的商业决策', en: 'Accelerate Your Business Decisions' },
+                 footerProducts: { zh: '产品', en: 'Products' },
+                 footerProductsLinks: { zh: '<li><a href="product/Survey/index.html" class="text-gray-400 hover:text-white transition-colors">AI 智能问卷</a></li><li><a href="product/FGD/index.html" class="text-gray-400 hover:text-white transition-colors">AI 深度访谈</a></li><li><a href="#products" class="text-gray-400 hover:text-white transition-colors">洞察副驾</a></li>', en: '<li><a href="product/Survey/index.html" class="text-gray-400 hover:text-white transition-colors">AI Survey</a></li><li><a href="product/FGD/index.html" class="text-gray-400 hover:text-white transition-colors">AI Interview</a></li><li><a href="#products" class="text-gray-400 hover:text-white transition-colors">Insights Copilot</a></li>' },
+                 footerSolutions: { zh: '解决方案', en: 'Solutions' },
+                 footerSolutionsLinks: { zh: '<li><a href="#solutions" class="text-gray-400 hover:text-white transition-colors">产品开发</a></li><li><a href="#solutions" class="text-gray-400 hover:text-white transition-colors">市场营销</a></li><li><a href="#solutions" class="text-gray-400 hover:text-white transition-colors">用户研究</a></li>', en: '<li><a href="#solutions" class="text-gray-400 hover:text-white transition-colors">Product Dev</a></li><li><a href="#solutions" class="text-gray-400 hover:text-white transition-colors">Marketing</a></li><li><a href="#solutions" class="text-gray-400 hover:text-white transition-colors">UX Research</a></li>' },
+                 footerResources: { zh: '资源', en: 'Resources' },
+                 footerResourcesLinks: { zh: '<li><a href="#case-study" class="text-gray-400 hover:text-white transition-colors">客户案例</a></li><li><a href="#faq" class="text-gray-400 hover:text-white transition-colors">常见问题</a></li><li><a href="#resources" class="text-gray-400 hover:text-white transition-colors">博客</a></li>', en: '<li><a href="#case-study" class="text-gray-400 hover:text-white transition-colors">Case Studies</a></li><li><a href="#faq" class="text-gray-400 hover:text-white transition-colors">FAQ</a></li><li><a href="#resources" class="text-gray-400 hover:text-white transition-colors">Blog</a></li>' },
+                 footerCompany: { zh: '公司', en: 'Company' },
+                 footerCompanyLinks: { zh: '<li><a href="#about" class="text-gray-400 hover:text-white transition-colors">关于我们</a></li><li><a href="mailto:jiang.changsheng@foxmail.com" class="text-gray-400 hover:text-white transition-colors">联系方式</a></li>', en: '<li><a href="#about" class="text-gray-400 hover:text-white transition-colors">About Us</a></li><li><a href="mailto:jiang.changsheng@foxmail.com" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>' },
+                 footerCopyright: { zh: '&copy; 2024 Sings.AI, Inc. 保留所有权利。', en: '&copy; 2024 Sings.AI, Inc. All rights reserved.' },
             };
-
             const langZhBtn = document.getElementById('lang-zh');
             const langEnBtn = document.getElementById('lang-en');
 
@@ -441,7 +461,7 @@
                 document.querySelectorAll('[data-lang]').forEach(element => {
                     const key = element.getAttribute('data-lang');
                     if (translations[key] && translations[key][lang]) {
-                        if (['heroTitle', 'echoesTitle', 'audienceTitle', 'ctaTitle', 'service1List', 'service2List', 'audienceTags', 'footerProductLinks', 'footerConceptLinks', 'footerCompanyLinks', 'footerLegalLinks'].includes(key)) {
+                        if (['heroTitle', 'footerProductsLinks', 'footerSolutionsLinks', 'footerResourcesLinks', 'footerCompanyLinks'].includes(key)) {
                             element.innerHTML = translations[key][lang];
                         } else {
                             element.textContent = translations[key][lang];
@@ -457,16 +477,31 @@
             langEnBtn.addEventListener('click', () => switchLanguage('en'));
             switchLanguage('zh');
 
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
-            
             if(mobileMenuButton) mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
             
-            const header = document.getElementById('header');
+            const backToTopButton = document.getElementById('back-to-top');
+
             window.addEventListener('scroll', () => {
-                header.classList.toggle('bg-gray-900/80', window.scrollY > 10);
-                header.classList.toggle('backdrop-blur-lg', window.scrollY > 10);
+                const isScrolled = window.scrollY > 10;
+                header.classList.toggle('bg-gray-900/80', isScrolled);
+                header.classList.toggle('backdrop-blur-lg', isScrolled);
+                headerInner.classList.toggle('border-b', isScrolled);
+                headerInner.classList.toggle('border-gray-800', isScrolled);
+
+                if (backToTopButton) {
+                    if (window.scrollY > 300) {
+                        backToTopButton.classList.remove('opacity-0', 'pointer-events-none');
+                    } else {
+                        backToTopButton.classList.add('opacity-0', 'pointer-events-none');
+                    }
+                }
             });
+
+            if (backToTopButton) {
+                backToTopButton.addEventListener('click', () => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
 
             const faders = document.querySelectorAll('.fade-in');
             const appearOnScroll = new IntersectionObserver((entries, observer) => {
@@ -475,188 +510,120 @@
                     entry.target.classList.add('visible');
                     observer.unobserve(entry.target);
                 });
-            }, { threshold: 0.2, rootMargin: "0px 0px -50px 0px" });
+            }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
             faders.forEach(fader => appearOnScroll.observe(fader));
             
-            // --- Page Switching Logic ---
-            const pageLinks = document.querySelectorAll('.page-link');
-            const pages = document.querySelectorAll('.page-section');
-
-            function switchPage(targetId) {
-                pages.forEach(page => {
-                    if (page.id === targetId) {
-                        page.classList.remove('hidden');
-                        setTimeout(() => page.style.opacity = 1, 10);
-                    } else {
-                        page.style.opacity = 0;
-                        setTimeout(() => page.classList.add('hidden'), 500);
-                    }
+            const productsMenu = document.getElementById('products-menu');
+            const productsDropdown = document.getElementById('products-dropdown');
+            if (productsMenu && productsDropdown) {
+                productsMenu.addEventListener('mouseenter', () => {
+                    productsDropdown.classList.remove('opacity-0', '-translate-y-2', 'pointer-events-none');
                 });
-                window.scrollTo(0, 0);
-                if (!mobileMenu.classList.contains('hidden')) {
-                    mobileMenu.classList.add('hidden');
-                }
+                productsMenu.addEventListener('mouseleave', () => {
+                    productsDropdown.classList.add('opacity-0', '-translate-y-2', 'pointer-events-none');
+                });
             }
 
-            pageLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    const href = this.getAttribute('href');
-                    if (href && href.startsWith('#') && href.length > 1) {
-                        e.preventDefault();
-                        let target = href.substring(1);
-                        let targetPageId = target + '-page';
+            const mobileProductsToggle = document.getElementById('mobile-products-toggle');
+            const mobileProductsLinks = document.getElementById('mobile-products-links');
+            if (mobileProductsToggle && mobileProductsLinks) {
+                mobileProductsToggle.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    mobileProductsLinks.classList.toggle('hidden');
+                    mobileProductsToggle.querySelector('i').classList.toggle('rotate-180');
+                });
+            }
 
-                        if (target === 'home' || !target) {
-                            targetPageId = 'home-page';
-                        } else if (target === 'three-echoes' || target === 'services') {
-                            targetPageId = 'home-page';
-                            switchPage(targetPageId);
-                            setTimeout(() => {
-                                const element = document.getElementById(target);
-                                if(element) element.scrollIntoView({ behavior: 'smooth' });
-                            }, 510);
-                            return;
-                        }
-
-                        if(document.getElementById(targetPageId)) {
-                            switchPage(targetPageId);
+            const counters = document.querySelectorAll('[data-count]');
+            const counterObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) return;
+                    const el = entry.target;
+                    const target = +el.getAttribute('data-count');
+                    let current = 0;
+                    const increment = target / 100;
+                    const updateCounter = () => {
+                        if (current < target) {
+                            current += increment;
+                            el.innerText = Math.ceil(current);
+                            requestAnimationFrame(updateCounter);
                         } else {
-                            console.warn(`Page with id ${targetPageId} not found.`);
+                            el.innerText = target;
+                        }
+                    };
+                    updateCounter();
+                    observer.unobserve(el);
+                });
+            }, { threshold: 0.5 });
+            counters.forEach(counter => counterObserver.observe(counter));
+
+            const demoConsole = document.getElementById('interactive-demo');
+            const demoScript = [
+                { type: 'input', text: '分析一下最近的用户访谈记录，找出关于新功能“智能提醒”的主要反馈。' },
+                { type: 'output', text: '正在分析 5 份访谈记录...\n完成！主要反馈如下：\n\n**正面反馈 (75%):**\n- 用户普遍认为该功能“非常有用”，能有效防止错过重要事项。\n- “界面简洁直观”是高频提到的优点。\n\n**负面反馈 (25%):**\n- 少数用户反馈提醒“过于频繁”，希望有自定义设置。\n- 两位用户提到在特定场景下（如会议中）无法快速静音。' },
+                { type: 'input', text: '很好。基于这些反馈，生成3条产品优化建议。' },
+                { type: 'output', text: '好的，生成优化建议：\n\n1. **增加提醒频率自定义:** 在设置中加入“高、中、低”三档提醒频率选项。\n2. **开发“一键静音”模式:** 允许用户通过快捷方式或下拉菜单快速开启1小时或更长的静音模式。\n3. **优化提醒时机:** 结合日历API，在用户有会议安排时自动降低提醒优先级。' }
+            ];
+
+            function typeLine(line, element, onComplete) {
+                const htmlLine = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+                element.innerHTML = htmlLine;
+                element.classList.remove('demo-line');
+                if (onComplete) onComplete();
+            }
+
+            async function runDemo() {
+                if(!demoConsole) return;
+                demoConsole.innerHTML = '';
+                for (const item of demoScript) {
+                    const p = document.createElement('p');
+                    if (item.type === 'input') {
+                        p.innerHTML = `<span class="text-green-400">&gt; </span>`;
+                        const textSpan = document.createElement('span');
+                        p.appendChild(textSpan);
+                        textSpan.classList.add('demo-line');
+                        demoConsole.appendChild(p);
+                        await new Promise(resolve => typeLine(item.text, textSpan, resolve));
+                    } else {
+                        p.classList.add('text-blue-300', 'whitespace-pre-wrap');
+                        const textSpan = document.createElement('span');
+                        p.appendChild(textSpan);
+                        textSpan.classList.add('demo-line');
+                        demoConsole.appendChild(p);
+                        await new Promise(resolve => setTimeout(resolve, 500));
+                        await new Promise(resolve => typeLine(item.text, textSpan, resolve));
+                    }
+                    demoConsole.scrollTop = demoConsole.scrollHeight;
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                }
+                setTimeout(runDemo, 5000);
+            }
+
+            const demoObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        runDemo();
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+            if(demoConsole) demoObserver.observe(demoConsole);
+
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const href = this.getAttribute('href');
+                    if (href.length > 1 && document.querySelector(href)) {
+                        e.preventDefault();
+                        document.querySelector(href).scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                        if(mobileMenu.classList.contains('hidden') === false){
+                           mobileMenu.classList.add('hidden');
                         }
                     }
                 });
             });
-
-            // --- Chat & Modal Logic ---
-            const chatInterface = document.getElementById('chat-interface');
-            const chatTriggers = document.querySelectorAll('.chat-trigger');
-            const closeChatBtn = document.getElementById('close-chat');
-            const chatMessages = document.getElementById('chat-messages');
-            const chatInput = document.getElementById('chat-input');
-            const sendButton = document.getElementById('send-button');
-            const contactModal = document.getElementById('contact-modal');
-            const closeModalBtn = document.getElementById('close-modal');
-            let chatHistory = [];
-
-            const systemInstruction = {
-                parts: [{ text: "你是一个名叫 Sings.AI 的顶级市场研究与用户洞察顾问。你的任务是帮助用户将模糊的研究想法，转化为一份清晰、专业、可执行的研究需求简报。请不要直接回答用户的问题，而是通过提问的方式，一步步引导他们明确以下几个核心问题：1. 研究背景与目标是什么？ 2. 核心研究对象是谁？ 3. 需要了解他们的哪些方面（如行为、态度、需求痛点）？ 4. 研究结果将用于什么商业决策？。在对话开始时，请先做一个简短的自我介绍，并发出第一个引导性问题，比如：'您好！我是 Sings.AI 的研究顾问。很高兴能帮助您构建研究方案。为了更好地开始，您能简单介绍一下您这次研究的大致想法或背景吗？'。在搜集到足够信息后，请主动为用户总结一份结构化的研究需求简报并寻求确认。在用户确认后，再根据简报输出一份专业的研究方案。在您输出最终的研究方案后，请在回复的末尾加上特殊标记：[CONVERSATION_COMPLETE]" }]
-            };
-            
-            function openChat() {
-                chatInterface.classList.remove('hidden');
-                setTimeout(() => chatInterface.classList.remove('opacity-0'), 10);
-                if (chatMessages.children.length === 0) {
-                    getInitialGreeting();
-                }
-            }
-
-            function closeChat() {
-                chatInterface.classList.add('opacity-0');
-                setTimeout(() => {
-                    chatInterface.classList.add('hidden');
-                }, 500);
-            }
-
-            chatTriggers.forEach(trigger => trigger.addEventListener('click', (e) => { e.preventDefault(); openChat(); }));
-            closeChatBtn.addEventListener('click', closeChat);
-
-            function showContactModal() {
-                const modalBox = contactModal.querySelector('div');
-                contactModal.classList.remove('hidden');
-                setTimeout(() => {
-                    modalBox.classList.remove('opacity-0', 'scale-95');
-                }, 10);
-            }
-
-            function hideContactModal() {
-                const modalBox = contactModal.querySelector('div');
-                modalBox.classList.add('opacity-0', 'scale-95');
-                setTimeout(() => {
-                    contactModal.classList.add('hidden');
-                }, 300);
-            }
-            closeModalBtn.addEventListener('click', hideContactModal);
-
-            function addMessageToUI(sender, text) {
-                const messageElement = document.createElement('div');
-                messageElement.classList.add('chat-message', 'p-4', 'rounded-lg', 'w-fit', 'max-w-[80%]');
-                if (sender === 'user') {
-                    messageElement.classList.add('user-message', 'self-end', 'ml-auto');
-                } else {
-                    messageElement.classList.add('ai-message', 'self-start', 'mr-auto');
-                }
-                text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
-                messageElement.innerHTML = text;
-                chatMessages.appendChild(messageElement);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }
-
-            function showTypingIndicator() {
-                const typingElement = document.createElement('div');
-                typingElement.id = 'typing-indicator';
-                typingElement.classList.add('ai-message', 'self-start', 'p-4', 'rounded-lg', 'w-fit');
-                typingElement.innerHTML = `<div class="typing-indicator"><span></span><span></span><span></span></div>`;
-                chatMessages.appendChild(typingElement);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }
-
-            function hideTypingIndicator() {
-                const indicator = document.getElementById('typing-indicator');
-                if (indicator) indicator.remove();
-            }
-
-            async function callGeminiAPI(currentChatHistory) {
-                const payload = { "system_instruction": systemInstruction, "contents": currentChatHistory };
-                const apiKey = "";
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-                try {
-                    const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                    if (!response.ok) throw new Error(`API call failed with status: ${response.status}`);
-                    const result = await response.json();
-                    if (result.candidates && result.candidates[0].content.parts[0].text) {
-                        return result.candidates[0].content.parts[0].text;
-                    }
-                    return '抱歉，我暂时无法生成回复。请尝试换一种问法。';
-                } catch (error) {
-                    console.error("Error calling Gemini API:", error);
-                    return '抱歉，连接时出现问题，请检查您的网络并重试。';
-                }
-            }
-            
-            async function getInitialGreeting() {
-                showTypingIndicator();
-                const initialUserMessage = { role: "user", parts: [{ text: "你好，请开始吧。" }] };
-                const aiResponseText = await callGeminiAPI([initialUserMessage]);
-                hideTypingIndicator();
-                chatHistory = [initialUserMessage, { role: "model", parts: [{ text: aiResponseText }] }];
-                addMessageToUI('ai', aiResponseText);
-            }
-
-            async function handleSend() {
-                const userInput = chatInput.value.trim();
-                if (!userInput) return;
-
-                addMessageToUI('user', userInput);
-                chatInput.value = '';
-                showTypingIndicator();
-
-                chatHistory.push({ role: "user", parts: [{ text: userInput }] });
-                const aiResponseText = await callGeminiAPI(chatHistory);
-                hideTypingIndicator();
-                
-                if (aiResponseText.includes('[CONVERSATION_COMPLETE]')) {
-                    const cleanResponse = aiResponseText.replace('[CONVERSATION_COMPLETE]', '').trim();
-                    chatHistory.push({ role: "model", parts: [{ text: cleanResponse }] });
-                    addMessageToUI('ai', cleanResponse);
-                    showContactModal();
-                } else {
-                    chatHistory.push({ role: "model", parts: [{ text: aiResponseText }] });
-                    addMessageToUI('ai', aiResponseText);
-                }
-            }
-
-            sendButton.addEventListener('click', handleSend);
-            chatInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleSend(); });
         });
     </script>
 </body>
