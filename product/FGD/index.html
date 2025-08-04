@@ -11,12 +11,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.2.12/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        /* 基础样式 */
         body {
             font-family: 'Inter', sans-serif;
             background-color: #0D0D1B;
             color: #E0E0E0;
+            transition: background-color 0.3s, color 0.3s;
         }
+
+        /* 渐变色文字 */
         .gradient-text {
             background: linear-gradient(90deg, #8A2BE2, #4F46E5);
             -webkit-background-clip: text;
@@ -24,6 +29,8 @@
             background-clip: text;
             text-fill-color: transparent;
         }
+
+        /* 步骤卡片 */
         .step-card {
             background-color: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -31,11 +38,14 @@
             padding: 2.5rem;
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 0 15px rgba(106, 77, 255, 0.1);
             transition: all 0.3s ease-in-out;
-            display: none; /* 默认隐藏所有步骤 */
+            display: none;
+            min-height: 50vh;
         }
         .step-card.active {
             display: block;
         }
+
+        /* 进度条 */
         .progress-bar-bg {
             background-color: rgba(255, 255, 255, 0.1);
         }
@@ -43,6 +53,8 @@
             background: linear-gradient(90deg, #8A2BE2, #4F46E5);
             transition: width 0.5s ease-in-out;
         }
+
+        /* 按钮 */
         .btn-primary {
             background: linear-gradient(90deg, #8A2BE2, #4F46E5);
             color: white;
@@ -74,11 +86,25 @@
         .btn-secondary:hover {
             background-color: rgba(255, 255, 255, 0.15);
         }
+        .btn-link {
+            color: #8A2BE2;
+            text-decoration: underline;
+            transition: color 0.3s;
+        }
+        .btn-link:hover {
+            color: #4F46E5;
+        }
+        .outline-card.selected {
+            border-color: #4F46E5;
+            background-color: rgba(79, 70, 229, 0.1);
+        }
+
+        /* 加载动画 */
         .loader-overlay {
             position: fixed;
             inset: 0;
             background-color: rgba(13, 13, 27, 0.7);
-            display: flex;
+            display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
@@ -87,70 +113,176 @@
             -webkit-backdrop-filter: blur(4px);
             transition: opacity 0.3s ease;
         }
-        .ai-thinking-animation {
+        .spinner {
             width: 80px;
             height: 80px;
-            position: relative;
-        }
-        .ai-thinking-animation .dot {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background: #fff;
+            border: 8px solid rgba(255, 255, 255, 0.1);
+            border-top: 8px solid #8A2BE2;
             border-radius: 50%;
-            animation: pulse 1.5s infinite ease-in-out;
+            animation: spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
         }
-        .ai-thinking-animation .dot1 { top: 0; left: 35px; }
-        .ai-thinking-animation .dot2 { top: 25px; left: 10px; animation-delay: -0.2s; }
-        .ai-thinking-animation .dot3 { top: 25px; left: 60px; animation-delay: 0.2s; }
-        .ai-thinking-animation .dot4 { top: 50px; left: 35px; animation-delay: -0.4s; }
-        .ai-thinking-animation .dot5 { top: 15px; left: 35px; background: #8A2BE2; animation-delay: -0.6s; }
-        @keyframes pulse {
-            0%, 100% { transform: scale(0.5); opacity: 0.5; }
-            50% { transform: scale(1.2); opacity: 1; }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
         .loader-text {
             margin-top: 20px;
             color: #e0e0e0;
-            font-size: 1rem;
+            font-size: 1.2rem;
             letter-spacing: 1px;
+            text-align: center;
         }
+        .loader-dots {
+            font-size: 1.5em;
+            animation: dot-animation 1.5s linear infinite;
+        }
+        @keyframes dot-animation {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+
+        /* 聊天气泡 */
         .chat-bubble {
-            max-width: 75%; padding: 0.6rem 1rem; border-radius: 16px; word-wrap: break-word; display: flex; flex-direction: column; line-height: 1.6;
+            max-width: 75%;
+            padding: 0.6rem 1rem;
+            border-radius: 16px;
+            word-wrap: break-word;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.6;
+            animation: slideIn 0.3s ease-out;
         }
-        .chat-bubble-right { background: linear-gradient(90deg, #8A2BE2, #4F46E5); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
-        .chat-bubble-left { background-color: #374151; color: #e5e7eb; align-self: flex-start; border-bottom-left-radius: 4px; }
-        .chat-name { font-weight: 600; font-size: 0.8rem; margin-bottom: 0.2rem; }
-        .chat-name-left { color: #9ca3af; }
-        .chat-name-right { color: #dbeafe; }
-        .typing-indicator { align-self: flex-start; margin-left: 10px; }
+        .chat-bubble-right {
+            background: linear-gradient(90deg, #8A2BE2, #4F46E5);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+        .chat-bubble-left {
+            background-color: #374151;
+            color: #e5e7eb;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+        .chat-name {
+            font-weight: 600;
+            font-size: 0.8rem;
+            margin-bottom: 0.2rem;
+        }
+        .chat-name-left {
+            color: #9ca3af;
+        }
+        .chat-name-right {
+            color: #dbeafe;
+        }
+        .typing-indicator {
+            align-self: flex-start;
+            margin-left: 10px;
+        }
         .typing-indicator span {
-            height: 8px; width: 8px; float: left; margin: 0 1px; background-color: #9ca3af; display: block; border-radius: 50%; opacity: 0.4; animation: bob 1s infinite;
+            height: 8px;
+            width: 8px;
+            float: left;
+            margin: 0 1px;
+            background-color: #9ca3af;
+            display: block;
+            border-radius: 50%;
+            opacity: 0.4;
+            animation: bob 1s infinite;
         }
-        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
-        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
         @keyframes bob {
             10% { transform: translateY(-5px); background-color: #e5e7eb; }
             50% { transform: translateY(0); background-color: #9ca3af; }
         }
-        .report-content h2, .voc-content h2 { font-size: 1.5rem; font-weight: 700; margin-top: 1.5rem; margin-bottom: 0.75rem; border-bottom: 2px solid rgba(255, 255, 255, 0.1); padding-bottom: 0.5rem; color: #fff; }
-        .report-content h3, .voc-content h3 { font-size: 1.25rem; font-weight: 600; margin-top: 1.25rem; margin-bottom: 0.5rem; color: #e5e7eb; }
-        .report-content p, .voc-content p { margin-bottom: 1rem; line-height: 1.75; color: #d1d5db; }
-        .report-content ul, .voc-content ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1rem; color: #d1d5db; }
-        .form-label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #d1d5db; }
-        .form-input, textarea { width: 100%; padding: 0.75rem 1rem; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px; background-color: rgba(255, 255, 255, 0.05); color: #e0e0e0; transition: border-color 0.2s, box-shadow 0.2s; }
-        .form-input:focus, textarea:focus { outline: none; border-color: #8A2BE2; box-shadow: 0 0 0 2px rgba(138, 43, 226, 0.5); }
+        @keyframes slideIn {
+            0% { transform: translateY(20px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Markdown 渲染样式 */
+        .report-content h2, .voc-content h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 0.5rem;
+            color: #fff;
+        }
+        .report-content h3, .voc-content h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: #e5e7eb;
+        }
+        .report-content p, .voc-content p {
+            margin-bottom: 1rem;
+            line-height: 1.75;
+            color: #d1d5db;
+        }
+        .report-content ul, .voc-content ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+            color: #d1d5db;
+        }
+        .report-content li, .voc-content li {
+            margin-bottom: 0.5rem;
+        }
+        .report-content blockquote {
+            border-left: 4px solid #8A2BE2;
+            padding-left: 1rem;
+            margin: 1rem 0;
+            color: #d1d5db;
+            font-style: italic;
+        }
+
+        /* 表单元素 */
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #d1d5db;
+        }
+        .form-input, textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.05);
+            color: #e0e0e0;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .form-input:focus, textarea:focus {
+            outline: none;
+            border-color: #8A2BE2;
+            box-shadow: 0 0 0 2px rgba(138, 43, 226, 0.5);
+        }
+
+        /* 参与者卡片动画 */
         .participant-card {
             opacity: 0;
             transform: translateY(20px);
             transition: opacity 0.5s ease, transform 0.5s ease;
         }
+
+        /* 玻璃拟态导航栏 */
         .glass-morphism {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
+
+        /* 语言切换器 */
         .lang-button {
             background-color: rgba(255, 255, 255, 0.1);
             color: #d1d5db;
@@ -165,21 +297,58 @@
             color: white;
         }
         .lang-dropdown-menu {
-            background: #1f2937; /* gray-800 */
-            border: 1px solid #374151; /* gray-700 */
+            background: #1f2937;
+            border: 1px solid #374151;
         }
         .lang-dropdown-menu a:hover {
-            background-color: #374151; /* gray-700 */
+            background-color: #374151;
         }
+
+        /* 自定义模态框 */
+        #custom-modal .btn-primary {
+            background: linear-gradient(90deg, #8A2BE2, #4F46E5);
+            border: none;
+        }
+        .moderator-avatar, .user-avatar {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: bold;
+            color: white;
+        }
+        .moderator-avatar {
+            background: #4F46E5;
+        }
+        .user-avatar {
+            background: #6B21A8;
+        }
+
+        /* 访谈追问输入框 */
+        #ask-question-container {
+            transition: opacity 0.3s ease;
+        }
+        .sentiment-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: bold;
+            border-radius: 9999px;
+        }
+        .sentiment-positive { background-color: #10B981; color: white; }
+        .sentiment-negative { background-color: #EF4444; color: white; }
+        .sentiment-neutral { background-color: #9CA3AF; color: white; }
     </style>
 </head>
 <body class="antialiased">
 
     <!-- Loader Overlay with AI Animation -->
     <div id="loader-overlay" class="loader-overlay" style="display: none;">
-        <div class="ai-thinking-animation">
-            <div class="dot dot1"></div><div class="dot dot2"></div><div class="dot dot3"></div><div class="dot dot4"></div><div class="dot dot5"></div>
-        </div>
+        <div class="spinner"></div>
         <div id="loader-text" class="loader-text" data-key="loaderText">AI 正在思考...</div>
     </div>
 
@@ -211,13 +380,6 @@
                     <a href="#" class="block px-4 py-2 text-sm text-gray-300" data-lang="en" data-key="langEn">English</a>
                 </div>
             </div>
-            
-            <!-- Mobile Menu Button (can be re-enabled if needed) -->
-            <div class="md:hidden" style="display: none;">
-                <button class="text-white">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-                </button>
-            </div>
         </div>
     </nav>
 
@@ -241,25 +403,26 @@
                 <span data-key="progress3">访谈大纲</span>
                 <span data-key="progress4">招募用户</span>
                 <span data-key="progress5">用户访谈</span>
-                <span data-key="progress6">用户之声</span>
+                <span data-key="progress6">洞察分析</span>
                 <span data-key="progress7">分析报告</span>
             </div>
         </div>
 
-        <!-- Step 1: Input Research Needs -->
+        <!-- Step 1: Input Research Needs (Optimized) -->
         <div id="step-1" class="step-card active">
             <h2 class="text-2xl font-bold mb-2" data-key="step1Title">第一步：输入研究需求</h2>
             <p class="text-gray-400 mb-6" data-key="step1Desc">请用自然语言简单描述你的研究背景、目的和想要了解的核心问题。</p>
             <textarea id="research-input" class="h-40" data-key-placeholder="step1Placeholder"></textarea>
-            <div class="mt-6 text-right">
-                <button onclick="handleStep1Next()" class="btn-primary" data-key="nextBtn">下一步</button>
+            
+            <div class="mt-6 flex justify-end">
+                <button onclick="handleStep1Next()" id="step1-next-btn" class="btn-primary" data-key="nextBtn">下一步</button>
             </div>
         </div>
 
         <!-- Step 2: Refine Needs & Define Sample -->
         <div id="step-2" class="step-card">
             <h2 class="text-2xl font-bold mb-2" data-key="step2Title">第二步：确认研究需求与样本</h2>
-            <p class="text-gray-400 mb-6" data-key="step2Desc">请确认AI提炼的研究目标，并检查、修改为你本次研究招募的核心用户条件。</p>
+            <p class="text-gray-400 mb-6" data-key="step2Desc">AI已为你提炼出最符合你需求的研究目标，并生成了用户招募条件。请检查并修改。</p>
             <div>
                 <label for="refined-need" class="form-label" data-key="step2Label1">研究目标</label>
                 <textarea id="refined-need" class="form-input h-28"></textarea>
@@ -278,46 +441,78 @@
             </div>
         </div>
 
-        <!-- Step 3: Generate Interview Outline -->
+        <!-- Step 3: Generate Interview Outline (Optimized) -->
         <div id="step-3" class="step-card">
             <h2 class="text-2xl font-bold mb-2" data-key="step3Title">第三步：确认访谈大纲</h2>
-            <p class="text-gray-400 mb-6" data-key="step3Desc">根据研究需求，AI已生成一份专业的访谈大纲。你可以在此基础上修改，后续访谈将严格依据此大纲进行。</p>
+            <p class="text-gray-400 mb-6" data-key="step3Desc">AI已为你生成一份最专业的访谈大纲。你可以在此基础上修改，后续访谈将严格依据此大纲进行。</p>
             <textarea id="interview-outline" class="h-64"></textarea>
-            <div class="mt-6 flex justify-between">
+            <div class="mt-8 flex justify-between">
                 <button onclick="showStep(2)" class="btn-secondary" data-key="backBtn">返回上一步</button>
                 <button onclick="handleStep3Next()" class="btn-primary" data-key="step3Btn">确认大纲，开始招募用户</button>
             </div>
         </div>
 
-        <!-- Step 4: Recruit Participants -->
+        <!-- Step 4: Recruit Participants (with Edit functionality) -->
         <div id="step-4" class="step-card">
             <h2 class="text-2xl font-bold mb-2" data-key="step4Title">第四步：招募虚拟用户</h2>
-            <p class="text-gray-400 mb-6" data-key="step4Desc">根据你确认的样本条件，AI已为你招募了6位符合条件的虚拟用户。请查看他们的基本信息。</p>
+            <p class="text-gray-400 mb-6" data-key="step4Desc">根据你确认的样本条件，AI已为你招募了符合条件的虚拟用户。你可以编辑或补充，使他们更贴近你的目标用户。</p>
             <div id="participants-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+            <div class="flex justify-center mt-6 space-x-4">
+                 <button onclick="addParticipantManually()" class="btn-secondary flex items-center space-x-2">
+                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                    <span data-key="addParticipantBtn">添加用户</span>
+                </button>
+                <button onclick="supplementParticipants()" class="btn-secondary flex items-center space-x-2">
+                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.922m-2.461 8.167a5.25 5.25 0 01-5.223-5.32c0-1.42.548-2.732 1.458-3.738M12 21a9 9 0 100-18 9 9 0 000 18z" />
+                    </svg>
+                    <span data-key="supplementParticipantBtn">补充2名用户</span>
+                </button>
+            </div>
             <div class="mt-8 flex justify-between">
                 <button onclick="showStep(3)" class="btn-secondary" data-key="backBtn">返回上一步</button>
                 <button onclick="handleStep4Next()" class="btn-primary" data-key="step4Btn">确认用户，开始访谈</button>
             </div>
         </div>
 
-        <!-- Step 5: Conduct Focus Group -->
+        <!-- Step 5: Conduct Focus Group (Optimized) -->
         <div id="step-5" class="step-card">
             <h2 class="text-2xl font-bold mb-2" data-key="step5Title">第五步：用户访谈</h2>
-            <p class="text-gray-400 mb-6" data-key="step5Desc">访谈已开始。AI 正在模拟一场真实的、动态的群聊。请稍候...</p>
-            <div id="chat-container" class="w-full h-96 bg-gray-900/50 rounded-lg p-4 overflow-y-auto flex flex-col space-y-3 border border-gray-700"></div>
-            <div class="mt-6 flex justify-end space-x-4">
+            <p class="text-gray-400 mb-6" data-key="step5Desc">访谈已开始。AI 正在模拟一场真实的、动态的群聊。你可以作为主持人进行追问。</p>
+            <div id="chat-container-wrapper" class="flex flex-col h-[70vh] md:h-[60vh]">
+                <div id="chat-container" class="flex-grow w-full bg-gray-900/50 rounded-lg p-4 overflow-y-auto flex flex-col space-y-4 border border-gray-700"></div>
+                <div id="ask-question-container" class="mt-4 flex space-x-2 hidden">
+                    <select id="ask-target" class="form-input w-40 flex-shrink-0">
+                        <option value="all" data-key="askAll">所有人</option>
+                    </select>
+                    <input type="text" id="ask-question-input" class="form-input flex-grow" data-key-placeholder="askQuestionPlaceholder" placeholder="作为主持人，你可以向用户提问...">
+                    <button onclick="askQuestion()" class="btn-primary flex-shrink-0">
+                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="mt-6 flex justify-between space-x-4">
+                 <button id="end-interview-btn" onclick="endInterview()" class="btn-secondary" data-key="endInterviewBtn">结束访谈</button>
                 <button id="skip-to-results-btn" onclick="skipToResults()" class="btn-secondary" data-key="step5SkipBtn">后台处理，抢先看结果</button>
-                <button id="step-5-next-btn" onclick="handleStep5Next()" class="btn-primary" disabled data-key="step5NextBtnDisabled">访谈进行中...</button>
+                <button id="step-5-next-btn" onclick="postNextQuestion()" class="btn-primary" disabled data-key="step5NextBtnDisabled">访谈进行中...</button>
             </div>
         </div>
 
-        <!-- Step 6: Generate VOC -->
+        <!-- Step 6: Generate VOC & Sentiment Analysis -->
         <div id="step-6" class="step-card">
-            <h2 class="text-2xl font-bold mb-2" data-key="step6Title">第六步：生成用户之声 (VOC)</h2>
-            <p class="text-gray-400 mb-6" data-key="step6Desc">访谈结束。AI已从对话中提炼出核心的用户观点和引述。</p>
+            <h2 class="text-2xl font-bold mb-2" data-key="step6Title">第六步：洞察分析</h2>
+            <p class="text-gray-400 mb-6" data-key="step6Desc">访谈结束。AI已从对话中提炼出核心的用户观点和引述，并进行了情感分析。</p>
             <div id="voc-content" class="w-full h-96 bg-gray-900/50 rounded-lg p-4 border border-gray-700 overflow-y-auto voc-content"></div>
+            <div id="sentiment-summary" class="mt-4 flex justify-between items-center text-sm">
+                <span class="text-gray-400" data-key="sentimentTotal">总情感倾向：</span>
+                <div id="sentiment-summary-badges"></div>
+            </div>
             <div class="mt-8 flex justify-between">
-                <button onclick="showStep(5)" class="btn-secondary" data-key="step6BackBtn">查看访谈</button>
+                <button onclick="showStep(5)" class="btn-secondary" data-key="backBtn">返回上一步</button>
                 <button onclick="handleStep6Next()" class="btn-primary" data-key="step6NextBtn">生成最终报告</button>
             </div>
         </div>
@@ -326,9 +521,18 @@
         <div id="step-7" class="step-card">
             <h2 class="text-2xl font-bold mb-2" data-key="step7Title">第七步：数据分析与研究报告</h2>
             <p class="text-gray-400 mb-6" data-key="step7Desc">基于本次研究的全过程，AI已为你生成一份详细的研究报告。</p>
+            
+            <!-- 新增的情感可视化图表容器 -->
+            <div class="mb-8 p-4 rounded-lg bg-gray-900/50 border border-gray-700">
+                <h3 class="text-lg font-semibold text-white mb-4" data-key="sentimentChartTitle">访谈情绪分布</h3>
+                <div class="h-64">
+                    <canvas id="sentimentChart"></canvas>
+                </div>
+            </div>
+            
             <div id="report-content" class="w-full bg-white text-gray-800 rounded-lg p-6 border overflow-y-auto report-content"></div>
             <div class="mt-8 flex justify-between">
-                <button onclick="showStep(6)" class="btn-secondary" data-key="step7BackBtn">查看VOC</button>
+                <button onclick="showStep(6)" class="btn-secondary" data-key="backBtn">返回上一步</button>
                 <div class="flex items-center space-x-2">
                     <button onclick="downloadReportAsPDF()" class="btn-secondary" data-key="downloadPdfBtn">下载报告 (PDF)</button>
                     <button onclick="restart()" class="btn-primary" data-key="restartBtn">完成，重新开始</button>
@@ -336,6 +540,44 @@
             </div>
         </div>
     </div>
+
+    <!-- Participant Edit Modal -->
+    <div id="edit-participant-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4 hidden">
+        <div class="bg-gray-900 border border-gray-700 text-white p-6 rounded-lg shadow-lg w-full max-w-lg mx-auto">
+            <h3 class="text-xl font-bold mb-4" data-key="editParticipantTitle">编辑用户画像</h3>
+            <form id="edit-participant-form">
+                <div class="mb-4">
+                    <label for="edit-name" class="form-label">姓名</label>
+                    <input type="text" id="edit-name" name="name" class="form-input" required>
+                </div>
+                <div class="mb-4">
+                    <label for="edit-age" class="form-label">年龄</label>
+                    <input type="text" id="edit-age" name="age" class="form-input" required>
+                </div>
+                <div class="mb-4">
+                    <label for="edit-gender" class="form-label">性别</label>
+                    <input type="text" id="edit-gender" name="gender" class="form-input" required>
+                </div>
+                <div class="mb-4">
+                    <label for="edit-city" class="form-label">城市</label>
+                    <input type="text" id="edit-city" name="city" class="form-input" required>
+                </div>
+                <div class="mb-4">
+                    <label for="edit-profession" class="form-label">职业</label>
+                    <input type="text" id="edit-profession" name="profession" class="form-input" required>
+                </div>
+                <div class="mb-4">
+                    <label for="edit-bio" class="form-label">简介</label>
+                    <textarea id="edit-bio" name="bio" class="form-input h-24" required></textarea>
+                </div>
+                <div class="flex justify-end space-x-4 mt-6">
+                    <button type="button" onclick="closeEditModal()" class="btn-secondary" data-key="cancelBtn">取消</button>
+                    <button type="submit" class="btn-primary" data-key="saveBtn">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 
     <script>
         // --- Language Translations ---
@@ -359,18 +601,22 @@
                 progress3: '访谈大纲',
                 progress4: '招募用户',
                 progress5: '用户访谈',
-                progress6: '用户之声',
+                progress6: '洞察分析',
                 progress7: '分析报告',
                 // General Buttons
                 nextBtn: '下一步',
                 backBtn: '返回上一步',
+                cancelBtn: '取消',
+                saveBtn: '保存',
                 // Step 1
                 step1Title: '第一步：输入研究需求',
                 step1Desc: '请用自然语言简单描述你的研究背景、目的和想要了解的核心问题。',
                 step1Placeholder: '例如：我们是一款面向大学生的在线学习App，最近活跃度有所下降。希望了解当前大学生使用在线学习产品的习惯、痛点，以及对我们产品的看法，为产品迭代寻找方向。',
+                refinementOptionsTitle: 'AI提炼的专业研究目标 (供选择)',
+                selectRefinedBtn: '选择此方案',
                 // Step 2
                 step2Title: '第二步：确认研究需求与样本',
-                step2Desc: '请确认AI提炼的研究目标，并检查、修改为你本次研究招募的核心用户条件。',
+                step2Desc: 'AI已为你提炼出最符合你需求的研究目标，并生成了用户招募条件。请检查并修改。',
                 step2Label1: '研究目标',
                 step2Subtitle: '建议的样本条件',
                 step2LabelCity: '城市',
@@ -384,37 +630,50 @@
                 step2Btn: '确认，生成访谈大纲',
                 // Step 3
                 step3Title: '第三步：确认访谈大纲',
-                step3Desc: '根据研究需求，AI已生成一份专业的访谈大纲。你可以在此基础上修改，后续访谈将严格依据此大纲进行。',
+                step3Desc: 'AI已为你生成一份最专业的访谈大纲。你可以在此基础上修改，后续访谈将严格依据此大纲进行。',
                 step3Btn: '确认大纲，开始招募用户',
+                selectOutlineBtn: '选择此大纲',
+                regenerateOutlineBtn: '重新生成大纲',
                 // Step 4
                 step4Title: '第四步：招募虚拟用户',
-                step4Desc: '根据你确认的样本条件，AI已为你招募了6位符合条件的虚拟用户。请查看他们的基本信息。',
+                step4Desc: '根据你确认的样本条件，AI已为你招募了符合条件的虚拟用户。你可以编辑或补充，使他们更贴近你的目标用户。',
                 step4Btn: '确认用户，开始访谈',
+                addParticipantBtn: '添加用户',
+                supplementParticipantBtn: '补充2名用户',
+                editParticipantTitle: '编辑用户画像',
                 // Step 5
                 step5Title: '第五步：用户访谈',
-                step5Desc: '访谈已开始。AI 正在模拟一场真实的、动态的群聊。请稍候...',
+                step5Desc: '访谈已开始。AI 正在模拟一场真实的、动态的群聊。你可以作为主持人进行追问。',
                 step5SkipBtn: '后台处理，抢先看结果',
                 step5NextBtnDisabled: '访谈进行中...',
-                step5NextBtnEnabled: '访谈已完成，查看用户之声',
+                step5NextBtnEnabled: '访谈已完成，查看洞察分析',
+                askQuestionPlaceholder: '作为主持人，你可以向用户提问...',
+                askAll: '所有人',
+                endInterviewBtn: '结束访谈',
                 // Step 6
-                step6Title: '第六步：生成用户之声 (VOC)',
-                step6Desc: '访谈结束。AI已从对话中提炼出核心的用户观点和引述。',
+                step6Title: '第六步：洞察分析',
+                step6Desc: '访谈结束。AI已从对话中提炼出核心的用户观点和引述，并进行了情感分析。',
                 step6BackBtn: '查看访谈',
                 step6NextBtn: '生成最终报告',
+                sentimentTotal: '总情感倾向：',
+                sentimentPositive: '积极',
+                sentimentNeutral: '中性',
+                sentimentNegative: '消极',
                 // Step 7
                 step7Title: '第七步：数据分析与研究报告',
                 step7Desc: '基于本次研究的全过程，AI已为你生成一份详细的研究报告。',
-                step7BackBtn: '查看VOC',
+                step7BackBtn: '查看洞察',
                 downloadPdfBtn: '下载报告 (PDF)',
                 restartBtn: '完成，重新开始',
+                sentimentChartTitle: '访谈情绪分布',
                 // Dynamic Text
                 loaderText: 'AI 正在思考...',
                 loaderAnalyzing: '正在分析您的研究需求...',
                 loaderCriteria: '正在建议用户样本条件...',
-                loaderOutline: '正在生成专业访谈大纲...',
-                loaderRecruiting: '正在全网寻找虚拟用户...',
+                loaderOutline: '正在生成访谈大纲草稿...',
+                loaderRecruiting: '正在招募虚拟用户...',
                 loaderSkipping: '正在为您跳过访谈，直接生成结果...',
-                loaderVoc: '正在从对话中提炼用户之声...',
+                loaderVoc: '正在进行洞察分析...',
                 loaderReport: '正在撰写最终分析报告...',
                 loaderPdf: '正在生成PDF报告...',
                 modalInputError: '请输入你的研究需求。',
@@ -447,18 +706,22 @@
                 progress3: 'Interview Outline',
                 progress4: 'Recruit Users',
                 progress5: 'User Interview',
-                progress6: 'Voice of Customer',
+                progress6: 'Insight Analysis',
                 progress7: 'Analysis Report',
                 // General Buttons
                 nextBtn: 'Next',
                 backBtn: 'Back',
+                cancelBtn: 'Cancel',
+                saveBtn: 'Save',
                 // Step 1
                 step1Title: 'Step 1: Input Research Needs',
                 step1Desc: 'Briefly describe your research background, objectives, and key questions in natural language.',
                 step1Placeholder: 'e.g., We are an online learning app for college students, and our recent activity has declined. We want to understand the current habits and pain points of college students using online learning products, as well as their opinions on our product, to find direction for product iteration.',
+                refinementOptionsTitle: 'AI-refined Research Objectives (Choose one)',
+                selectRefinedBtn: 'Select this option',
                 // Step 2
                 step2Title: 'Step 2: Confirm Needs & Sample',
-                step2Desc: 'Please confirm the research objectives refined by the AI, and review or modify the core user recruitment criteria for this study.',
+                step2Desc: 'AI has refined the most suitable research objective and generated user recruitment criteria for you. Please review and edit them.',
                 step2Label1: 'Research Objectives',
                 step2Subtitle: 'Suggested Sample Criteria',
                 step2LabelCity: 'City',
@@ -472,43 +735,56 @@
                 step2Btn: 'Confirm, Generate Outline',
                 // Step 3
                 step3Title: 'Step 3: Confirm Interview Outline',
-                step3Desc: 'Based on the research needs, the AI has generated a professional interview outline. You can modify it here. The subsequent interview will strictly follow this outline.',
+                step3Desc: 'AI has generated the most professional interview outline for you. You can modify it here, and the subsequent interview will strictly follow this outline.',
                 step3Btn: 'Confirm Outline, Recruit Users',
+                selectOutlineBtn: 'Select this outline',
+                regenerateOutlineBtn: 'Regenerate Outlines',
                 // Step 4
                 step4Title: 'Step 4: Recruit Virtual Users',
-                step4Desc: 'Based on your confirmed sample criteria, the AI has recruited 6 virtual users who meet the conditions. Please review their basic information.',
+                step4Desc: 'Based on your confirmed sample criteria, the AI has recruited virtual users who meet the conditions. You can edit or add more to make them more aligned with your target users.',
                 step4Btn: 'Confirm Users, Start Interview',
+                addParticipantBtn: 'Add User',
+                supplementParticipantBtn: 'Add 2 more users',
+                editParticipantTitle: 'Edit Participant Profile',
                 // Step 5
                 step5Title: 'Step 5: User Interview',
-                step5Desc: 'The interview has started. The AI is simulating a real, dynamic group chat. Please wait...',
+                step5Desc: 'The interview has started. The AI is simulating a real, dynamic group chat. You can ask questions as a moderator.',
                 step5SkipBtn: 'Process in Background & See Results',
                 step5NextBtnDisabled: 'Interview in progress...',
-                step5NextBtnEnabled: 'Interview Complete, View VOC',
+                step5NextBtnEnabled: 'Interview Complete, View Insights',
+                askQuestionPlaceholder: 'As the moderator, you can ask a question...',
+                askAll: 'Everyone',
+                endInterviewBtn: 'End Interview',
                 // Step 6
-                step6Title: 'Step 6: Generate Voice of Customer (VOC)',
-                step6Desc: 'Interview finished. The AI has extracted the core user opinions and quotes from the conversation.',
+                step6Title: 'Step 6: Insight Analysis',
+                step6Desc: 'Interview finished. The AI has extracted the core user opinions and quotes, and performed sentiment analysis.',
                 step6BackBtn: 'View Interview',
                 step6NextBtn: 'Generate Final Report',
+                sentimentTotal: 'Overall Sentiment:',
+                sentimentPositive: 'Positive',
+                sentimentNeutral: 'Neutral',
+                sentimentNegative: 'Negative',
                 // Step 7
                 step7Title: 'Step 7: Data Analysis & Research Report',
                 step7Desc: 'Based on the entire process of this study, the AI has generated a detailed research report for you.',
-                step7BackBtn: 'View VOC',
+                step7BackBtn: 'View Insights',
                 downloadPdfBtn: 'Download Report (PDF)',
                 restartBtn: 'Finish, Restart',
+                sentimentChartTitle: 'Interview Sentiment Distribution',
                 // Dynamic Text
                 loaderText: 'AI is thinking...',
                 loaderAnalyzing: 'Analyzing your research needs...',
                 loaderCriteria: 'Suggesting user sample criteria...',
-                loaderOutline: 'Generating professional interview outline...',
+                loaderOutline: 'Generating professional interview outlines...',
                 loaderRecruiting: 'Recruiting virtual users...',
                 loaderSkipping: 'Skipping interview and generating results for you...',
-                loaderVoc: 'Extracting Voice of Customer from conversation...',
+                loaderVoc: 'Extracting Voice of Customer...',
                 loaderReport: 'Writing the final analysis report...',
                 loaderPdf: 'Generating PDF report...',
                 modalInputError: 'Please enter your research needs.',
                 modalCriteriaError: 'AI failed to generate valid sample criteria. Please try again.',
                 modalEmptyError: 'Research objectives and key features cannot be empty.',
-                modalOutlineError: 'The interview outline cannot be empty.',
+                modalOutlineError: '访谈大纲不能为空。',
                 modalRecruitError: 'Failed to recruit users. The data format returned by the AI is incorrect.',
                 modalPdfError: 'Report content is empty and cannot be downloaded.',
                 modalPdfGenError: 'Sorry, there was a problem generating the PDF report.',
@@ -520,21 +796,36 @@
 
         // --- Global State Management ---
         const appState = {
-            currentStep: 1, researchNeed: '', refinedNeed: '',
+            currentStep: 1,
+            researchNeed: '',
+            refinedNeed: '',
             recruitmentCriteria: { city: '', age: '', gender: '', other: '' },
-            interviewOutline: '', participants: [], chatHistory: [], voc: '', report: '', isInterviewRunning: false,
-            currentLanguage: 'zh'
+            interviewOutline: '',
+            participants: [],
+            chatHistory: [],
+            voc: '',
+            report: '',
+            sentimentData: null,
+            isInterviewRunning: false,
+            currentLanguage: 'zh',
+            generatedOutlines: [],
+            generatedRefinedNeeds: []
         };
 
+        let myChart = null;
         const loaderOverlay = document.getElementById('loader-overlay');
         const loaderText = document.getElementById('loader-text');
+        let coreQuestions = [];
+        let currentQuestionIndex = 0;
+        let participantReplyCount = 0;
+        let lastMessage = {};
+        let interviewTimer = null;
 
         // --- Language Switching ---
         function setLanguage(lang) {
             appState.currentLanguage = lang;
             document.documentElement.lang = lang;
             
-            // Set static text from data-key attributes
             document.querySelectorAll('[data-key]').forEach(el => {
                 const key = el.dataset.key;
                 if (translations[lang][key]) {
@@ -542,7 +833,6 @@
                 }
             });
             
-            // Set placeholder text from data-key-placeholder attributes
             document.querySelectorAll('[data-key-placeholder]').forEach(el => {
                 const key = el.dataset.keyPlaceholder;
                 if (translations[lang][key]) {
@@ -550,7 +840,11 @@
                 }
             });
             
-            // Update page title
+            const nextBtn = document.getElementById('step-5-next-btn');
+            if (nextBtn) {
+                nextBtn.textContent = appState.isInterviewRunning ? translations[lang].step5NextBtnDisabled : translations[lang].step5NextBtnEnabled;
+            }
+            
             document.title = translations[lang].pageTitle;
         }
 
@@ -560,6 +854,36 @@
             document.getElementById(`step-${stepNumber}`).classList.add('active');
             appState.currentStep = stepNumber;
             updateProgressBar();
+
+            if (stepNumber === 5) {
+                document.getElementById('ask-question-container').classList.remove('hidden');
+                document.getElementById('ask-question-container').style.opacity = '0';
+                updateAskTargetDropdown();
+                setTimeout(() => {
+                    document.getElementById('ask-question-container').style.opacity = '1';
+                }, 100);
+            } else {
+                document.getElementById('ask-question-container').classList.add('hidden');
+            }
+            
+            if (stepNumber === 7) {
+                renderSentimentChart();
+            }
+        }
+
+        function updateAskTargetDropdown() {
+            const dropdown = document.getElementById('ask-target');
+            dropdown.innerHTML = '';
+            const allOption = document.createElement('option');
+            allOption.value = 'all';
+            allOption.textContent = translations[appState.currentLanguage].askAll;
+            dropdown.appendChild(allOption);
+            appState.participants.forEach(p => {
+                const option = document.createElement('option');
+                option.value = p.name;
+                option.textContent = p.name;
+                dropdown.appendChild(option);
+            });
         }
 
         function updateProgressBar() {
@@ -608,28 +932,33 @@
 
         function restart() {
             appState.isInterviewRunning = false;
+            if(interviewTimer) clearTimeout(interviewTimer);
             Object.assign(appState, {
                 currentStep: 1, researchNeed: '', refinedNeed: '',
                 recruitmentCriteria: { city: '', age: '', gender: '', other: '' },
-                interviewOutline: '', participants: [], chatHistory: [], voc: '', report: '', isInterviewRunning: false
+                interviewOutline: '', participants: [], chatHistory: [], voc: '', report: '', sentimentData: null, isInterviewRunning: false, generatedOutlines: [], generatedRefinedNeeds: []
             });
             ['research-input', 'refined-need', 'criteria-city', 'criteria-age', 'criteria-gender', 'criteria-other', 'interview-outline'].forEach(id => document.getElementById(id).value = '');
-            ['participants-grid', 'chat-container', 'voc-content', 'report-content'].forEach(id => document.getElementById(id).innerHTML = '');
+            ['participants-grid', 'chat-container', 'voc-content', 'report-content', 'sentiment-summary-badges'].forEach(id => document.getElementById(id).innerHTML = '');
             
             const nextBtn = document.getElementById('step-5-next-btn');
-            nextBtn.disabled = true;
-            nextBtn.textContent = translations[appState.currentLanguage].step5NextBtnDisabled;
+            if (nextBtn) {
+                nextBtn.disabled = true;
+                nextBtn.textContent = translations[appState.currentLanguage].step5NextBtnDisabled;
+            }
             
             document.getElementById('skip-to-results-btn').style.display = 'inline-block';
+            document.getElementById('end-interview-btn').style.display = 'none';
+            if (myChart) myChart.destroy();
             showStep(1);
         }
 
-        // --- API Call ---
+        // --- Simulated API Call (with updated mock data) ---
         async function callAIModel(prompt, expectJson = false, useGlobalLoader = true, loaderMsgKey = 'loaderText') {
             if (useGlobalLoader) {
                 showLoader(true, loaderMsgKey);
             }
-            const apiKey = "sk-xifmrwnarxegowpdpwjmbpiodhjawjtacbkgtkoygpgszhec"; // This should be secured in a real application
+            const apiKey = "YOUR_SECURE_BACKEND_ENDPOINT"; 
             const url = "https://api.siliconflow.cn/v1/chat/completions";
             const payload = {
                 model: "alibaba/Qwen2-7B-Instruct",
@@ -641,42 +970,184 @@
             }
 
             try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                if (!response.ok) throw new Error(`API call failed: ${response.status} ${await response.text()}`);
-                const result = await response.json();
-                if (result.choices?.[0]?.message?.content) {
-                    const text = result.choices[0].message.content;
-                    if (expectJson) {
-                        try {
-                            const startIndex = text.indexOf('{');
-                            const endIndex = text.lastIndexOf('}');
-                            const startBracketIndex = text.indexOf('[');
-                            const endBracketIndex = text.lastIndexOf(']');
+                await new Promise(resolve => setTimeout(resolve, 1500 + Math.random() * 1000));
+                
+                let text;
+                // Check for JSON expectation first to handle errors more gracefully
+                if (expectJson) {
+                    if (loaderMsgKey === 'loaderVoc') {
+                        text = JSON.stringify({
+                            voc: `## 用户之声 (Voice of Customer)
 
-                            let jsonText = '';
+### 核心用户观点
 
-                            if (startBracketIndex !== -1 && endBracketIndex !== -1 && startBracketIndex < startIndex) {
-                                jsonText = text.substring(startBracketIndex, endBracketIndex + 1);
-                            } else if (startIndex !== -1 && endIndex !== -1) {
-                                jsonText = text.substring(startIndex, endIndex + 1);
-                            } else {
-                                jsonText = text;
+* **张三 (计算机系学生)**：
+    * **观点**: App 内容质量不错，但技术社区互动性不够，难以找到志同道合的伙伴。
+    * **引述**: “我觉得你们的课程内容挺扎实的，但是论坛有点冷清，讨论不起来。”
+
+* **李四 (设计系学生)**：
+    * **观点**: 界面设计简洁，但缺少一些创意和个性化主题。希望有更多视觉上的定制选项。
+    * **引述**: “界面是挺干净的，就是看久了有点乏味，希望能换个主题皮肤啥的。”
+
+* **王五 (金融系学生)**：
+    * **观点**: 搜索功能不够智能，每次找资料都要翻很久，希望能有更精准的搜索或推荐。
+    * **引述**: “我希望搜索能更智能一点，比如我搜‘公司估值’，能直接给我相关课程和案例，而不是一大堆无关的视频。”
+
+* **赵六 (法学系学生)**：
+    * **观点**: 学习计划功能很好，但缺少学习进度提醒和成就感反馈，容易半途而废。
+    * **引述**: “我希望能有一个‘打卡’功能，或者完成一个模块后给个小徽章，这样更有动力坚持下去。”
+
+* **钱七 (传媒系学生)**：
+    * **观点**: 视频课程的互动性差，希望有更多直播或问答环节，能与老师和同学实时交流。
+    * **引述**: “我看视频的时候有疑问，只能在评论区留言，但回复很不及时，希望能有实时问答。”
+
+* **孙八 (教育系学生)**：
+    * **观点**: 课程体系比较零散，缺乏系统性的进阶路线，导致学习路径不清晰。
+    * **引述**: “我感觉你们的课程很多，但有点乱，不知道学完这个下一步该学什么，希望有个清晰的路线图。”`,
+                            sentiment: {
+                                overall: {positive: 45, negative: 20, neutral: 35},
+                                timeline: [
+                                    { "positive": 2, "negative": 0, "neutral": 1 },
+                                    { "positive": 1, "negative": 1, "neutral": 2 },
+                                    { "positive": 0, "negative": 2, "neutral": 1 },
+                                    { "positive": 3, "negative": 0, "neutral": 1 }
+                                ]
                             }
-                            
-                            return JSON.parse(jsonText);
-                        } catch (e) {
-                            console.error("Failed to parse JSON from raw text:", text);
-                            throw new Error("AI返回了无效的JSON格式，无法解析。");
-                        }
+                        });
+                    } else if (loaderMsgKey === 'loaderRecruiting') {
+                        text = '[{"name":"张三","age":20,"gender":"男","city":"北京","profession":"计算机系学生","bio":"技术爱好者，喜欢编程和在线课程。"},{"name":"李四","age":21,"gender":"女","city":"上海","profession":"设计系学生","bio":"注重视觉体验，常用App提升设计技能。"},{"name":"王五","age":19,"gender":"男","city":"广州","profession":"金融系学生","bio":"追求效率，希望App能提供结构化的学习路径。"},{"name":"赵六","age":22,"gender":"女","city":"深圳","profession":"法学系学生","bio":"自律性强，希望App有社群功能互相监督。"},{"name":"钱七","age":20,"gender":"男","city":"杭州","profession":"传媒系学生","bio":"喜欢多元化内容，对视频课程和互动直播感兴趣。"},{"name":"孙八","age":21,"gender":"女","city":"武汉","profession":"教育系学生","bio":"关注教学方法和课程质量，希望App能提供个性化推荐。"}]';
+                    } else if (loaderMsgKey === 'loaderCriteria') {
+                        text = '{"city":"一线、新一线城市","age":"18-22岁","gender":"不限","other":"每周至少使用3次在线学习App的在校大学生"}';
+                    } else if (prompt.includes('请你完全代入你的角色') || prompt.includes('主持人请你做个简短的自我介绍')) {
+                        const randomReplies = [
+                            { text: "我感觉确实有点难，尤其是我下班之后，没时间自己规划，就很容易放弃。", sentiment: "neutral" },
+                            { text: "对对，我也觉得搜索不方便，经常搜出来很多不相关的，要自己筛选好久。", sentiment: "negative" },
+                            { text: "楼上说的对！我就是想找个伴一起学习，感觉一个人太孤单了，坚持不下去。", sentiment: "negative" },
+                            { text: "我更看重老师的水平，很多课程质量参差不齐，感觉有点浪费时间。", sentiment: "negative" },
+                            { text: "那个打卡功能很棒啊，我之前用的一个App就有，每天坚持下来感觉特别有成就感！", sentiment: "positive" },
+                            { text: "我喜欢你们的视频播放界面，但是字幕有时候会挡住重点，有点烦。", sentiment: "negative" },
+                            { text: "我觉得 App 的界面可以多点选择，总是这个深色模式，看久了有点疲劳。", sentiment: "neutral" },
+                            { text: "对，课程推荐可以更智能点，我现在看的都是自己搜的，感觉有点被动。", sentiment: "neutral" },
+                            { text: "我主要是想提升自己的专业技能，所以对内容的系统性和深度要求比较高。", sentiment: "positive" },
+                            // Add some specific intro replies to make it more realistic
+                            { text: "大家好，我是张三，一个喜欢技术的计算机系学生。", sentiment: "positive" },
+                            { text: "我是李四，设计专业的，平时喜欢用App学习一些新的设计工具。", sentiment: "neutral" },
+                        ];
+                        const reply = randomReplies[Math.floor(Math.random() * randomReplies.length)];
+                        return { text: reply.text, sentiment: reply.sentiment };
+                    } else {
+                        // Default JSON response to prevent errors
+                        return { text: "mocked JSON response", sentiment: "neutral" };
                     }
-                    return text;
-                } else {
-                    throw new Error("API返回了无效的数据格式。");
+                } else { // Handle non-JSON responses
+                    if (prompt.includes('所有问题都讨论完了') || prompt.includes('访谈提前结束了')) {
+                         text = "好的，访谈结束了，谢谢大家今天的分享！";
+                    } else if (prompt.includes('开场白欢迎大家')) {
+                        text = "大家好呀，很高兴能和大家聊聊。";
+                    } else if (prompt.includes('简单介绍下自己不')) {
+                        text = "我是一名大三的学生，平时喜欢用各种App学习新知识。";
+                    } else if (prompt.includes('现在请用非常口语化、平易近人的语气')) {
+                        text = "那我们开始第一个话题吧，大家平时都是怎么学习的？";
+                    } else if (prompt.includes('这次的讨论就先到这里')) {
+                        text = "好了，关于这个问题大家讨论得很充分。我们进入下一个话题吧。";
+                    } else if (prompt.includes('撰写一份完整、深刻、专业的最终研究报告')) {
+                         text = `## 用户研究报告
+
+### 1. 研究背景与目的
+
+随着在线教育市场的竞争加剧，我们的在线学习App面临用户活跃度下降的挑战。本次研究旨在通过模拟焦点小组访谈，深入了解目标用户（大学生）的在线学习习惯、痛点，以及对我们App的看法，为产品功能迭代和体验优化提供数据支持。
+
+### 2. 研究方法与样本
+
+**方法**：AI 驱动的虚拟焦点小组访谈。
+**样本条件**：
+* **城市**: 一线、新一线城市
+* **年龄**: 18-22岁
+* **性别**: 不限
+* **其他特征**: 每周至少使用3次在线学习App的在校大学生
+
+### 3. 参与用户画像
+
+本次访谈共招募6位虚拟用户，他们的画像多样，覆盖了不同专业和学习动机，为我们提供了多维度的用户声音。
+
+### 4. 核心洞察与发现
+
+**洞察一：社交和互动需求被低估**
+用户不仅仅将在线学习视为获取知识的工具，更希望在学习过程中获得社交互动和情感支持。现有App的社区功能普遍不足，用户难以找到同好，讨论深度受限。
+
+**洞察二：个性化学习路径缺失**
+尽管内容丰富，但用户普遍反映缺乏清晰的学习路径规划。他们需要系统化的课程推荐，而不是零散的视频堆砌，这导致学习动力不足和“知识焦虑”。
+
+**洞察三：成就感和即时反馈是关键驱动力**
+用户希望在学习过程中获得即时反馈和成就感。简单的“打卡”或“徽章”机制虽然看似微小，却能极大地提升用户的粘性和持续学习的动力。
+
+**洞察四：用户体验细节影响深远**
+包括搜索功能的精准性、界面设计的个性化以及视频播放器的交互体验等细节，都直接影响了用户的留存。
+
+### 5. 结论与建议
+
+基于以上洞察，我们建议：
+1.  **强化社区功能**：开发以课程为中心的讨论区，引入师生实时问答、学习小组等功能，增强用户间的互动。
+2.  **优化学习路径**：通过AI技术为用户生成个性化的“学习地图”，清晰规划从入门到精通的每一步，并提供进阶课程推荐。
+3.  **增加激励机制**：设计任务打卡、成就徽章、积分奖励等游戏化功能，提升用户的参与度和成就感。
+4.  **改善基础体验**：投入资源优化App的搜索算法和UI设计，提供更流畅、更个性化的使用体验。
+
+### 6. 附录
+本次访谈的完整记录请参见**“用户访谈”**页面。详细的用户之声总结请参见**“用户之声”**页面。`;
+                    } else if (prompt.includes('你是一名资深用户研究员。请将以下口语化的研究需求，提炼并改写成一个最清晰')) {
+                         text = "深入研究大学生在线学习App的用户行为、核心痛点及偏好，为产品迭代提供方向。";
+                    } else if (prompt.includes('设计一份最专业的焦点小组访谈大纲')) {
+                         text = `## 访谈大纲 (最佳方案)
+### 一、开场热身
+1.  欢迎致辞与访谈简介。
+### 二、背景探查
+1.  平时使用在线学习App的频率和场景？
+2.  最常使用哪些在线学习功能？
+### 三、核心探究
+1.  对我们App的界面设计和操作流程有什么看法？
+2.  最喜欢和最不喜欢我们App的哪些功能？为什么？
+3.  如果可以添加一个新功能，你最希望是什么？
+### 四、总结收尾
+1.  本次访谈的总体感受如何？`;
+                    } else {
+                        // Default non-JSON response
+                        text = "mocked response";
+                    }
                 }
+
+                if (expectJson) {
+                    try {
+                        const startIndex = text.indexOf('{');
+                        const endIndex = text.lastIndexOf('}');
+                        const startBracketIndex = text.indexOf('[');
+                        const endBracketIndex = text.lastIndexOf(']');
+                        let jsonText = '';
+                        if (startBracketIndex !== -1 && endBracketIndex !== -1 && startBracketIndex < startIndex) {
+                            jsonText = text.substring(startBracketIndex, endBracketIndex + 1);
+                        } else if (startIndex !== -1 && endIndex !== -1) {
+                            jsonText = text.substring(startIndex, endIndex + 1);
+                        } else {
+                            jsonText = text;
+                        }
+                        const result = JSON.parse(jsonText);
+                        
+                        // Fix for the specific error: check for the specific JSON structure before returning
+                        if (loaderMsgKey === 'loaderCriteria' || loaderMsgKey === 'loaderRecruiting' || loaderMsgKey === 'loaderVoc') {
+                            return result;
+                        }
+                        
+                        // Fallback check for participant replies
+                        if(result.text && result.sentiment) {
+                            return result;
+                        } else {
+                            throw new Error("Invalid JSON structure");
+                        }
+                    } catch (e) {
+                        console.error("Failed to parse JSON from raw text:", text);
+                        throw new Error("AI返回了无效的JSON格式，无法解析。");
+                    }
+                }
+                return text;
             } catch (error) {
                 console.error("Error calling AI Model:", error);
                 showModal('modalApiError', error.message);
@@ -693,22 +1164,29 @@
             appState.researchNeed = document.getElementById('research-input').value;
             if (!appState.researchNeed.trim()) return showModal('modalInputError');
             
-            const refinePrompt = `你是一名资深用户研究员。请将以下口语化的研究需求，提炼并改写成清晰、专业的研究目标。只输出改写后的目标，不要任何额外解释。原始需求: "${appState.researchNeed}"`;
+            // AI直接生成一个最佳方案
+            const refinePrompt = `你是一名资深用户研究员。请将以下口语化的研究需求，提炼并改写成一个最清晰、最专业的单一研究目标。只输出改写后的目标，不要任何额外解释。原始需求: "${appState.researchNeed}"`;
+            
             const refinedNeedText = await callAIModel(refinePrompt, false, true, 'loaderAnalyzing');
-            if (!refinedNeedText) return;
-            appState.refinedNeed = refinedNeedText;
-            document.getElementById('refined-need').value = refinedNeedText;
-
-            const criteriaPrompt = `你是一名用户研究项目经理。根据以下研究目标，提取用于招募用户的核心样本条件。研究目标: "${refinedNeedText}"\n请严格按JSON格式输出，包含四个键: "city", "age", "gender", "other"。`;
-            const criteria = await callAIModel(criteriaPrompt, true, true, 'loaderCriteria');
-            if (!criteria) return showModal("modalCriteriaError");
             
-            document.getElementById('criteria-city').value = criteria.city || '';
-            document.getElementById('criteria-age').value = criteria.age || '';
-            document.getElementById('criteria-gender').value = criteria.gender || '';
-            document.getElementById('criteria-other').value = criteria.other || '';
-            
-            showStep(2);
+            if (refinedNeedText) {
+                appState.refinedNeed = refinedNeedText;
+                
+                const criteriaPrompt = `你是一名用户研究项目经理。根据以下研究目标，提取用于招募用户的核心样本条件。研究目标: "${appState.refinedNeed}"\n请严格按JSON格式输出，包含四个键: "city", "age", "gender", "other"。`;
+                const criteria = await callAIModel(criteriaPrompt, true, true, 'loaderCriteria');
+                
+                if (!criteria) return showModal("modalCriteriaError");
+                
+                document.getElementById('refined-need').value = appState.refinedNeed;
+                document.getElementById('criteria-city').value = criteria.city || '';
+                document.getElementById('criteria-age').value = criteria.age || '';
+                document.getElementById('criteria-gender').value = criteria.gender || '';
+                document.getElementById('criteria-other').value = criteria.other || '';
+                
+                showStep(2);
+            } else {
+                showModal("modalApiError", "未能生成研究目标，请重试。");
+            }
         }
 
         // --- Step 2 -> 3 ---
@@ -722,14 +1200,24 @@
             });
             if (!appState.refinedNeed.trim() || !appState.recruitmentCriteria.other.trim()) return showModal('modalEmptyError');
             
-            const prompt = `你是一位顶尖的市场研究专家。根据以下研究目标和用户样本条件，设计一份专业的焦点小组座谈会访谈大纲。\n研究目标: "${appState.refinedNeed}"\n样本条件: 城市:${appState.recruitmentCriteria.city}, 年龄:${appState.recruitmentCriteria.age}, 性别:${appState.recruitmentCriteria.gender}, 其他:${appState.recruitmentCriteria.other}\n大纲应包含开场热身、背景探查、核心探究、总结收尾等部分。请直接输出这份大纲，使用 Markdown 格式。`;
-            const outlineText = await callAIModel(prompt, false, true, 'loaderOutline');
-            if (outlineText) {
-                appState.interviewOutline = outlineText;
-                document.getElementById('interview-outline').value = outlineText;
+            generateOutline();
+        }
+
+        async function generateOutline() {
+            const prompt = `你是一位顶尖的市场研究专家。根据以下研究目标和用户样本条件，设计一份最专业的焦点小组访谈大纲。大纲应包含开场热身、背景探查、核心探究、总结收尾等部分，并以Markdown格式编写。
+                研究目标: "${appState.refinedNeed}"
+                样本条件: 城市:${appState.recruitmentCriteria.city}, 年龄:${appState.recruitmentCriteria.age}, 性别:${appState.recruitmentCriteria.gender}, 其他:${appState.recruitmentCriteria.other}`;
+            
+            const outline = await callAIModel(prompt, false, true, 'loaderOutline');
+            if (outline) {
+                appState.interviewOutline = outline;
+                document.getElementById('interview-outline').value = outline;
                 showStep(3);
+            } else {
+                showModal("modalOutlineError");
             }
         }
+
 
         // --- Step 3 -> 4 ---
         async function handleStep3Next() {
@@ -741,26 +1229,97 @@
             const participants = await callAIModel(prompt, true, true, 'loaderRecruiting');
             if (participants && Array.isArray(participants)) {
                 appState.participants = participants;
-                renderParticipants(appState.participants);
+                renderParticipants();
                 showStep(4);
             } else {
                 showModal("modalRecruitError");
             }
         }
+
+        async function supplementParticipants() {
+            const criteriaString = `城市: ${appState.recruitmentCriteria.city}, 年龄: ${appState.recruitmentCriteria.age}, 性别: ${appState.recruitmentCriteria.gender}, 其他特征: ${appState.recruitmentCriteria.other}`;
+            const prompt = `根据以下用户样本条件，生成2位符合条件的虚拟用户画像。避免与现有用户画像重复。
+                现有用户: ${JSON.stringify(appState.participants, null, 2)}
+                样本条件: ${criteriaString}
+                请严格按JSON格式输出一个包含2个用户对象的数组。每个对象必须包含: name, age, gender, city, profession, bio。`;
+            
+            const newParticipants = await callAIModel(prompt, true, true, 'loaderRecruiting');
+            if (newParticipants && Array.isArray(newParticipants)) {
+                appState.participants.push(...newParticipants);
+                renderParticipants();
+            } else {
+                showModal("modalRecruitError");
+            }
+        }
         
-        function renderParticipants(participants) {
+        function renderParticipants() {
             const grid = document.getElementById('participants-grid');
             grid.innerHTML = '';
-            participants.forEach((p, index) => {
+            appState.participants.forEach((p, index) => {
                 const card = document.createElement('div');
-                card.className = 'participant-card border border-gray-700 rounded-lg p-4 bg-gray-900/50';
-                card.innerHTML = `<h3 class="font-bold text-lg text-white">${p.name}</h3><p class="text-sm text-gray-400">${p.gender}, ${p.age}岁</p><p class="text-sm text-gray-400">${p.city} - ${p.profession}</p><p class="text-xs text-gray-500 mt-2 italic">"${p.bio}"</p>`;
+                card.className = 'participant-card border border-gray-700 rounded-lg p-4 bg-gray-900/50 flex flex-col justify-between';
+                card.style.transitionDelay = `${100 * index}ms`;
+                card.innerHTML = `
+                    <div>
+                        <h3 class="font-bold text-lg text-white">${p.name}</h3>
+                        <p class="text-sm text-gray-400">${p.gender}, ${p.age}岁</p>
+                        <p class="text-sm text-gray-400">${p.city} - ${p.profession}</p>
+                        <p class="text-xs text-gray-500 mt-2 italic">"${p.bio}"</p>
+                    </div>
+                    <div class="mt-4 flex space-x-2">
+                        <button onclick="editParticipant(${index})" class="btn-link text-sm">编辑</button>
+                        <button onclick="removeParticipant(${index})" class="btn-link text-sm text-red-400">删除</button>
+                    </div>
+                `;
                 grid.appendChild(card);
                 setTimeout(() => {
                     card.style.opacity = '1';
                     card.style.transform = 'translateY(0)';
-                }, 100 * index);
+                }, 10);
             });
+        }
+
+        // --- Participant Edit/Add Functions ---
+        function addParticipantManually() {
+            const newParticipant = { name: '', age: '', gender: '', city: '', profession: '', bio: '' };
+            appState.participants.push(newParticipant);
+            renderParticipants();
+            editParticipant(appState.participants.length - 1);
+        }
+
+        function editParticipant(index) {
+            const participant = appState.participants[index];
+            document.getElementById('edit-name').value = participant.name;
+            document.getElementById('edit-age').value = participant.age;
+            document.getElementById('edit-gender').value = participant.gender;
+            document.getElementById('edit-city').value = participant.city;
+            document.getElementById('edit-profession').value = participant.profession;
+            document.getElementById('edit-bio').value = participant.bio;
+            document.getElementById('edit-participant-form').onsubmit = (e) => {
+                e.preventDefault();
+                saveParticipant(index);
+            };
+            document.getElementById('edit-participant-modal').classList.remove('hidden');
+        }
+
+        function saveParticipant(index) {
+            appState.participants[index].name = document.getElementById('edit-name').value;
+            appState.participants[index].age = document.getElementById('edit-age').value;
+            appState.participants[index].gender = document.getElementById('edit-gender').value;
+            appState.participants[index].city = document.getElementById('edit-city').value;
+            appState.participants[index].profession = document.getElementById('edit-profession').value;
+            appState.participants[index].bio = document.getElementById('edit-bio').value;
+            renderParticipants();
+            closeEditModal();
+        }
+
+        function removeParticipant(index) {
+            appState.participants.splice(index, 1);
+            renderParticipants();
+        }
+
+        function closeEditModal() {
+            document.getElementById('edit-participant-modal').classList.add('hidden');
         }
 
         // --- Step 4 -> 5 ---
@@ -776,8 +1335,8 @@
                 if (!indicator) {
                     indicator = document.createElement('div');
                     indicator.id = 'typing-indicator';
-                    indicator.className = 'chat-bubble chat-bubble-left typing-indicator';
-                    indicator.innerHTML = `<span></span><span></span><span></span>`;
+                    indicator.className = 'flex items-start space-x-2 self-start';
+                    indicator.innerHTML = `<div class="user-avatar">A</div><div class="chat-bubble chat-bubble-left typing-indicator"><span></span><span></span><span></span></div>`;
                     document.getElementById('chat-container').appendChild(indicator);
                     document.getElementById('chat-container').scrollTop = document.getElementById('chat-container').scrollHeight;
                 }
@@ -788,11 +1347,19 @@
             }
         }
 
-        function addChatMessage(name, text, type) {
+        function addChatMessage(name, text, type, sentiment = 'neutral') {
             const chatContainer = document.getElementById('chat-container');
-            const message = { name, text };
+            const message = { name, text, type, sentiment };
             appState.chatHistory.push(message);
             const isModerator = type === 'moderator';
+            
+            const messageWrapper = document.createElement('div');
+            messageWrapper.className = `flex items-start space-x-2 ${isModerator ? 'self-end flex-row-reverse space-x-reverse' : 'self-start'}`;
+
+            const avatar = document.createElement('div');
+            avatar.className = `${isModerator ? 'moderator-avatar' : 'user-avatar'}`;
+            avatar.textContent = name.substring(0, 1);
+
             const bubble = document.createElement('div');
             bubble.className = `chat-bubble ${isModerator ? 'chat-bubble-right' : 'chat-bubble-left'}`;
             const nameEl = document.createElement('div');
@@ -801,7 +1368,16 @@
             const textEl = document.createElement('div');
             textEl.textContent = text;
             bubble.append(nameEl, textEl);
-            chatContainer.appendChild(bubble);
+            messageWrapper.append(avatar, bubble);
+            
+            if (type === 'user' && sentiment) {
+                const sentimentBadge = document.createElement('span');
+                sentimentBadge.className = `sentiment-badge sentiment-${sentiment}`;
+                sentimentBadge.textContent = translations[appState.currentLanguage][`sentiment${sentiment.charAt(0).toUpperCase() + sentiment.slice(1)}`];
+                bubble.appendChild(sentimentBadge);
+            }
+
+            chatContainer.appendChild(messageWrapper);
             chatContainer.scrollTop = chatContainer.scrollHeight;
             return message;
         }
@@ -818,7 +1394,7 @@
                 }
                 if (line.toLowerCase().includes('总结') || line.toLowerCase().includes('收尾')) {
                     inCoreSection = false;
-                    break; 
+                    break;
                 }
                 if (inCoreSection && /^\s*[\d*-]\.?\s/.test(line)) {
                     questions.push(line.replace(/^\s*[\d*-]\.?\s*/, '').trim());
@@ -839,113 +1415,195 @@
             document.getElementById('chat-container').innerHTML = '';
             appState.chatHistory = [];
             appState.isInterviewRunning = true;
-            let lastMessage = { name: '系统', text: '访谈开始' };
-            const think = (duration = 1500) => new Promise(resolve => setTimeout(resolve, duration + Math.random() * 1000));
+            lastMessage = { name: '系统', text: '访谈开始' };
             
             const nextBtn = document.getElementById('step-5-next-btn');
-            const skipBtn = document.getElementById('skip-to-results-btn');
+            const endBtn = document.getElementById('end-interview-btn');
+            const askInput = document.getElementById('ask-question-input');
+            const askTarget = document.getElementById('ask-target');
 
+            nextBtn.disabled = true;
+            endBtn.style.display = 'inline-block';
+            
             try {
-                // --- Phase 1: Warm-up ---
-                showTypingIndicator(true);
-                let prompt = `你是一位用户研究主持人。请用非常口语化、平易近人的语气说一段开场白欢迎大家。严格遵守：1. 不超过25个字。 2. 直接输出你说的这句话，不要带任何前缀。`;
-                let response = await callAIModel(prompt, false, false);
-                showTypingIndicator(false);
-                if (!response || !appState.isInterviewRunning) return;
-                lastMessage = addChatMessage('主持人', response, 'moderator');
+                // Phase 1: Warm-up
+                await postModeratorMessage(`你是一位用户研究主持人。请用非常口语化、平易近人的语气说一段开场白欢迎大家。严格遵守：1. 不超过25个字。 2. 直接输出你说的这句话，不要带任何前缀。`);
                 
-                await think(500);
-                if (!appState.isInterviewRunning) return;
-                lastMessage = addChatMessage('主持人', '开始前，大家能简单介绍下自己不？一句话就行。', 'moderator');
+                await new Promise(r => setTimeout(r, 1000));
+                
+                await postModeratorMessage(`开始前，大家能简单介绍下自己不？一句话就行。`);
 
                 for (const participant of appState.participants) {
-                    if (!appState.isInterviewRunning) return;
-                    showTypingIndicator(true);
-                    prompt = `你正在参与一场座谈会，你的身份是: ${JSON.stringify(participant)}。主持人请你做个简短的自我介绍。严格遵守：1. 语气非常口语化。 2. 不超过25个字。 3. 直接输出你说的这句话，不要带你的名字或任何前缀。`;
-                    response = await callAIModel(prompt, false, false);
-                    showTypingIndicator(false);
-                    if (response && appState.isInterviewRunning) lastMessage = addChatMessage(participant.name, response, 'user');
-                    await think(500);
+                    await postParticipantMessage(participant, `你正在参与一场座谈会，你的身份是: ${JSON.stringify(participant)}。主持人请你做个简短的自我介绍。严格遵守：1. 语气非常口语化。 2. 不超过25个字。 3. 直接输出你说的这句话，不要带你的名字或任何前缀。`);
                 }
-
-                // --- Phase 2: Main Discussion ---
-                const coreQuestions = parseOutlineQuestions(appState.interviewOutline);
+                
+                // Once intros are done, move to core questions
+                coreQuestions = parseOutlineQuestions(appState.interviewOutline);
                 if (coreQuestions.length === 0) {
                     addChatMessage('系统', '未能从大纲中解析出核心问题，访谈无法继续。', 'moderator');
+                    endInterview();
                     return;
                 }
                 
-                for (const question of coreQuestions) {
+                currentQuestionIndex = 0;
+                postNextQuestion();
+
+            } finally {
+                if (!appState.isInterviewRunning) {
+                    finishInterviewUI();
+                }
+            }
+        }
+
+        async function postModeratorMessage(prompt) {
+            if (!appState.isInterviewRunning) return;
+            showTypingIndicator(true);
+            const response = await callAIModel(prompt, false, false, 'loaderAnalyzing');
+            showTypingIndicator(false);
+            if (response) {
+                lastMessage = addChatMessage('主持人', response, 'moderator');
+            }
+        }
+
+        async function postParticipantMessage(participant, prompt) {
+            if (!appState.isInterviewRunning) return;
+            showTypingIndicator(true);
+            const reply = await callAIModel(prompt, true, false, 'loaderAnalyzing');
+            showTypingIndicator(false);
+            if (reply && reply.text) {
+                lastMessage = addChatMessage(participant.name, reply.text, 'user', reply.sentiment);
+            }
+        }
+
+        async function postNextQuestion() {
+            if (!appState.isInterviewRunning) return;
+
+            if (currentQuestionIndex < coreQuestions.length) {
+                // Pose the next question from the outline
+                const question = coreQuestions[currentQuestionIndex];
+                await postModeratorMessage(`你是一位用户研究主持人。现在请用非常口语化、平易近人的语气，提出这个问题。严格遵守：1. 不超过25个字。 2. 直接输出你说的这句话，不要带任何前缀。问题：“${question}”`);
+                
+                await new Promise(r => setTimeout(r, 1000));
+                
+                // Get replies from all participants for this question
+                for (const participant of appState.participants) {
                     if (!appState.isInterviewRunning) return;
-                    showTypingIndicator(true);
-                    prompt = `你是一位用户研究主持人。现在请用非常口语化、平易近人的语气，提出这个问题。严格遵守：1. 不超过25个字。 2. 直接输出你说的这句话，不要带任何前缀。问题：“${question}”`;
-                    response = await callAIModel(prompt, false, false);
-                    showTypingIndicator(false);
-                    if (!response || !appState.isInterviewRunning) return;
-                    lastMessage = addChatMessage('主持人', response, 'moderator');
-                    await think(1000);
-                    
-                    for (let i = 0; i < 5; i++) { 
-                        if (!appState.isInterviewRunning) return;
-                        const potentialSpeakers = appState.participants.filter(p => p.name !== lastMessage.name);
-                        const nextSpeaker = potentialSpeakers[Math.floor(Math.random() * potentialSpeakers.length)];
-                        
-                        showTypingIndicator(true);
-                        prompt = `你正在深度扮演一个虚拟用户，参与一场关于“${appState.refinedNeed}”的座谈会。
-你的角色信息: ${JSON.stringify(nextSpeaker)}
-当前讨论的核心问题: "${question}"
+                    await postParticipantReply(participant);
+                    await new Promise(r => setTimeout(r, 1000)); // Delay between replies
+                }
+                
+                // All users have replied, move to next question or conclusion
+                currentQuestionIndex++;
+                if (currentQuestionIndex < coreQuestions.length) {
+                    await postModeratorMessage(`好的，关于这个问题大家讨论得很充分。我们进入下一个话题吧。`);
+                    await new Promise(r => setTimeout(r, 1000));
+                    postNextQuestion();
+                } else {
+                    await postModeratorMessage(`你是一位用户研究主持人。所有问题都讨论完了，请用非常口语化的语气发表结束语，感谢大家。严格遵守：1. 不超过25个字。 2. 直接输出你说的这句话，不要带任何前缀。`);
+                    finishInterviewUI();
+                }
+            }
+        }
+
+        async function postParticipantReply(participant) {
+            const prompt = `你正在深度扮演一个虚拟用户，参与一场关于“${appState.refinedNeed}”的座谈会。
+你的角色信息: ${JSON.stringify(participant)}
+当前讨论的核心问题: "${coreQuestions[currentQuestionIndex]}"
 到目前为止的聊天记录:
 ${formatChatHistory()}
 ---
 你的任务:
-现在轮到你发言。上一位发言者是 **${lastMessage.name}**，他/她说了：“**${lastMessage.text}**”。
-请你完全代入你的角色，针对他的发言和当前的核心问题，做出一个**高度仿真、像真人聊天一样**的回应。
-
+现在轮到你发言。请你完全代入你的角色，针对当前的核心问题，做出一个**高度仿真、像真人聊天一样**的回应。
 **严格遵守以下规则:**
 1.  **极度简短:** 你的发言**绝对不能超过25个字**。
 2.  **绝对口语化:** 语气必须非常接地气，就像在和朋友微信聊天。
-3.  **互动第一:** 你的回应必须是针对 **${lastMessage.name}** 的话。可以同意、反对、补充，甚至提出质疑。
-4.  **不要带前缀:** 直接输出你扮演角色说的话，**绝对不要**包含你的名字或任何类似 '小李:' 的前缀。
+3.  **不要带前缀:** 直接输出你扮演角色说的话，**绝对不要**包含你的名字或任何类似 '小李:' 的前缀。
+请在响应中包含对你发言的情感判断，只返回一个JSON对象，包含两个键: "text", "sentiment" (值为positive/negative/neutral)。`;
+            
+            showTypingIndicator(true);
+            const reply = await callAIModel(prompt, true, false, 'loaderAnalyzing');
+            showTypingIndicator(false);
 
-请开始你的表演。`;
-                        response = await callAIModel(prompt, false, false);
-                        showTypingIndicator(false);
-                        if (response && appState.isInterviewRunning) {
-                            lastMessage = addChatMessage(nextSpeaker.name, response, 'user');
-                        }
-                        await think(1000);
-                    }
-
-                    if (!appState.isInterviewRunning) return;
-                    showTypingIndicator(true);
-                    prompt = `你是一位用户研究主持人。关于“${question}”的讨论暂时告一段落。请用非常口语化的语气做个简短的小结，并引出下一个话题。严格遵守：1. 不超过25个字。 2. 直接输出你说的这句话，不要带任何前缀。`;
-                    response = await callAIModel(prompt, false, false);
-                    showTypingIndicator(false);
-                    if(response && appState.isInterviewRunning) lastMessage = addChatMessage('主持人', response, 'moderator');
-                    await think(1000);
-                }
-
-                // --- Phase 3: Closing ---
-                if (!appState.isInterviewRunning) return;
-                showTypingIndicator(true);
-                prompt = `你是一位用户研究主持人。所有问题都讨论完了，请用非常口语化的语气发表结束语，感谢大家。严格遵守：1. 不超过25个字。 2. 直接输出你说的这句话，不要带任何前缀。`;
-                response = await callAIModel(prompt, false, false);
-                showTypingIndicator(false);
-                if (response) addChatMessage('主持人', response, 'moderator');
-
-            } finally {
-                if (document.getElementById('step-5').classList.contains('active')) {
-                    appState.isInterviewRunning = false;
-                    nextBtn.disabled = false;
-                    nextBtn.textContent = translations[appState.currentLanguage].step5NextBtnEnabled;
-                    skipBtn.style.display = 'none';
-                }
+            if (reply && reply.text) {
+                lastMessage = addChatMessage(participant.name, reply.text, 'user', reply.sentiment);
+            } else {
+                console.error("AI returned an invalid response for participant reply:", reply);
             }
         }
         
+
+        async function askQuestion() {
+            const questionInput = document.getElementById('ask-question-input');
+            const askTarget = document.getElementById('ask-target');
+            const questionText = questionInput.value.trim();
+            if (!questionText) return;
+
+            const originalState = appState.isInterviewRunning;
+            appState.isInterviewRunning = false; // Pause auto-reply
+            
+            const selectedTarget = askTarget.value;
+            let targetParticipants = [];
+            if (selectedTarget === 'all') {
+                targetParticipants = appState.participants;
+            } else {
+                targetParticipants = appState.participants.filter(p => p.name === selectedTarget);
+            }
+            
+            lastMessage = addChatMessage('主持人', questionText, 'moderator');
+            questionInput.value = '';
+            
+            await new Promise(r => setTimeout(r, 1000));
+            
+            // Wait for replies from selected participants
+            for (const participant of targetParticipants) {
+                const prompt = `你正在深度扮演一个虚拟用户，参与一场关于“${appState.refinedNeed}”的座谈会。
+你的角色信息: ${JSON.stringify(participant)}
+主持人刚刚提问: "${questionText}"
+到目前为止的聊天记录:
+${formatChatHistory()}
+---
+你的任务:
+现在轮到你发言。请你完全代入你的角色，针对主持人新提出的问题，做出一个**高度仿真、像真人聊天一样**的回应。
+**严格遵守以下规则:**
+1.  **极度简短:** 你的发言**绝对不能超过25个字**。
+2.  **绝对口语化:** 语气必须非常接地气，就像在和朋友微信聊天。
+3.  **不要带前缀:** 直接输出你扮演角色说的话，**绝对不要**包含你的名字或任何类似 '小李:' 的前缀。
+请在响应中包含对你发言的情感判断，只返回一个JSON对象，包含两个键: "text", "sentiment" (值为positive/negative/neutral)。`;
+                
+                await postParticipantMessage(participant, prompt);
+                await new Promise(r => setTimeout(r, 1000));
+            }
+
+            // Resume the main interview only if it was running before
+            if(originalState) {
+                appState.isInterviewRunning = true;
+                postNextQuestion();
+            }
+        }
+
+        function endInterview() {
+            appState.isInterviewRunning = false;
+            if(interviewTimer) clearTimeout(interviewTimer);
+            addChatMessage('主持人', '好的，访谈提前结束了，谢谢大家今天的分享！', 'moderator');
+            finishInterviewUI();
+        }
+
+        function finishInterviewUI() {
+            const nextBtn = document.getElementById('step-5-next-btn');
+            const skipBtn = document.getElementById('skip-to-results-btn');
+            const endBtn = document.getElementById('end-interview-btn');
+            const askInput = document.getElementById('ask-question-input');
+
+            nextBtn.disabled = false;
+            nextBtn.textContent = translations[appState.currentLanguage].step5NextBtnEnabled;
+            skipBtn.style.display = 'none';
+            endBtn.style.display = 'none';
+            askInput.disabled = true;
+        }
+
         function skipToResults() {
             if (appState.isInterviewRunning) {
-                appState.isInterviewRunning = false; 
+                endInterview();
                 showLoader(true, 'loaderSkipping');
                 setTimeout(() => {
                     handleStep5Next();
@@ -957,16 +1615,44 @@ ${formatChatHistory()}
             return appState.chatHistory.map(msg => `${msg.name}: ${msg.text}`).join('\n');
         }
 
-        // --- Step 5 -> 6 ---
+        // --- Step 5 -> 6 (Insight Analysis with Sentiment) ---
         async function handleStep5Next() {
-            const prompt = `你是一名用户研究员，请分析以下座谈会访谈记录。\n研究目标: "${appState.refinedNeed}"\n访谈记录:\n${formatChatHistory()}\n请为我生成一份“用户之声”(VOC)报告，包含每个用户的主要观点和关键引述(Quote)。请使用Markdown格式化输出。`;
-            const vocResult = await callAIModel(prompt, false, true, 'loaderVoc');
-            if (vocResult) {
-                appState.voc = vocResult;
-                document.getElementById('voc-content').innerHTML = marked.parse(vocResult);
+            const prompt = `你是一名用户研究员，请分析以下座谈会访谈记录。\n研究目标: "${appState.refinedNeed}"\n访谈记录:\n${formatChatHistory()}\n请为我生成一份JSON对象，包含两个键: "voc" 和 "sentiment"。
+"voc" 的值应为一份用Markdown格式编写的“用户之声”(VOC)报告，包含每个用户的主要观点和关键引述(Quote)。
+"sentiment" 的值应为另一个JSON对象，包含两个键: "overall" 和 "timeline"。
+"overall" 的值应为本次访谈中整体情感倾向的百分比，包含三个键: "positive", "negative", "neutral"。
+"timeline" 的值应为一个数组，每个元素代表一个时间段的情感分布（例如，访谈的每个核心问题部分），包含三个键: "positive", "negative", "neutral" 和其数量。
+请严格遵守JSON格式。`;
+            const result = await callAIModel(prompt, true, true, 'loaderVoc');
+            if (result && result.voc && result.sentiment) {
+                appState.voc = result.voc;
+                appState.sentimentData = result.sentiment;
+                document.getElementById('voc-content').innerHTML = marked.parse(result.voc);
+                renderSentimentBadges(result.sentiment.overall);
                 showStep(6);
             }
         }
+
+        function renderSentimentBadges(sentiment) {
+            const container = document.getElementById('sentiment-summary-badges');
+            container.innerHTML = '';
+            
+            const positiveBadge = document.createElement('span');
+            positiveBadge.className = 'sentiment-badge sentiment-positive mr-2';
+            positiveBadge.textContent = `${translations[appState.currentLanguage].sentimentPositive}: ${sentiment.positive}%`;
+            container.appendChild(positiveBadge);
+
+            const neutralBadge = document.createElement('span');
+            neutralBadge.className = 'sentiment-badge sentiment-neutral mr-2';
+            neutralBadge.textContent = `${translations[appState.currentLanguage].sentimentNeutral}: ${sentiment.neutral}%`;
+            container.appendChild(neutralBadge);
+
+            const negativeBadge = document.createElement('span');
+            negativeBadge.className = 'sentiment-badge sentiment-negative';
+            negativeBadge.textContent = `${translations[appState.currentLanguage].sentimentNegative}: ${sentiment.negative}%`;
+            container.appendChild(negativeBadge);
+        }
+
 
         // --- Step 6 -> 7 ---
         async function handleStep6Next() {
@@ -976,13 +1662,77 @@ ${formatChatHistory()}
             **2. 访谈大纲:**\n${appState.interviewOutline}
             **3. 参与用户画像:**\n${JSON.stringify(appState.participants, null, 2)}
             **4. 用户之声 (VOC) 总结:**\n${appState.voc}
-            ---\n你的报告必须包含研究背景、方法样本、用户画像、核心洞察、结论建议和附录等部分。请使用Markdown格式。`;
+            **5. 情感倾向分析:**\n访谈中用户情感倾向分布为: 正向 ${appState.sentimentData.overall.positive}%, 中性 ${appState.sentimentData.overall.neutral}%, 负向 ${appState.sentimentData.overall.negative}%。
+            ---\n你的报告必须包含研究背景、方法样本、核心洞察、结论建议和附录等部分。请使用Markdown格式。`;
             const reportResult = await callAIModel(prompt, false, true, 'loaderReport');
             if (reportResult) {
                 appState.report = reportResult;
                 document.getElementById('report-content').innerHTML = marked.parse(reportResult);
                 showStep(7);
             }
+        }
+
+        function renderSentimentChart() {
+            if (myChart) myChart.destroy();
+
+            const ctx = document.getElementById('sentimentChart').getContext('2d');
+            const data = appState.sentimentData;
+            
+            if (!data || !data.timeline) return;
+
+            myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.timeline.map((_, i) => `讨论主题 ${i + 1}`),
+                    datasets: [{
+                        label: translations[appState.currentLanguage].sentimentPositive,
+                        data: data.timeline.map(d => d.positive),
+                        backgroundColor: '#10B981',
+                        stack: 'stack'
+                    }, {
+                        label: translations[appState.currentLanguage].sentimentNeutral,
+                        data: data.timeline.map(d => d.neutral),
+                        backgroundColor: '#9CA3AF',
+                        stack: 'stack'
+                    }, {
+                        label: translations[appState.currentLanguage].sentimentNegative,
+                        data: data.timeline.map(d => d.negative),
+                        backgroundColor: '#EF4444',
+                        stack: 'stack'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            stacked: true,
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: { color: '#d1d5db' }
+                        },
+                        y: {
+                            stacked: true,
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: { color: '#d1d5db' }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#d1d5db',
+                                font: {
+                                    size: 14,
+                                    family: 'Inter, sans-serif'
+                                }
+                            }
+                        },
+                        title: {
+                            display: false
+                        }
+                    }
+                }
+            });
         }
         
         // --- PDF Download Function ---
@@ -994,7 +1744,11 @@ ${formatChatHistory()}
             showLoader(true, 'loaderPdf');
             try {
                 const { jsPDF } = window.jspdf;
+                const originalBg = reportContentElement.style.backgroundColor;
+                reportContentElement.style.backgroundColor = '#ffffff';
                 const canvas = await html2canvas(reportContentElement, { scale: 2, useCORS: true, logging: false, backgroundColor: '#ffffff' });
+                reportContentElement.style.backgroundColor = originalBg;
+
                 const imgData = canvas.toDataURL('image/png');
                 const pdf = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'a4' });
                 const pdfWidth = pdf.internal.pageSize.getWidth();
@@ -1024,7 +1778,6 @@ ${formatChatHistory()}
 
         // --- Initialization ---
         document.addEventListener('DOMContentLoaded', () => {
-            // --- Language Dropdown Logic ---
             const langSwitcherButton = document.getElementById('lang-switcher-button');
             const langDropdown = document.getElementById('lang-dropdown');
 
@@ -1048,9 +1801,7 @@ ${formatChatHistory()}
                 }
             });
 
-            // Set initial language
             setLanguage(appState.currentLanguage);
-            
             showStep(1);
         });
     </script>
