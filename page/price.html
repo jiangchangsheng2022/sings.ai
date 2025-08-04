@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
     <style>
-        /* 自定义样式，使其更接近 sings.ai 的风格 */
+        /* 自定义样式 */
         body {
             font-family: 'Inter', sans-serif;
             background-color: #000000;
@@ -90,41 +90,40 @@
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
+        /* 语言切换样式 */
+        .lang-zh .en, .lang-en .zh {
+            display: none;
+        }
     </style>
 </head>
 <body class="glow-background">
 
-    <!-- 导航栏 HTML 代码 -->
+    <!-- 导航栏 HTML 代码 (已简化并修复) -->
     <nav class="fixed top-0 left-0 right-0 z-50 p-4">
         <div class="container mx-auto glass-morphism rounded-xl p-2 px-4 flex justify-between items-center">
-            <!-- 左侧: 返回主页按钮和 Logo -->
+            <!-- Logo -->
             <div class="flex items-center space-x-4">
-                <a href="https://sings.ai/#" class="flex items-center text-gray-300 hover:text-white transition-colors">
-                    <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-                    返回主页
-                </a>
-                <a href="https://sings.ai/#" class="text-xl font-bold text-white">sings.ai</a>
+                <a href="https://sings.ai/" class="text-xl font-bold text-white">sings.ai</a>
+            </div>
+            
+            <!-- 桌面端语言切换 -->
+            <div class="hidden md:flex items-center">
+                <a href="#" id="lang-toggle" class="text-gray-300 hover:text-white transition-colors border border-gray-600 hover:border-gray-400 rounded-lg px-3 py-2 text-sm font-medium">中 / EN</a>
             </div>
 
-            <!-- 中间: 导航链接 (桌面端显示) -->
-            <div class="hidden md:flex items-center space-x-8">
-                <a href="#" class="text-gray-300 hover:text-white transition-colors">产品</a>
-                <a href="#" class="text-gray-300 hover:text-white transition-colors">方案</a>
-                <a href="#" class="text-gray-300 hover:text-white transition-colors">资源</a>
-                <a href="#" class="text-gray-300 hover:text-white transition-colors">定价</a>
-            </div>
-
-            <!-- 右侧: 操作按钮 (桌面端显示) -->
-            <div class="hidden md:flex items-center space-x-4">
-                <a href="#" class="text-gray-300 hover:text-white transition-colors">登录</a>
-                <a href="#" class="gradient-button text-white font-semibold py-2 px-4 rounded-lg">免费开始</a>
-            </div>
             <!-- 移动端菜单按钮 -->
             <div class="md:hidden">
-                <button class="text-white">
+                <button id="mobile-menu-button" class="text-white">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
                 </button>
             </div>
+        </div>
+        <!-- 移动端菜单 (只保留语言切换) -->
+        <div id="mobile-menu" class="container mx-auto glass-morphism rounded-xl mt-2 p-4 hidden md:hidden">
+            <a href="#" id="lang-toggle-mobile" class="block text-center text-gray-300 hover:text-white transition-colors py-2">
+                <span class="zh">切换到 English</span>
+                <span class="en">Switch to 中文</span>
+            </a>
         </div>
     </nav>
 
@@ -133,19 +132,29 @@
         <!-- 1. 标题和价格切换 -->
         <header class="text-center max-w-3xl mx-auto mb-12 md:mb-16">
             <h1 class="text-4xl md:text-5xl font-black tracking-tighter mb-4">
-                选择<span class="gradient-text">适合你</span>的方案
+                 <span class="zh">选择<span class="gradient-text">适合你</span>的方案</span>
+                 <span class="en">Choose the <span class="gradient-text">Right Plan</span> for You</span>
             </h1>
             <p class="text-lg text-gray-400 mb-8">
-                从初创团队到大型企业，我们都有相应的解决方案，助你开启智能用户体验新时代。
+                <span class="zh">从初创团队到大型企业，我们都有相应的解决方案，助你开启智能用户体验新时代。</span>
+                <span class="en">From startups to large enterprises, we have a solution to help you usher in a new era of intelligent user experience.</span>
             </p>
             <div class="flex items-center justify-center space-x-4">
-                <span class="font-medium text-white">按月付费</span>
+                <span class="font-medium text-white">
+                    <span class="zh">按月付费</span>
+                    <span class="en">Monthly</span>
+                </span>
                 <label for="billing-toggle" class="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" id="billing-toggle" class="sr-only peer">
+                    <input type="checkbox" id="billing-toggle" class="sr-only peer" checked>
                     <div class="w-11 h-6 bg-gray-700 rounded-full toggle-bg peer-checked:bg-blue-600"></div>
                 </label>
                 <span class="font-medium text-white">
-                    按年付费 <span class="text-sm text-green-400">(节省 16%)</span>
+                    <span class="zh">按年付费</span>
+                    <span class="en">Annually</span>
+                    <span class="text-sm text-green-400">
+                        <span class="zh">(节省 16%)</span>
+                        <span class="en">(Save 16%)</span>
+                    </span>
                 </span>
             </div>
         </header>
@@ -153,94 +162,106 @@
         <!-- 2. 定价卡片 -->
         <div id="pricing-cards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto mb-16 md:mb-24">
             
-            <!-- 启动版 -->
+            <!-- 个人版 -->
             <div class="gradient-border rounded-2xl p-8 flex flex-col">
-                <h3 class="text-xl font-bold text-white">启动版</h3>
-                <p class="text-gray-400 mt-2 mb-6 h-12">适合初创公司和小型研究团队，快速启动 AI 用户研究。</p>
+                <h3 class="text-xl font-bold text-white"><span class="zh">个人版</span><span class="en">Personal</span></h3>
+                <p class="text-gray-400 mt-2 mb-6 h-12"><span class="zh">适合个人、学生和独立研究者，免费体验 AI 用户研究的魅力。</span><span class="en">Perfect for individuals, students, and indie researchers to experience AI user research for free.</span></p>
                 <div class="mb-6">
-                    <span class="text-4xl font-extrabold text-white" data-monthly="¥1,999" data-yearly="¥19,990">¥1,999</span>
-                    <span class="text-gray-400">/ 月</span>
+                    <span class="text-4xl font-extrabold text-white" data-monthly="<span class='text-green-400'>限时免费</span><span class='text-lg text-gray-500 line-through ml-2'>¥29</span>" data-yearly="<span class='text-green-400'>限时免费</span><span class='text-lg text-gray-500 line-through ml-2'>¥199</span>"></span>
+                    <span class="text-gray-400"></span>
                 </div>
-                <a href="#" class="w-full text-center py-3 px-6 rounded-lg font-semibold text-white bg-gray-700 hover:bg-gray-600 transition-colors">开始使用</a>
+                <a href="#" class="w-full text-center py-3 px-6 rounded-lg font-semibold text-white gradient-button"><span class="zh">立即免费使用</span><span class="en">Start for Free</span></a>
                 <ul class="mt-8 space-y-4 text-gray-300">
-                    <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>AI 访谈转写与分析</li>
-                    <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>问卷数据洞察</li>
-                    <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>每月 20 小时处理量</li>
-                    <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>2 个协作项目</li>
-                    <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>标准技术支持</li>
+                    <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span><span class="zh">AI 访谈转写与分析</span><span class="en">AI Interview Transcription & Analysis</span></span></li>
+                    <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span><span class="zh">问卷数据洞察</span><span class="en">Survey Data Insights</span></span></li>
+                    <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span><span class="zh">每月 20 小时处理量</span><span class="en">20 Processing Hours/Month</span></span></li>
+                    <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span><span class="zh">2 个协作项目</span><span class="en">2 Collaborative Projects</span></span></li>
+                    <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span><span class="zh">标准技术支持</span><span class="en">Standard Tech Support</span></span></li>
                 </ul>
             </div>
 
             <!-- 专业版 (高亮) -->
             <div class="gradient-border highlight-border rounded-2xl p-8 flex flex-col relative">
                 <div class="absolute top-0 -translate-y-1/2 w-full flex justify-center">
-                    <span class="gradient-button text-white text-xs font-bold px-4 py-1 rounded-full">最受欢迎</span>
+                    <span class="gradient-button text-white text-xs font-bold px-4 py-1 rounded-full"><span class="zh">最受欢迎</span><span class="en">Most Popular</span></span>
                 </div>
-                <h3 class="text-xl font-bold text-white">专业版</h3>
-                <p class="text-gray-400 mt-2 mb-6 h-12">为成长型企业和专业团队打造的一站式 SaaS 平台。</p>
+                <h3 class="text-xl font-bold text-white"><span class="zh">专业版</span><span class="en">Professional</span></h3>
+                <p class="text-gray-400 mt-2 mb-6 h-12"><span class="zh">为成长型企业和专业团队打造的一站式 SaaS 平台。</span><span class="en">The all-in-one SaaS platform for growing businesses and professional teams.</span></p>
                 <div class="mb-6">
-                    <span class="text-4xl font-extrabold text-white" data-monthly="¥4,999" data-yearly="¥49,990">¥4,999</span>
-                    <span class="text-gray-400">/ 月</span>
+                    <span class="text-4xl font-extrabold text-white" data-monthly="¥499" data-yearly="¥4,999"></span>
+                    <span class="text-gray-400"></span>
                 </div>
-                <a href="#" class="w-full text-center py-3 px-6 rounded-lg font-semibold text-white gradient-button">选择专业版</a>
+                <a href="#" class="w-full text-center py-3 px-6 rounded-lg font-semibold text-white gradient-button"><span class="zh">选择专业版</span><span class="en">Choose Pro</span></a>
                 <ul class="mt-8 space-y-4 text-gray-300">
-                    <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>包含<span class="font-semibold text-white mx-1">启动版</span>所有功能</li>
-                    <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>SaaS 平台自助服务</li>
-                    <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>多源数据接入</li>
-                    <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>每月 100 小时处理量</li>
-                    <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>无限协作项目</li>
-                    <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>优先技术支持</li>
+                    <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span><span class="zh">包含<span class="font-semibold text-white mx-1">个人版</span>所有功能</span><span class="en">All features in <span class="font-semibold text-white mx-1">Personal</span></span></span></li>
+                    <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span><span class="zh">SaaS 平台自助服务</span><span class="en">SaaS Platform Self-Service</span></span></li>
+                    <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span><span class="zh">多源数据接入</span><span class="en">Multi-Source Data Integration</span></span></li>
+                    <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span><span class="zh">每月 100 小时处理量</span><span class="en">100 Processing Hours/Month</span></span></li>
+                    <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span><span class="zh">无限协作项目</span><span class="en">Unlimited Collaborative Projects</span></span></li>
+                    <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span><span class="zh">优先技术支持</span><span class="en">Priority Tech Support</span></span></li>
                 </ul>
             </div>
 
             <!-- 企业版 -->
             <div class="gradient-border rounded-2xl p-8 flex flex-col">
-                <h3 class="text-xl font-bold text-white">企业版</h3>
-                <p class="text-gray-400 mt-2 mb-6 h-12">为大型企业提供深度定制的 AI 驱动全局体验管理系统。</p>
+                <h3 class="text-xl font-bold text-white"><span class="zh">企业版</span><span class="en">Enterprise</span></h3>
+                <p class="text-gray-400 mt-2 mb-6 h-12"><span class="zh">为大型企业提供深度定制的 AI 驱动全局体验管理系统。</span><span class="en">Deeply customized AI-driven CEM system for large enterprises.</span></p>
                 <div class="mb-6 h-12 flex items-center">
-                     <span class="text-3xl font-extrabold text-white">联系我们</span>
+                     <span class="text-3xl font-extrabold text-white"><span class="zh">联系我们</span><span class="en">Contact Us</span></span>
                 </div>
-                <a href="#" class="w-full text-center py-3 px-6 rounded-lg font-semibold text-white bg-gray-700 hover:bg-gray-600 transition-colors">预约演示</a>
+                <a href="#" class="w-full text-center py-3 px-6 rounded-lg font-semibold text-white bg-gray-700 hover:bg-gray-600 transition-colors"><span class="zh">预约演示</span><span class="en">Request a Demo</span></a>
                 <ul class="mt-8 space-y-4 text-gray-300">
-                    <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>包含<span class="font-semibold text-white mx-1">专业版</span>所有功能</li>
-                    <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>AI 驱动的 CEM 系统</li>
-                    <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>私有化部署选项</li>
-                    <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>定制化 AI 模型</li>
-                    <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>专属客户成功经理</li>
-                    <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>SLA 服务保障</li>
+                    <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span><span class="zh">包含<span class="font-semibold text-white mx-1">专业版</span>所有功能</span><span class="en">All features in <span class="font-semibold text-white mx-1">Professional</span></span></span></li>
+                    <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span><span class="zh">AI 驱动的 CEM 系统</span><span class="en">AI-Driven CEM System</span></span></li>
+                    <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span><span class="zh">私有化部署选项</span><span class="en">Private Deployment Option</span></span></li>
+                    <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span><span class="zh">定制化 AI 模型</span><span class="en">Customized AI Models</span></span></li>
+                    <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span><span class="zh">专属客户成功经理</span><span class="en">Dedicated CSM</span></span></li>
+                    <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span><span class="zh">SLA 服务保障</span><span class="en">SLA Guarantee</span></span></li>
                 </ul>
             </div>
         </div>
         
         <!-- 3. 常见问题 FAQ -->
         <section class="max-w-3xl mx-auto">
-            <h2 class="text-3xl font-bold text-center text-white mb-8">常见问题</h2>
+            <h2 class="text-3xl font-bold text-center text-white mb-8"><span class="zh">常见问题</span><span class="en">FAQ</span></h2>
             <div class="space-y-4">
                 <details class="gradient-border rounded-lg p-4 cursor-pointer">
                     <summary class="flex justify-between items-center font-medium text-white">
-                        我该如何选择适合我的方案？
+                        <span>
+                            <span class="zh">我该如何选择适合我的方案？</span>
+                            <span class="en">How do I choose the right plan for me?</span>
+                        </span>
                         <svg class="w-5 h-5 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </summary>
                     <p class="text-gray-300 mt-4">
-                        如果你的团队刚开始接触 AI 用户研究，或项目规模较小，“启动版”是很好的起点。如果你的公司需要系统化、规模化地进行用户洞察，并希望使用一站式平台，“专业版”是最佳选择。对于有特殊安全要求、需要深度集成和定制化服务的大型企业，请联系我们了解“企业版”。
+                        <span class="zh">如果你的团队刚开始接触 AI 用户研究，或项目规模较小，“个人版”是很好的起点。如果你的公司需要系统化、规模化地进行用户洞察，并希望使用一站式平台，“专业版”是最佳选择。对于有特殊安全要求、需要深度集成和定制化服务的大型企业，请联系我们了解“企业版”。</span>
+                        <span class="en">If your team is new to AI user research or has small-scale projects, the "Personal" plan is a great starting point. If your company needs systematic, large-scale user insights and wants an all-in-one platform, the "Professional" plan is the best choice. For large enterprises with special security requirements, deep integration, and customized services, please contact us to learn about the "Enterprise" plan.</span>
                     </p>
                 </details>
                 <details class="gradient-border rounded-lg p-4 cursor-pointer">
                     <summary class="flex justify-between items-center font-medium text-white">
-                        我的数据安全吗？
+                        <span>
+                            <span class="zh">我的数据安全吗？</span>
+                            <span class="en">Is my data secure?</span>
+                        </span>
                         <svg class="w-5 h-5 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </summary>
                     <p class="text-gray-300 mt-4">
-                        数据安全是我们的最高优先级。我们采用行业领先的加密技术和安全措施来保护您的数据。对于“企业版”客户，我们还提供私有化部署选项，让数据完全保留在您的服务器上。
+                        <span class="zh">数据安全是我们的最高优先级。我们采用行业领先的加密技术和安全措施来保护您的数据。对于“企业版”客户，我们还提供私有化部署选项，让数据完全保留在您的服务器上。</span>
+                        <span class="en">Data security is our highest priority. We use industry-leading encryption and security measures to protect your data. For "Enterprise" customers, we also offer a private deployment option to keep data entirely on your servers.</span>
                     </p>
                 </details>
                 <details class="gradient-border rounded-lg p-4 cursor-pointer">
                     <summary class="flex justify-between items-center font-medium text-white">
-                        我可以随时取消订阅吗？
+                        <span>
+                            <span class="zh">我可以随时取消订阅吗？</span>
+                            <span class="en">Can I cancel my subscription at any time?</span>
+                        </span>
                         <svg class="w-5 h-5 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </summary>
                     <p class="text-gray-300 mt-4">
-                        是的，您可以随时在您的账户设置中取消或更改您的订阅方案。对于年度订阅，取消将在当前计费周期结束后生效。
+                        <span class="zh">是的，您可以随时在您的账户设置中取消或更改您的订阅方案。对于年度订阅，取消将在当前计费周期结束后生效。</span>
+                        <span class="en">Yes, you can cancel or change your subscription plan at any time in your account settings. For annual subscriptions, the cancellation will take effect at the end of the current billing cycle.</span>
                     </p>
                 </details>
             </div>
@@ -250,36 +271,50 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            // --- DOM Elements ---
+            const body = document.body;
             const toggle = document.getElementById('billing-toggle');
             const pricingCards = document.getElementById('pricing-cards');
             const priceElements = pricingCards.querySelectorAll('[data-monthly]');
+            const detailsElements = document.querySelectorAll('details');
+            const langToggleBtn = document.getElementById('lang-toggle');
+            const langToggleMobileBtn = document.getElementById('lang-toggle-mobile');
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
 
+            // --- Billing Toggle Function ---
             function updatePrices() {
                 const isYearly = toggle.checked;
                 priceElements.forEach(el => {
                     const monthlyPrice = el.getAttribute('data-monthly');
                     const yearlyPrice = el.getAttribute('data-yearly');
-                    const priceContainer = el.nextElementSibling; // the '/ 月' or '/ 年' span
+                    const priceContainer = el.nextElementSibling;
 
                     if (isYearly) {
-                        // Display the total yearly price
-                        el.textContent = yearlyPrice;
+                        el.innerHTML = yearlyPrice;
                         priceContainer.textContent = '/ 年';
+                        if (yearlyPrice.includes("免费")) {
+                            priceContainer.textContent = '';
+                        }
                     } else {
-                        // Display the monthly price
-                        el.textContent = monthlyPrice;
+                        el.innerHTML = monthlyPrice;
                         priceContainer.textContent = '/ 月';
+                        if (monthlyPrice.includes("免费")) {
+                            priceContainer.textContent = '';
+                        }
                     }
                 });
             }
 
-            toggle.addEventListener('change', updatePrices);
-            
-            // Initial price update
-            updatePrices();
+            // --- Language Toggle Function (FIXED) ---
+            function toggleLanguage() {
+                body.classList.toggle('lang-zh');
+                body.classList.toggle('lang-en');
+            }
 
-            // FAQ accordion icon rotation
-            const detailsElements = document.querySelectorAll('details');
+            // --- Event Listeners ---
+            toggle.addEventListener('change', updatePrices);
+
             detailsElements.forEach(details => {
                 details.addEventListener('toggle', function() {
                     const icon = this.querySelector('summary svg');
@@ -290,6 +325,28 @@
                     }
                 });
             });
+
+            langToggleBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                toggleLanguage();
+            });
+
+            langToggleMobileBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                toggleLanguage();
+                mobileMenu.classList.add('hidden'); // Close menu after selection
+            });
+
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // --- Initial Setup ---
+            // Set default language and ensure the other is not present
+            body.classList.add('lang-zh');
+            body.classList.remove('lang-en');
+
+            updatePrices(); // Initial price update on page load
         });
     </script>
 
