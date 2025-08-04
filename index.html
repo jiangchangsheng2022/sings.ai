@@ -567,9 +567,22 @@
 
             function typeLine(line, element, onComplete) {
                 const htmlLine = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
-                element.innerHTML = htmlLine;
-                element.classList.remove('demo-line');
-                if (onComplete) onComplete();
+                let currentHtml = '';
+                let i = 0;
+                const speed = 20; 
+                
+                function type() {
+                    if (i < htmlLine.length) {
+                        currentHtml += htmlLine[i];
+                        element.innerHTML = currentHtml;
+                        i++;
+                        setTimeout(type, speed);
+                    } else {
+                        element.classList.remove('demo-line');
+                        if (onComplete) onComplete();
+                    }
+                }
+                type();
             }
 
             async function runDemo() {
