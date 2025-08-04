@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sings.ai 商业计划书</title>
+    <!-- 引入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入 Google Fonts 的 Inter 字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* 自定义样式 */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000000;
+            color: #E5E7EB; /* text-gray-200 */
+        }
+        /* 背景辉光效果 */
+        .glow-background {
+            position: relative;
+            overflow-x: hidden;
+        }
+        .glow-background::before {
+            content: '';
+            position: absolute;
+            top: -20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 800px;
+            background-image: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(99, 102, 241, 0) 60%);
+            z-index: -1;
+            pointer-events: none;
+        }
+        /* 标题渐变色 */
+        .gradient-text {
+            background-image: linear-gradient(to right, #A78BFA, #3B82F6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        /* 卡片和区块边框渐变 */
+        .gradient-border {
+            border: 1px solid;
+            border-image-slice: 1;
+            border-image-source: linear-gradient(to bottom, rgba(79, 70, 229, 0.5), rgba(59, 130, 246, 0.5));
+            background-color: rgba(255, 255, 255, 0.03);
+        }
+        /* 时间线中间的线条 */
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background-image: linear-gradient(to bottom, #4F46E5, #3B82F6, transparent);
+            z-index: 1;
+        }
+        /* 时间线上的圆点 */
+        .timeline-point {
+            position: absolute;
+            top: 2.5rem; 
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 24px;
+            height: 24px;
+            border-radius: 9999px;
+            background-color: #000;
+            border: 2px solid #4F46E5;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .timeline-point-inner {
+            width: 12px;
+            height: 12px;
+            border-radius: 9999px;
+            background-image: linear-gradient(to right, #A78BFA, #3B82F6);
+        }
+        /* 导航栏毛玻璃效果 */
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        /* 折叠面板 */
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+        }
+        .rotate-180 {
+            transform: rotate(180deg);
+        }
+        .transition-transform {
+            transition: transform 0.3s ease;
+        }
+        /* 语言切换样式 */
+        .lang-zh .en, .lang-en .zh {
+            display: none;
+        }
+        /* 虚拟演示框样式 */
+        .terminal-window {
+            background-color: #111827; /* gray-900 */
+            border: 1px solid #4F46E5; /* Indigo-600 for a branded border */
+            border-radius: 0.75rem;
+            box-shadow: 0 0 40px rgba(99, 102, 241, 0.3); /* Enhanced glow */
+            overflow: hidden; /* Keep children inside the rounded corners */
+        }
+        .terminal-header {
+            background-color: rgba(0,0,0,0.2);
+            border-bottom: 1px solid #4F46E5;
+        }
+        .terminal-body {
+            color: #D1D5DB; /* gray-300 */
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 1.5rem;
+            min-height: 300px;
+        }
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 1.2em;
+            background-color: #A78BFA; /* violet-400 */
+            animation: blink 1s step-end infinite;
+            vertical-align: bottom;
+        }
+        @keyframes blink {
+            from, to { background-color: transparent }
+            50% { background-color: #A78BFA; }
+        }
+    </style>
+</head>
+<body class="glow-background">
+
+    <!-- 导航栏 -->
+    <nav class="fixed top-0 left-0 right-0 z-50 p-4">
+        <div class="container mx-auto glass-morphism rounded-xl p-2 px-4 flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <a href="https://sings.ai/" class="text-xl font-bold text-white">sings.ai</a>
+            </div>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#overview" class="text-gray-300 hover:text-white transition-colors">
+                    <span class="zh">概述</span>
+                    <span class="en">Overview</span>
+                </a>
+                <a href="#products" class="text-gray-300 hover:text-white transition-colors">
+                    <span class="zh">产品</span>
+                    <span class="en">Products</span>
+                </a>
+                <a href="#challenges" class="text-gray-300 hover:text-white transition-colors">
+                    <span class="zh">优势</span>
+                    <span class="en">Advantages</span>
+                </a>
+                <a href="#roadmap" class="text-gray-300 hover:text-white transition-colors">
+                    <span class="zh">蓝图</span>
+                    <span class="en">Roadmap</span>
+                </a>
+            </div>
+            <div class="hidden md:flex items-center">
+                <a href="#" id="lang-toggle" class="text-gray-300 hover:text-white transition-colors border border-gray-600 hover:border-gray-400 rounded-lg px-3 py-2 text-sm font-medium">中 / EN</a>
+            </div>
+            <div class="md:hidden">
+                <button class="text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 页面主要内容容器 -->
+    <div class="container mx-auto px-6 pt-32 md:pt-40 pb-16 md:pb-24">
+        
+        <!-- 页面标题 -->
+        <header class="text-center max-w-4xl mx-auto mb-16 md:mb-24 relative z-10">
+            <h1 class="text-4xl md:text-6xl font-black tracking-tighter mb-6">
+                <span class="gradient-text">
+                    <span class="zh">Sings.ai 商业计划书</span>
+                    <span class="en">Sings.ai Business Plan</span>
+                </span>
+            </h1>
+            <p class="text-lg md:text-xl text-gray-400">
+                <span class="zh">我们致力于通过人工智能（AI）技术，重塑市场与用户研究行业，让深刻的用户洞察变得触手可及。</span>
+                <span class="en">We are dedicated to reshaping the market and user research industry through Artificial Intelligence (AI), making profound user insights accessible to all.</span>
+            </p>
+        </header>
+
+        <!-- 各个章节 -->
+        <div class="space-y-24 md:space-y-32">
+
+            <!-- 1. 公司概述 (动态演示框) -->
+            <section id="overview" class="max-w-4xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-8 text-center">
+                    <span class="zh">公司概述</span>
+                    <span class="en">Company Overview</span>
+                </h2>
+                <div class="terminal-window">
+                    <!-- Terminal Header -->
+                    <div class="terminal-header flex items-center p-3">
+                        <div class="flex space-x-2">
+                            <span class="block w-3 h-3 bg-red-500 rounded-full"></span>
+                            <span class="block w-3 h-3 bg-yellow-500 rounded-full"></span>
+                            <span class="block w-3 h-3 bg-green-500 rounded-full"></span>
+                        </div>
+                        <div class="flex-grow text-center text-sm text-gray-400 font-mono">
+                            <span class="zh">bash -- Sings.ai 概述</span>
+                            <span class="en">bash -- Sings.ai Overview</span>
+                        </div>
+                    </div>
+                    <!-- Terminal Body -->
+                    <div id="terminal-text" class="terminal-body"></div>
+                </div>
+            </section>
+
+            <!-- 3. 产品与服务 -->
+            <section id="products" class="max-w-6xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-bold text-white text-center mb-12">
+                    <span class="gradient-text">
+                        <span class="zh">产品与服务</span>
+                        <span class="en">Products & Services</span>
+                    </span>
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="gradient-border rounded-2xl p-8 transition-transform duration-300 hover:scale-105 hover:shadow-indigo-500/20 shadow-lg">
+                        <h3 class="text-2xl font-bold text-white mb-3">
+                            <span class="zh">快速实验平台</span>
+                            <span class="en">Rapid Experiment Platform</span>
+                        </h3>
+                        <p class="text-gray-300 leading-relaxed">
+                            <span class="zh">为“微决策”场景设计的敏捷测试工具。例如，测试两个短视频封面哪个更吸引人，平台可在5-15分钟内完成小样本AB测试，提供清晰可靠的数据反馈，无需用户掌握专业知识。</span>
+                            <span class="en">An agile testing tool designed for "micro-decision" scenarios. For example, to test which of two short-video covers is more appealing, the platform can complete a small-sample A/B test in 5-15 minutes, providing clear and reliable data feedback without requiring professional knowledge.</span>
+                        </p>
+                    </div>
+                    <div class="gradient-border rounded-2xl p-8 transition-transform duration-300 hover:scale-105 hover:shadow-blue-500/20 shadow-lg">
+                        <h3 class="text-2xl font-bold text-white mb-3">
+                            <span class="zh">AI 访谈系统</span>
+                            <span class="en">AI Interview System</span>
+                        </h3>
+                        <p class="text-gray-300 leading-relaxed">
+                            <span class="zh">用 AI 主持第一轮大规模用户访谈，7x24小时不间断工作。系统能进行标准化提问，并对回答进行实时转录与初步的情感分析、关键词提取。</span>
+                            <span class="en">Uses AI to conduct the first round of large-scale user interviews, operating 24/7. The system can ask standardized questions and perform real-time transcription, preliminary sentiment analysis, and keyword extraction on the responses.</span>
+                        </p>
+                    </div>
+                    <div class="gradient-border rounded-2xl p-8 transition-transform duration-300 hover:scale-105 hover:shadow-purple-500/20 shadow-lg">
+                        <h3 class="text-2xl font-bold text-white mb-3">
+                            <span class="zh">“虚拟用户”模拟系统</span>
+                            <span class="en">"Virtual User" Simulation System</span>
+                        </h3>
+                        <p class="text-gray-300 leading-relaxed">
+                            <span class="zh">基于真实、脱敏用户画像数据训练的 AI 模型，能模拟真实用户行为与反馈，为产品优化、内容测试等提供高效、可扩展、可反复测试的“模拟沙箱”。</span>
+                            <span class="en">An AI model trained on real, anonymized user profile data. It can simulate real user behavior and feedback, providing an efficient, scalable, and repeatable "simulation sandbox" for product optimization and content testing.</span>
+                        </p>
+                    </div>
+                    <div class="gradient-border rounded-2xl p-8 transition-transform duration-300 hover:scale-105 hover:shadow-pink-500/20 shadow-lg">
+                        <h3 class="text-2xl font-bold text-white mb-3">
+                            <span class="zh">一站式智能研究平台</span>
+                            <span class="en">All-in-One Intelligent Research Platform</span>
+                        </h3>
+                        <p class="text-gray-300 leading-relaxed">
+                            <span class="zh">我们的终极形态。整合所有功能，并延伸至研究计划撰写、问卷生成、数据处理，直至一键生成可视化报告，全面实现研究流程的智能化与自动化。</span>
+                            <span class="en">Our ultimate form. It will integrate all functions and extend to more stages of the research chain, including AI-assisted research plan writing, automatic questionnaire generation, data processing, and one-click generation of visual reports, fully automating the research process.</span>
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. 我们的优势与解决方案 -->
+            <section id="challenges" class="max-w-4xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-bold text-white text-center mb-12">
+                    <span class="gradient-text">
+                        <span class="zh">我们的优势与解决方案</span>
+                        <span class="en">Our Advantages & Solutions</span>
+                    </span>
+                </h2>
+                <div class="space-y-4">
+                    <div class="gradient-border rounded-xl">
+                        <button class="accordion-header w-full flex justify-between items-center text-left p-6">
+                            <span class="text-xl font-semibold text-white">
+                                <span class="zh">优势一：确保快速实验的质量</span>
+                                <span class="en">Advantage 1: Ensuring Quality of Rapid Experiments</span>
+                            </span>
+                            <svg class="w-6 h-6 text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="p-6 pt-0 text-gray-300 space-y-2">
+                                <p><strong class="text-white"><span class="zh">透明化品控：</span><span class="en">Transparent Quality Control:</span></strong> <span class="zh">明确告知样本画像、来源，并提供“样本质量分”。</span><span class="en">Clearly state sample profiles, sources, and provide a "sample quality score."</span></p>
+                                <p><strong class="text-white"><span class="zh">科学化呈现：</span><span class="en">Scientific Presentation:</span></strong> <span class="zh">提供置信区间、统计显著性等关键指标，并用通俗语言解释。</span><span class="en">Provide key metrics like confidence intervals and statistical significance, explained in plain language.</span></p>
+                                <p><strong class="text-white"><span class="zh">清晰的预期管理：</span><span class="en">Clear Expectation Management:</span></strong> <span class="zh">报告自动附上提醒，强调结果仅供方向性参考。</span><span class="en">Reports automatically include a reminder that results are for directional reference only.</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gradient-border rounded-xl">
+                        <button class="accordion-header w-full flex justify-between items-center text-left p-6">
+                            <span class="text-xl font-semibold text-white">
+                                <span class="zh">优势二：突破AI访谈的深度局限</span>
+                                <span class="en">Advantage 2: Overcoming AI Interview Depth Limitations</span>
+                            </span>
+                            <svg class="w-6 h-6 text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="p-6 pt-0 text-gray-300 space-y-2">
+                                <p><strong class="text-white"><span class="zh">“人机混合”访谈模式：</span><span class="en">"Human-Machine Hybrid" Interview Mode:</span></strong> <span class="zh">AI 担任“超级助教”，执行第一轮标准化访谈。</span><span class="en">AI acts as a "super assistant" for the first round of standardized interviews.</span></p>
+                                <p><strong class="text-white"><span class="zh">智能筛选与标记：</span><span class="en">Intelligent Screening & Tagging:</span></strong> <span class="zh">AI 自动标记出情绪波动明显、内容丰富的“高价值”用户。</span><span class="en">AI automatically tags "high-value" users with significant emotional fluctuations or rich content.</span></p>
+                                <p><strong class="text-white"><span class="zh">专家聚焦深度：</span><span class="en">Expert-Focused Depth:</span></strong> <span class="zh">真人研究员直接对被筛选出的关键用户进行深入追访。</span><span class="en">Human researchers conduct in-depth follow-ups with key users screened by AI.</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gradient-border rounded-xl">
+                        <button class="accordion-header w-full flex justify-between items-center text-left p-6">
+                            <span class="text-xl font-semibold text-white">
+                                <span class="zh">优势三：化解“虚拟用户”的真实性风险</span>
+                                <span class="en">Advantage 3: Mitigating "Virtual User" Authenticity Risks</span>
+                            </span>
+                            <svg class="w-6 h-6 text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="p-6 pt-0 text-gray-300 space-y-2">
+                                <p><strong class="text-white"><span class="zh">持续验证与校准：</span><span class="en">Continuous Validation & Calibration:</span></strong> <span class="zh">建立严格的“人机对比”验证机制，定期用真实用户“考核”虚拟用户，并公开“可信度报告”。</span><span class="en">Establish a strict "human-machine comparison" validation mechanism, regularly "evaluating" virtual users with real users and publishing "credibility reports."</span></p>
+                                <p><strong class="text-white"><span class="zh">引入“边缘”变量：</span><span class="en">Introducing "Edge" Variables:</span></strong> <span class="zh">刻意创建代表“非主流”行为的虚拟用户，以对抗主流偏见。</span><span class="en">Intentionally create virtual users representing "non-mainstream" behaviors to counter mainstream bias.</span></p>
+                                <p><strong class="text-white"><span class="zh">强调辅助定位：</span><span class="en">Emphasizing an Auxiliary Role:</span></strong> <span class="zh">始终强调“虚拟用户”是高效的假设验证工具，而非真实用户的完美替代品。</span><span class="en">Always emphasize that "virtual users" are efficient hypothesis-testing tools, not perfect substitutes for real users.</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gradient-border rounded-xl">
+                        <button class="accordion-header w-full flex justify-between items-center text-left p-6">
+                            <span class="text-xl font-semibold text-white">
+                                <span class="zh">优势四：降低“研究民主化”的认知门槛</span>
+                                <span class="en">Advantage 4: Lowering the Cognitive Barrier to "Research Democratization"</span>
+                            </span>
+                            <svg class="w-6 h-6 text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="p-6 pt-0 text-gray-300 space-y-2">
+                                <p><strong class="text-white"><span class="zh">引导式研究设计：</span><span class="en">Guided Research Design:</span></strong> <span class="zh">AI 像教练一样，通过提问引导用户厘清业务问题、研究目标和决策用途。</span><span class="en">AI acts like a coach, guiding users to clarify business problems, research objectives, and decision-making purposes through questions.</span></p>
+                                <p><strong class="text-white"><span class="zh">报告的教育性解读：</span><span class="en">Educational Report Interpretation:</span></strong> <span class="zh">AI 报告不仅有结论，更有解读和提醒，主动提示潜在的解读误区。</span><span class="en">AI reports provide not just conclusions but also interpretations and reminders, proactively highlighting potential interpretation pitfalls.</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 5. 商业模式 -->
+            <section id="pricing" class="max-w-6xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-bold text-white text-center mb-12">
+                    <span class="gradient-text">
+                        <span class="zh">商业模式</span>
+                        <span class="en">Business Model</span>
+                    </span>
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                    <div class="gradient-border rounded-2xl p-8">
+                        <h3 class="text-2xl font-bold text-white mb-3">
+                            <span class="zh">按次付费</span>
+                            <span class="en">Pay-as-you-go</span>
+                        </h3>
+                        <p class="text-gray-300">
+                            <span class="zh">针对个人用户和临时需求，提供“快速实验”等单次服务，价格亲民，即用即付。</span>
+                            <span class="en">For individual users and temporary needs, offering single services like "Rapid Experiments" at affordable, pay-per-use prices.</span>
+                        </p>
+                    </div>
+                    <div class="gradient-border rounded-2xl p-8">
+                        <h3 class="text-2xl font-bold text-white mb-3">
+                            <span class="zh">订阅制</span>
+                            <span class="en">Subscription</span>
+                        </h3>
+                        <p class="text-gray-300">
+                            <span class="zh">面向中小企业和高频使用者，推出不同等级的订阅套餐，解锁更高级的功能。</span>
+                            <span class="en">For SMEs and frequent users, offering tiered subscription plans that unlock more advanced features.</span>
+                        </p>
+                    </div>
+                    <div class="gradient-border rounded-2xl p-8">
+                        <h3 class="text-2xl font-bold text-white mb-3">
+                            <span class="zh">企业解决方案</span>
+                            <span class="en">Enterprise Solution</span>
+                        </h3>
+                        <p class="text-gray-300">
+                            <span class="zh">为大型企业提供定制化的私有部署、技术整合及专属研究咨询支持。</span>
+                            <span class="en">Providing large enterprises with customized private deployments, technical integration, and dedicated research consulting support.</span>
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. 发展蓝图 -->
+            <section id="roadmap" class="max-w-5xl mx-auto">
+                 <h2 class="text-3xl md:text-4xl font-bold text-white text-center mb-20">
+                    <span class="gradient-text">
+                        <span class="zh">发展蓝图</span>
+                        <span class="en">Roadmap</span>
+                    </span>
+                </h2>
+                <div class="relative">
+                    <div class="timeline-line absolute h-full hidden md:block"></div>
+
+                    <!-- 阶段一 -->
+                    <div class="relative flex justify-between items-start mb-16 w-full flex-wrap md:flex-nowrap">
+                        <div class="w-full md:w-5/12 order-1">
+                            <div class="relative">
+                                <div class="timeline-point hidden md:block" style="right: -29px; left: auto;">
+                                    <div class="timeline-point-inner"></div>
+                                </div>
+                                <div class="gradient-border rounded-2xl p-6 md:p-8 shadow-lg transition-transform duration-300 hover:scale-105">
+                                    <p class="gradient-text font-bold text-lg mb-2"><span class="zh">第一阶段 (未来6个月)</span><span class="en">Phase 1 (Next 6 Months)</span></p>
+                                    <h3 class="text-xl font-bold text-white mb-3"><span class="zh">打磨核心产品，验证市场需求</span><span class="en">Refine Core Product, Validate Market Demand</span></h3>
+                                    <p class="text-gray-300"><span class="zh">集中所有资源打磨“快速实验平台”这一单点产品，通过服务早期种子用户，快速迭代，验证核心商业模式的可行性。</span><span class="en">Focus all resources on refining the "Rapid Experiment Platform" as a single-point product, iterating quickly by serving early seed users to validate the core business model's feasibility.</span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-full md:w-5/12 order-2 md:mt-0 mt-8 p-4 md:p-6">
+                            <h4 class="text-lg font-bold text-white mb-3"><span class="zh">关键目标与成果</span><span class="en">Key Goals & Milestones</span></h4>
+                            <ul class="list-disc list-inside text-gray-400 space-y-2">
+                                <li><strong><span class="zh">产品:</span><span class="en">Product:</span></strong> <span class="zh">上线快速实验平台V1.0，完成至少3次核心功能迭代。</span><span class="en">Launch Rapid Experiment Platform V1.0, complete at least 3 core feature iterations.</span></li>
+                                <li><strong><span class="zh">用户:</span><span class="en">Users:</span></strong> <span class="zh">获取1,000名高活跃度种子用户，建立核心用户社群。</span><span class="en">Acquire 1,000 highly active seed users and establish a core user community.</span></li>
+                                <li><strong><span class="zh">商业:</span><span class="en">Business:</span></strong> <span class="zh">完成首批付费用户转化，验证按次付费模式。</span><span class="en">Achieve first paid user conversions and validate the pay-as-you-go model.</span></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- 阶段二 -->
+                    <div class="relative flex justify-between items-start mb-16 w-full flex-wrap md:flex-nowrap">
+                        <div class="w-full md:w-5/12 order-2 md:order-1 md:mt-0 mt-8 p-4 md:p-6 md:text-right">
+                             <h4 class="text-lg font-bold text-white mb-3"><span class="zh">关键目标与成果</span><span class="en">Key Goals & Milestones</span></h4>
+                            <ul class="list-disc list-inside text-gray-400 space-y-2">
+                                <li><strong><span class="zh">产品:</span><span class="en">Product:</span></strong> <span class="zh">上线AI访谈系统，与实验平台数据互通。</span><span class="en">Launch AI Interview System with data integration into the experiment platform.</span></li>
+                                <li><strong><span class="zh">用户:</span><span class="en">Users:</span></strong> <span class="zh">月活跃用户(MAU)突破10,000，付费订阅用户达500+。</span><span class="en">Exceed 10,000 Monthly Active Users (MAU) and 500+ paying subscribers.</span></li>
+                                <li><strong><span class="zh">商业:</span><span class="en">Business:</span></strong> <span class="zh">成功验证订阅制模式，探索规模化增长路径。</span><span class="en">Successfully validate the subscription model and explore paths to scalable growth.</span></li>
+                            </ul>
+                        </div>
+                        <div class="w-full md:w-5/12 order-1 md:order-2">
+                            <div class="relative">
+                                <div class="timeline-point hidden md:block" style="left: -29px;">
+                                    <div class="timeline-point-inner"></div>
+                                </div>
+                                <div class="gradient-border rounded-2xl p-6 md:p-8 shadow-lg transition-transform duration-300 hover:scale-105">
+                                    <p class="gradient-text font-bold text-lg mb-2"><span class="zh">第二阶段 (6-12个月)</span><span class="en">Phase 2 (6-12 Months)</span></p>
+                                    <h3 class="text-xl font-bold text-white mb-3"><span class="zh">构建产品矩阵，拓展服务边界</span><span class="en">Build Product Matrix, Expand Service Boundaries</span></h3>
+                                    <p class="text-gray-300"><span class="zh">在核心产品站稳脚跟后，上线“人机混合”访谈系统，形成小型产品矩阵，开始为用户提供更完整的初阶研究解决方案。</span><span class="en">After the core product is established, launch the "human-machine hybrid" interview system to form a small product matrix, providing users with a more complete preliminary research solution.</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 阶段三 -->
+                    <div class="relative flex justify-between items-start mb-16 w-full flex-wrap md:flex-nowrap">
+                        <div class="w-full md:w-5/12 order-1">
+                            <div class="relative">
+                                <div class="timeline-point hidden md:block" style="right: -29px; left: auto;">
+                                    <div class="timeline-point-inner"></div>
+                                </div>
+                                <div class="gradient-border rounded-2xl p-6 md:p-8 shadow-lg transition-transform duration-300 hover:scale-105">
+                                    <p class="gradient-text font-bold text-lg mb-2"><span class="zh">第三阶段 (12-24个月)</span><span class="en">Phase 3 (12-24 Months)</span></p>
+                                    <h3 class="text-xl font-bold text-white mb-3"><span class="zh">探索前沿创新，构筑技术壁垒</span><span class="en">Explore Innovation, Build Technical Barriers</span></h3>
+                                    <p class="text-gray-300"><span class="zh">启动最具创新性的“虚拟用户”系统内部测试，并与核心客户进行小范围邀测，持续进行模型验证与迭代，构筑核心技术护城河。</span><span class="en">Initiate internal testing of the innovative "Virtual User" system and conduct small-scale invited tests with key clients, continuously validating and iterating the model to build a core technical moat.</span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-full md:w-5/12 order-2 md:mt-0 mt-8 p-4 md:p-6">
+                            <h4 class="text-lg font-bold text-white mb-3"><span class="zh">关键目标与成果</span><span class="en">Key Goals & Milestones</span></h4>
+                            <ul class="list-disc list-inside text-gray-400 space-y-2">
+                                <li><strong><span class="zh">技术:</span><span class="en">Technology:</span></strong> <span class="zh">“虚拟用户”在特定场景预测准确率达85%。</span><span class="en">"Virtual User" prediction accuracy reaches 85% in specific scenarios.</span></li>
+                                <li><strong><span class="zh">市场:</span><span class="en">Market:</span></strong> <span class="zh">树立在AI用户研究领域的思想领导力地位。</span><span class="en">Establish thought leadership in the AI user research field.</span></li>
+                                <li><strong><span class="zh">团队:</span><span class="en">Team:</span></strong> <span class="zh">扩充顶级AI算法与数据科学家团队。</span><span class="en">Expand the team with top-tier AI algorithm and data scientists.</span></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- 阶段四 -->
+                    <div class="relative flex justify-between items-start mb-16 w-full flex-wrap md:flex-nowrap">
+                        <div class="w-full md:w-5/12 order-2 md:order-1 md:mt-0 mt-8 p-4 md:p-6 md:text-right">
+                             <h4 class="text-lg font-bold text-white mb-3"><span class="zh">关键目标与成果</span><span class="en">Key Goals & Milestones</span></h4>
+                            <ul class="list-disc list-inside text-gray-400 space-y-2">
+                                <li><strong><span class="zh">产品:</span><span class="en">Product:</span></strong> <span class="zh">正式推出一站式智能研究平台，实现全链路服务闭环。</span><span class="en">Officially launch the all-in-one intelligent research platform, closing the loop on full-lifecycle services.</span></li>
+                                <li><strong><span class="zh">商业:</span><span class="en">Business:</span></strong> <span class="zh">成为国内市场占有率领先的体验管理平台。</span><span class="en">Become the leading experience management platform by market share in the domestic market.</span></li>
+                                <li><strong><span class="zh">生态:</span><span class="en">Ecosystem:</span></strong> <span class="zh">开放API，引入第三方开发者与合作伙伴。</span><span class="en">Open APIs to bring in third-party developers and partners.</span></li>
+                            </ul>
+                        </div>
+                        <div class="w-full md:w-5/12 order-1 md:order-2">
+                            <div class="relative">
+                                <div class="timeline-point hidden md:block" style="left: -29px;">
+                                    <div class="timeline-point-inner"></div>
+                                </div>
+                                <div class="gradient-border rounded-2xl p-6 md:p-8 shadow-lg transition-transform duration-300 hover:scale-105">
+                                    <p class="gradient-text font-bold text-lg mb-2"><span class="zh">第四阶段 (24个月后)</span><span class="en">Phase 4 (24+ Months)</span></p>
+                                    <h3 class="text-xl font-bold text-white mb-3"><span class="zh">整合为一站式平台，引领行业变革</span><span class="en">Integrate into a Platform, Lead the Industry</span></h3>
+                                    <p class="text-gray-300"><span class="zh">正式推出“虚拟用户”系统，并将所有功能模块无缝整合至“一站式智能研究平台”，实现全链路服务，重新定义行业标准。</span><span class="en">Officially launch the "Virtual User" system and seamlessly integrate all functional modules into the "All-in-One Intelligent Research Platform" to provide full-lifecycle services and redefine industry standards.</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- 全局变量 ---
+            const body = document.body;
+            const langToggleBtn = document.getElementById('lang-toggle');
+            const accordionHeaders = document.querySelectorAll('.accordion-header');
+            const overviewSection = document.getElementById('overview');
+            const terminalTextElement = document.getElementById('terminal-text');
+            let typewriterInterval;
+
+            // --- 文本内容 ---
+            const texts = {
+                zh: `Sings.ai 是一家致力于通过人工智能（AI）技术，重塑市场与用户研究行业的中国本土创新企业。我们的核心使命是“让深刻的用户洞察变得触手可及”，通过将复杂的调研方法论与前沿 AI 技术深度融合，打破传统研究模式的专业壁垒与成本限制。\n\n我们正从过去服务企业客户（ToB）的模式，向更广阔的个人用户与中小团队（ToC/ToB-SME）市场拓展。我们的产品矩阵旨在为用户提供一个覆盖研究全链路的一站式智能工具平台，包括用于快速决策的快速实验平台、提升访谈效率的AI 访谈系统，以及具备前瞻性的“虚拟用户”模拟系统。\n\n作为一家根植于中国市场的创新企业，Sings.ai 的探索尤为关注本土业务场景的实际需求。我们观察到，在快速迭代的商业环境中，无论是大型企业的产品经理，还是独立的短视频创作者，都对理解用户、验证想法有着迫切的需求。然而，传统的市场研究服务流程长、费用高、专业门槛高，将绝大多数潜在需求方挡在了门外。Sings.ai 的创立，正是为了解决这一核心矛盾。\n\n我们相信，AI 技术的力量不仅在于提升效率，更在于实现能力的“平权”。我们的战略转型，即从服务少数大型企业，转向为成千上万的个体创作者、创业团队及企业内部创新单元提供轻量、高效、可信赖的研究工具，是顺应这一趋势的必然选择。`,
+                en: `Sings.ai is a local Chinese innovative enterprise dedicated to reshaping the market and user research industry through Artificial Intelligence (AI) technology. Our core mission is to "make profound user insights accessible," breaking down the professional barriers and cost limitations of traditional research models by deeply integrating complex research methodologies with cutting-edge AI technology.\n\nWe are expanding from a Business-to-Business (ToB) model to a broader market of individual users and small to medium-sized teams (ToC/ToB-SME). Our product matrix aims to provide users with a one-stop intelligent tool platform covering the entire research lifecycle, including a rapid experiment platform for quick decision-making, an AI interview system to enhance efficiency, and a forward-looking "virtual user" simulation system.\n\nAs an innovative company rooted in the Chinese market, Sings.ai's exploration pays special attention to the practical needs of local business scenarios. We have observed that in a rapidly iterating business environment, everyone from product managers in large corporations to independent short-video creators has an urgent need to understand users and validate ideas. However, traditional market research services are lengthy, expensive, and have high professional barriers, excluding the vast majority of potential users. Sings.ai was founded to solve this core contradiction.\n\nWe believe the power of AI lies not only in improving efficiency but also in achieving "capability equality." Our strategic transformation—from serving a few large enterprises to providing lightweight, efficient, and trustworthy research tools for thousands of individual creators, startup teams, and internal innovation units—is an inevitable choice in line with this trend.`
+            };
+
+            // --- 函数定义 ---
+
+            // 打字机效果函数
+            function startTypewriter(lang) {
+                clearInterval(typewriterInterval); // 清除之前的定时器
+                const textToType = texts[lang].replace(/\n/g, '<br>'); // 将换行符替换为<br>
+                let i = 0;
+                terminalTextElement.innerHTML = ''; // 清空内容
+                
+                // 创建并添加光标
+                let cursor = terminalTextElement.querySelector('.cursor');
+                if (!cursor) {
+                    cursor = document.createElement('span');
+                    cursor.className = 'cursor';
+                    terminalTextElement.appendChild(cursor);
+                }
+
+                typewriterInterval = setInterval(() => {
+                    if (i < textToType.length) {
+                        // 如果是<br>标签，一次性插入
+                        if (textToType.substring(i, i + 4) === '<br>') {
+                            terminalTextElement.insertBefore(document.createElement('br'), cursor);
+                            terminalTextElement.insertBefore(document.createElement('br'), cursor);
+                             i += 4;
+                        } else {
+                            const charNode = document.createTextNode(textToType.charAt(i));
+                            terminalTextElement.insertBefore(charNode, cursor);
+                            i++;
+                        }
+                    } else {
+                        clearInterval(typewriterInterval);
+                        // 动画结束后移除光标
+                        if(cursor) cursor.remove();
+                    }
+                }, 25); // 打字速度
+            }
+
+            // 折叠面板逻辑
+            accordionHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const content = header.nextElementSibling;
+                    const arrow = header.querySelector('svg');
+
+                    if (content.style.maxHeight) {
+                        content.style.maxHeight = null;
+                        arrow.classList.remove('rotate-180');
+                    } else {
+                        document.querySelectorAll('.accordion-content').forEach(c => c.style.maxHeight = null);
+                        document.querySelectorAll('.accordion-header svg').forEach(a => a.classList.remove('rotate-180'));
+                        content.style.maxHeight = content.scrollHeight + "px";
+                        arrow.classList.add('rotate-180');
+                    }
+                });
+            });
+
+            // 语言切换逻辑
+            langToggleBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const isZh = body.classList.contains('lang-zh');
+                const newLang = isZh ? 'en' : 'zh';
+                
+                body.classList.remove(isZh ? 'lang-zh' : 'lang-en');
+                body.classList.add(newLang);
+                
+                // 如果概述部分可见，则重启打字机动画
+                if (overviewSection.getBoundingClientRect().top < window.innerHeight && overviewSection.getBoundingClientRect().bottom >= 0) {
+                     startTypewriter(newLang);
+                }
+            });
+
+            // --- 初始化 ---
+            
+            // 默认设置为中文
+            body.classList.add('lang-zh');
+
+            // Intersection Observer 监听概述部分是否进入视口
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const currentLang = body.classList.contains('lang-zh') ? 'zh' : 'en';
+                        startTypewriter(currentLang);
+                        observer.unobserve(entry.target); // 动画只触发一次
+                    }
+                });
+            }, { threshold: 0.5 }); // 当元素50%可见时触发
+
+            observer.observe(overviewSection);
+        });
+    </script>
+
+</body>
+</html>
