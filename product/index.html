@@ -111,13 +111,13 @@
     <!-- 导航栏 -->
     <nav class="fixed top-0 left-0 right-0 z-50 p-4">
         <div class="container mx-auto glass-morphism rounded-xl p-2 px-4 flex justify-between items-center">
-            <a href="https://sings.ai/" class="text-xl font-bold text-white">sings.ai</a>
+            <a href="https://sings.ai/index.html" class="text-xl font-bold text-white">sings.ai</a>
             
             <div class="hidden md:flex items-center space-x-8">
                 <a href="#" class="gradient-text font-semibold">
                     <span class="zh">产品</span><span class="en">Products</span>
                 </a>
-                <a href="https://sings.ai/page/pricing.html" class="text-gray-300 hover:text-white transition-colors">
+                <a href="https://sings.ai/page/price.html" class="text-gray-300 hover:text-white transition-colors">
                     <span class="zh">定价</span><span class="en">Pricing</span>
                 </a>
             </div>
@@ -135,7 +135,7 @@
         <!-- 移动端菜单 -->
         <div id="mobile-menu" class="container mx-auto glass-morphism rounded-xl mt-2 p-4 hidden md:hidden">
             <a href="#" class="block gradient-text font-semibold py-2"><span class="zh">产品</span><span class="en">Products</span></a>
-            <a href="https://sings.ai/page/pricing.html" class="block text-gray-300 hover:text-white py-2"><span class="zh">定价</span><span class="en">Pricing</span></a>
+            <a href="https://sings.ai/page/price.html" class="block text-gray-300 hover:text-white py-2"><span class="zh">定价</span><span class="en">Pricing</span></a>
             <div class="border-t border-gray-700 mt-2 pt-2">
                  <a href="#" id="lang-toggle-mobile" class="block text-center text-gray-300 hover:text-white transition-colors py-2">
                     <span class="zh">切换到 English</span><span class="en">Switch to 中文</span>
@@ -173,7 +173,7 @@
                         <span class="en">This is more than just an online form. Our AI questionnaire can conduct real-time follow-up questions and logical jumps based on user responses, just like an experienced researcher, digging into deeper motivations and reasons. Say goodbye to static questionnaires and make every answer valuable.</span>
                     </p>
                     <div class="mt-6">
-                        <a href="#" class="gradient-button text-white font-semibold py-2 px-6 rounded-lg inline-block">
+                        <a href="https://sings.ai/product/Survey" class="gradient-button text-white font-semibold py-2 px-6 rounded-lg inline-block">
                             <span class="zh">立即使用</span><span class="en">Use Now</span>
                         </a>
                     </div>
@@ -199,7 +199,7 @@
                         <span class="en">Let AI be your research assistant, conducting the first round of user interviews 24/7. It standardizes the interview process and performs real-time transcription, sentiment analysis, and key information extraction, freeing you from tedious repetitive work to focus on what truly requires insight.</span>
                     </p>
                     <div class="mt-6">
-                        <a href="#" class="gradient-button text-white font-semibold py-2 px-6 rounded-lg inline-block">
+                        <a href="https://sings.ai/product/FGD" class="gradient-button text-white font-semibold py-2 px-6 rounded-lg inline-block">
                             <span class="zh">立即使用</span><span class="en">Use Now</span>
                         </a>
                     </div>
@@ -225,7 +225,7 @@
                         <span class="en">Our most innovative feature. Before your product goes live, converse with and test it on thousands of "virtual users" trained on real data. Efficiently validate product concepts, test user flows, and optimize copy details to gain high-value iteration directions at a minimal cost, mitigating launch risks.</span>
                     </p>
                     <div class="mt-6">
-                        <a href="#" class="gradient-button text-white font-semibold py-2 px-6 rounded-lg inline-block">
+                        <a href="https://sings.ai/product/User" class="gradient-button text-white font-semibold py-2 px-6 rounded-lg inline-block">
                             <span class="zh">立即使用</span><span class="en">Use Now</span>
                         </a>
                     </div>
@@ -277,7 +277,7 @@
                 <span class="zh">查看我们的定价方案，选择最适合你的计划，或者直接免费开始体验。</span>
                 <span class="en">Check out our pricing plans, choose the one that's right for you, or start for free right away.</span>
             </p>
-            <a href="https://sings.ai/page/pricing.html" class="gradient-button text-white font-semibold py-3 px-8 rounded-lg text-lg inline-block">
+            <a href="https://sings.ai/page/price.html" class="gradient-button text-white font-semibold py-3 px-8 rounded-lg text-lg inline-block">
                 <span class="zh">查看定价</span><span class="en">View Pricing</span>
             </a>
         </section>
@@ -362,8 +362,8 @@
                      const cursor = element.querySelector('.cursor');
                      if(cursor) cursor.remove();
                      setTimeout(() => {
-                        element.innerHTML = ''; // Clear and restart
-                        typeWriter(element, lines, 0);
+                         element.innerHTML = ''; // Clear and restart
+                         typeWriter(element, lines, 0);
                      }, 5000); // Restart after 5 seconds
                     return;
                 }
