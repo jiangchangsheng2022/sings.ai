@@ -32,13 +32,18 @@
         }
         body {
             font-family: 'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
-            background-color: #050608;
+            background-color: #050608; /* Fallback */
             color: #E2E8F0;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            /* Subtle grid background */
-            background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-            background-size: 30px 30px;
+            /* Stacked background: subtle grid pattern on top of a subtle gradient */
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), /* Vertical grid lines */
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px), /* Horizontal grid lines */
+                linear-gradient(to bottom, #111827, #050608); /* Subtle gradient from a dark blue-gray to near-black */
+            background-size: 30px 30px, 30px 30px, 100% 100%;
+            background-repeat: repeat, repeat, no-repeat;
+            background-attachment: scroll, scroll, fixed; /* Fix the gradient to the viewport */
         }
         .hero-bg {
             background-color: #050608;
@@ -238,7 +243,7 @@
                 margin: 0;
             }
         }
-        /* NEW: Solutions Scroller Styles */
+        /* Solutions Scroller Styles */
         .solutions-container {
             -webkit-mask-image: linear-gradient(to right, transparent, white 10%, white 90%, transparent);
             mask-image: linear-gradient(to right, transparent, white 10%, white 90%, transparent);
@@ -273,10 +278,9 @@
                             <a href="https://sings.ai/product/User" class="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-gray-700/50 hover:text-white transition-colors rounded-b-lg" data-lang="productLink3"><i class="ph ph-user-circle-gear text-lg text-green-400"></i> AI User 仿真用户</a>
                         </div>
                     </div>
-                    <a href="#solutions" class="nav-link text-gray-300 hover:text-white transition-colors" data-lang="navSolutions">解决方案</a>
-                    <a href="#case-study" class="nav-link text-gray-300 hover:text-white transition-colors" data-lang="navCaseStudies">客户案例</a>
                     <a href="https://sings.ai/page/price.html" class="nav-link text-gray-300 hover:text-white transition-colors" data-lang="navPricing">定价</a>
-                    <a href="#faq" class="nav-link text-gray-300 hover:text-white transition-colors" data-lang="navFaq">常见问题</a>
+                    <a href="https://sings.ai/page/technology.html" class="nav-link text-gray-300 hover:text-white transition-colors" data-lang="navTechnology">技术原理</a>
+                    <a href="https://sings.ai/page/competitors.html" class="nav-link text-gray-300 hover:text-white transition-colors" data-lang="navCompetitors">竞争格局</a>
                 </nav>
                 <div class="hidden md:flex items-center space-x-4">
                     <a href="https://sings.ai/product/" class="py-2 px-4 rounded-lg font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-500 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300" data-lang="bookDemo">立即体验</a>
@@ -302,10 +306,9 @@
                         <a href="https://sings.ai/product/User" class="block text-lg text-gray-400 hover:text-white" data-lang="productLink3Mobile">AI User 仿真用户</a>
                     </div>
                 </div>
-                <a href="#solutions" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="navSolutionsMobile">解决方案</a>
-                <a href="#case-study" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="navCaseStudiesMobile">客户案例</a>
                 <a href="https://sings.ai/page/price.html" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="navPricingMobile">定价</a>
-                <a href="#faq" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="navFaqMobile">常见问题</a>
+                <a href="https://sings.ai/page/technology.html" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="navTechnologyMobile">技术原理</a>
+                <a href="https://sings.ai/page/competitors.html" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="navCompetitorsMobile">竞争格局</a>
                 <hr class="w-full border-gray-700 my-4">
                 <a href="https://sings.ai/product/" class="w-full max-w-xs px-6 py-3 rounded-lg text-white font-semibold bg-gradient-to-r from-blue-600 to-indigo-500 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300" data-lang="bookDemoMobile">立即体验</a>
             </div>
@@ -551,19 +554,17 @@
             const translations = {
                 // Navigation
                 navProducts: { zh: '产品', en: 'Products' },
-                navSolutions: { zh: '解决方案', en: 'Solutions' },
-                navCaseStudies: { zh: '客户案例', en: 'Case Studies' },
                 navPricing: { zh: '定价', en: 'Pricing' },
-                navFaq: { zh: '常见问题', en: 'FAQ' },
+                navTechnology: { zh: '技术原理', en: 'Technology' },
+                navCompetitors: { zh: '竞争格局', en: 'Competitors' },
                 bookDemo: { zh: '立即体验', en: 'Experience Now' },
                 productLink1: { zh: 'AI Test 智能问卷', en: 'AI Test Smart Survey' },
                 productLink2: { zh: 'AI Talk 智能访谈', en: 'AI Talk Smart Interview' },
                 productLink3: { zh: 'AI User 仿真用户', en: 'AI User Simulated User' },
                 navProductsMobile: { zh: '产品', en: 'Products' },
-                navSolutionsMobile: { zh: '解决方案', en: 'Solutions' },
-                navCaseStudiesMobile: { zh: '客户案例', en: 'Case Studies' },
                 navPricingMobile: { zh: '定价', en: 'Pricing' },
-                navFaqMobile: { zh: '常见问题', en: 'FAQ' },
+                navTechnologyMobile: { zh: '技术原理', en: 'Technology' },
+                navCompetitorsMobile: { zh: '竞争格局', en: 'Competitors' },
                 bookDemoMobile: { zh: '立即体验', en: 'Experience Now' },
                 productLink1Mobile: { zh: 'AI Test 智能问卷', en: 'AI Test Smart Survey' },
                 productLink2Mobile: { zh: 'AI Talk 智能访谈', en: 'AI Talk Smart Interview' },
