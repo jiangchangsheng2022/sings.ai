@@ -238,6 +238,21 @@
                 margin: 0;
             }
         }
+        /* NEW: Solutions Scroller Styles */
+        .solutions-container {
+            -webkit-mask-image: linear-gradient(to right, transparent, white 10%, white 90%, transparent);
+            mask-image: linear-gradient(to right, transparent, white 10%, white 90%, transparent);
+        }
+        .solutions-scroller {
+            animation: scroll-solutions 40s infinite linear;
+        }
+        .solutions-scroller:hover {
+            animation-play-state: paused;
+        }
+        @keyframes scroll-solutions {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); } /* Scroll by half the width since content is duplicated */
+        }
     </style>
 </head>
 <body>
@@ -400,19 +415,22 @@
                 </div>
             </section>
 
-            <!-- Solutions Section -->
+            <!-- Solutions Section (UPDATED) -->
             <section id="solutions" class="py-20 md:py-24">
                 <div class="container mx-auto px-4">
-                    <div class="text-center mb-16"><h2 class="text-3xl md:text-4xl font-bold text-white" data-lang="solutionsTitle">为高效团队而生</h2><p class="mt-4 max-w-2xl mx-auto text-lg text-gray-400" data-lang="solutionsSubtitle">无论您的角色是什么，Sings.AI 都能提供量身定制的解决方案，加速您的工作流程。</p></div>
-                    <div class="grid md:grid-cols-3 gap-8">
-                        <div class="glass-card rounded-xl p-8 fade-in"><h3 class="text-xl font-bold text-white" data-lang="role1Title">为产品经理</h3><p class="mt-4 text-gray-400" data-lang="role1Desc">快速验证产品概念、测试功能优先级、挖掘未被满足的用户需求，让每一个产品决策都有数据支撑。</p></div>
-                        <div class="glass-card rounded-xl p-8 fade-in" style="transition-delay: 150ms;"><h3 class="text-xl font-bold text-white" data-lang="role2Title">为市场营销</h3><p class="mt-4 text-gray-400" data-lang="role2Desc">评估广告创意效果、洞察目标客群、追踪品牌健康度，用精准洞察驱动营销活动的ROI增长。</p></div>
-                        <div class="glass-card rounded-xl p-8 fade-in" style="transition-delay: 300ms;"><h3 class="text-xl font-bold text-white" data-lang="role3Title">为用户研究员</h3><p class="mt-4 text-gray-400" data-lang="role3Desc">将数周的定性、定量研究压缩至数天甚至数小时，从繁琐的执行工作中解放，专注于更高价值的洞察分析。</p></div>
+                    <div class="text-center mb-16">
+                        <h2 class="text-3xl md:text-4xl font-bold text-white" data-lang="solutionsTitle">为高效团队而生</h2>
+                        <p class="mt-4 max-w-2xl mx-auto text-lg text-gray-400" data-lang="solutionsSubtitle">无论您的角色是什么，Sings.AI 都能提供量身定制的解决方案，加速您的工作流程。</p>
+                    </div>
+                    <div class="solutions-container overflow-hidden">
+                        <div class="solutions-scroller flex gap-8">
+                            <!-- Solution cards will be populated by JS -->
+                        </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Case Study Section (UPDATED) -->
+            <!-- Case Study Section -->
             <section id="case-study" class="py-20 md:py-24 bg-gray-900/30">
                 <div class="container mx-auto px-4">
                     <div class="case-study-slider-container">
@@ -584,6 +602,12 @@
                 role2Desc: { zh: '评估广告创意效果、洞察目标客群、追踪品牌健康度，用精准洞察驱动营销活动的ROI增长。', en: 'Evaluate ad creative effectiveness, understand target audiences, and track brand health to drive marketing campaign ROI with precise insights.' },
                 role3Title: { zh: '为用户研究员', en: 'For UX Researchers' },
                 role3Desc: { zh: '将数周的定性、定量研究压缩至数天甚至数小时，从繁琐的执行工作中解放，专注于更高价值的洞察分析。', en: 'Compress weeks of qualitative and quantitative research into days or even hours, freeing you from tedious execution to focus on high-value insight analysis.' },
+                role4Title: { zh: '为战略/咨询', en: 'For Strategy & Consulting' },
+                role4Desc: { zh: '快速完成行业扫描、市场规模评估和竞品分析，为关键战略决策提供可靠、及时的情报支持。', en: 'Quickly complete industry scans, market size assessments, and competitive analysis to provide reliable, timely intelligence for key strategic decisions.' },
+                role5Title: { zh: '为投资分析', en: 'For Investment Analysts' },
+                role5Desc: { zh: '深入挖掘消费者对特定品牌或产品的真实看法，验证投资假设，发现隐藏的市场机会与风险。', en: 'Dig deep into consumer sentiment towards specific brands or products, validate investment theses, and uncover hidden market opportunities and risks.' },
+                role6Title: { zh: '为创始人/CEO', en: 'For Founders/CEOs' },
+                role6Desc: { zh: '以极高效率倾听用户心声，把握市场脉搏，确保公司发展方向与用户真实需求保持一致。', en: 'Listen to the voice of the customer with extreme efficiency, keep a pulse on the market, and ensure the company\'s direction aligns with real user needs.' },
 
                 // Case Studies
                 case_studies: [
@@ -742,6 +766,7 @@
                 caseStudyDots: document.getElementById('case-study-dots'),
                 caseStudyPrevBtn: document.getElementById('case-study-prev'),
                 caseStudyNextBtn: document.getElementById('case-study-next'),
+                solutionsScroller: document.querySelector('.solutions-scroller'),
             };
 
             let currentLang = 'zh';
@@ -766,6 +791,7 @@
                 populateMoreFeatures();
                 populateFaqs();
                 populateCaseStudies();
+                populateSolutions();
 
                 dom.langZhBtn.classList.toggle('active-lang', lang === 'zh');
                 dom.langEnBtn.classList.toggle('active-lang', lang === 'en');
@@ -813,6 +839,18 @@
                     });
                 });
                 observeFadeInElements();
+            }
+            
+            function populateSolutions() {
+                if (!dom.solutionsScroller) return;
+                const roles = ['role1', 'role2', 'role3', 'role4', 'role5', 'role6'];
+                const cardsHtml = roles.map(role => `
+                    <div class="glass-card rounded-xl p-8 flex-shrink-0 w-[300px] md:w-[350px]">
+                        <h3 class="text-xl font-bold text-white">${translations[`${role}Title`][currentLang]}</h3>
+                        <p class="mt-4 text-gray-400">${translations[`${role}Desc`][currentLang]}</p>
+                    </div>
+                `).join('');
+                dom.solutionsScroller.innerHTML = cardsHtml + cardsHtml; // Duplicate for seamless scroll
             }
 
             function populateCaseStudies() {
