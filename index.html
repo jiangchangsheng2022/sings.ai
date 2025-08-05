@@ -11,7 +11,6 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-    
       gtag('config', 'G-HCWQKQNN47');
     </script>
 
@@ -27,7 +26,7 @@
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     
     <style>
-        /* 自定义全局样式 */
+        /* Custom global styles */
         html {
             scroll-behavior: smooth;
         }
@@ -37,7 +36,7 @@
             color: #E2E8F0;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            /* subtle grid background */
+            /* Subtle grid background */
             background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
             background-size: 30px 30px;
         }
@@ -62,8 +61,8 @@
             transition: background 0.3s ease, border-color 0.3s ease;
         }
         .glass-card:hover {
-             background: rgba(255, 255, 255, 0.08);
-             border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
         }
         .fade-in {
             opacity: 0;
@@ -75,18 +74,6 @@
             transform: translateY(0);
         }
         .lang-switcher .active-lang { background-color: #2563EB; color: white; }
-        .tab-button.active { color: white; background-color: #2563EB; }
-        .video-placeholder { position: relative; cursor: pointer; }
-        .video-placeholder .play-button {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 80px; height: 80px; background: rgba(0,0,0,0.5); border-radius: 50%;
-            display: flex; justify-content: center; align-items: center;
-            transition: transform 0.3s ease, background-color 0.3s ease;
-        }
-        .video-placeholder:hover .play-button {
-            transform: translate(-50%, -50%) scale(1.1);
-            background: rgba(37, 99, 235, 0.8);
-        }
         .faq-item .faq-answer {
             max-height: 0;
             overflow: hidden;
@@ -94,8 +81,11 @@
             padding-top: 0; padding-bottom: 0;
         }
         .faq-item.open .faq-answer {
-            max-height: 200px;
+            max-height: 250px;
             padding-top: 1rem; padding-bottom: 1rem;
+        }
+        .faq-item .faq-arrow {
+            transition: transform 0.3s ease-in-out;
         }
         .faq-item.open .faq-arrow { transform: rotate(180deg); }
         .demo-console { font-family: 'Courier New', Courier, monospace; }
@@ -104,12 +94,6 @@
             animation: blink 1s step-end infinite;
         }
         @keyframes blink { 50% { opacity: 0; } }
-        .gradient-text {
-            background-image: linear-gradient(to right, #A78BFA, #3B82F6);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
         .nav-link {
             position: relative;
         }
@@ -121,7 +105,7 @@
             bottom: -6px;
             left: 50%;
             transform: translateX(-50%);
-            background-color: #60A5FA; /* text-blue-400 */
+            background-color: #60A5FA;
             transition: width 0.3s ease-in-out;
         }
         .nav-link:hover::after {
@@ -130,7 +114,6 @@
         .dropdown {
             transition: opacity 0.3s ease, transform 0.3s ease;
         }
-        /* Scrolling logos animation */
         .logos-container {
             -webkit-mask-image: linear-gradient(to right, transparent, white 20%, white 80%, transparent);
             mask-image: linear-gradient(to right, transparent, white 20%, white 80%, transparent);
@@ -143,16 +126,117 @@
             from { transform: translateX(0); }
             to { transform: translateX(-100%); }
         }
-        /* Show more transition */
         #more-features-grid {
-            transition: max-height 0.7s ease-in-out, opacity 0.5s ease-in-out;
+            transition: max-height 0.7s ease-in-out, opacity 0.5s ease-in-out, margin-top 0.7s ease-in-out;
             max-height: 0;
             opacity: 0;
             overflow: hidden;
+            margin-top: 0;
         }
         #more-features-grid.show {
-            max-height: 1000px; /* Adjust if more features are added */
+            max-height: 1000px;
             opacity: 1;
+            margin-top: 3rem;
+        }
+        .gradient-button {
+            background-image: linear-gradient(to right, #4F46E5, #3B82F6);
+            transition: all 0.3s ease;
+        }
+        .gradient-button:hover {
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+        }
+        .terminal-window {
+            background-color: #111827;
+            border: 1px solid #374151;
+            border-radius: 0.75rem;
+            box-shadow: 0 0 40px rgba(99, 102, 241, 0.1);
+            overflow: hidden;
+        }
+        .terminal-header {
+            background-color: rgba(0,0,0,0.2);
+            border-bottom: 1px solid #374151;
+        }
+        .terminal-body {
+            color: #D1D5DB;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 1.5rem;
+            min-height: 200px;
+        }
+        .terminal-body .user-input { color: #A78BFA; }
+        .terminal-body .ai-output { color: #60A5FA; }
+        .terminal-body .system-info { color: #34D399; }
+        .terminal-cursor {
+            display: inline-block;
+            width: 10px;
+            height: 1.2em;
+            background-color: #A78BFA;
+            animation: blink-terminal 1s step-end infinite;
+            vertical-align: bottom;
+        }
+        @keyframes blink-terminal {
+            from, to { background-color: transparent }
+            50% { background-color: #A78BFA; }
+        }
+        /* Case Study Slider Styles */
+        .case-study-slider-container {
+            position: relative;
+        }
+        .case-study-slider {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+        .case-study-slide {
+            min-width: 100%;
+            flex-shrink: 0;
+            box-sizing: border-box;
+        }
+        .slider-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            pointer-events: none;
+        }
+        .slider-nav button {
+            pointer-events: all;
+            background-color: rgba(30, 41, 59, 0.5);
+            border-radius: 9999px;
+            width: 3rem;
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: background-color 0.3s ease;
+            margin: 0 -1.5rem; /* Position buttons outside the content area on larger screens */
+        }
+        .slider-nav button:hover {
+            background-color: rgba(55, 65, 81, 0.8);
+        }
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 2rem;
+        }
+        .slider-dots button {
+            width: 0.75rem;
+            height: 0.75rem;
+            border-radius: 9999px;
+            background-color: #4B5563; /* gray-600 */
+            transition: background-color 0.3s ease;
+        }
+        .slider-dots button.active {
+            background-color: #3B82F6; /* blue-500 */
+        }
+        @media (max-width: 1024px) {
+            .slider-nav button {
+                margin: 0;
+            }
         }
     </style>
 </head>
@@ -162,30 +246,31 @@
         <!-- Header -->
         <header id="header" class="fixed top-0 left-0 right-0 z-50 p-4 transition-all duration-300">
              <div id="header-inner" class="container mx-auto glass-morphism rounded-xl p-2 px-4 flex justify-between items-center transition-all duration-300">
-                <a href="index.html" class="flex items-center text-2xl font-bold text-white"><span class="text-blue-400">Sings</span><span>.AI</span></a>
+                <a href="https://sings.ai/index.html" class="flex items-center text-2xl font-bold text-white"><span class="text-blue-400">Sings</span><span>.AI</span></a>
                 <nav class="hidden md:flex items-center space-x-8">
                     <div class="relative" id="products-menu">
                         <button class="nav-link text-gray-300 hover:text-white transition-colors flex items-center" data-lang="navProducts">
                             产品 <i class="ph ph-caret-down ml-1 transition-transform duration-300"></i>
                         </button>
-                        <div id="products-dropdown" class="dropdown absolute top-full left-1/2 -translate-x-1/2 mt-4 w-56 bg-gray-900/80 backdrop-blur-lg border border-gray-700 rounded-lg shadow-lg opacity-0 pointer-events-none transform -translate-y-2">
-                            <a href="https://sings.ai/product/" class="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-gray-700/50 hover:text-white transition-colors rounded-t-lg"><i class="ph ph-chart-pie-slice text-lg text-blue-400"></i> AI 智能问卷</a>
-                            <a href="https://sings.ai/product/" class="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-gray-700/50 hover:text-white transition-colors rounded-b-lg"><i class="ph ph-users-three text-lg text-purple-400"></i> AI 深度访谈</a>
+                        <div id="products-dropdown" class="dropdown absolute top-full left-1/2 -translate-x-1/2 mt-4 w-60 bg-gray-900/80 backdrop-blur-lg border border-gray-700 rounded-lg shadow-lg opacity-0 pointer-events-none transform -translate-y-2">
+                            <a href="https://sings.ai/product/Survey" class="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-gray-700/50 hover:text-white transition-colors rounded-t-lg" data-lang="productLink1"><i class="ph ph-chart-pie-slice text-lg text-blue-400"></i> AI Test 智能问卷</a>
+                            <a href="https://sings.ai/product/FGD" class="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-gray-700/50 hover:text-white transition-colors" data-lang="productLink2"><i class="ph ph-users-three text-lg text-purple-400"></i> AI Talk 智能访谈</a>
+                            <a href="https://sings.ai/product/User" class="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-gray-700/50 hover:text-white transition-colors rounded-b-lg" data-lang="productLink3"><i class="ph ph-user-circle-gear text-lg text-green-400"></i> AI User 仿真用户</a>
                         </div>
                     </div>
                     <a href="#solutions" class="nav-link text-gray-300 hover:text-white transition-colors" data-lang="navSolutions">解决方案</a>
                     <a href="#case-study" class="nav-link text-gray-300 hover:text-white transition-colors" data-lang="navCaseStudies">客户案例</a>
+                    <a href="https://sings.ai/page/price.html" class="nav-link text-gray-300 hover:text-white transition-colors" data-lang="navPricing">定价</a>
                     <a href="#faq" class="nav-link text-gray-300 hover:text-white transition-colors" data-lang="navFaq">常见问题</a>
                 </nav>
                 <div class="hidden md:flex items-center space-x-4">
-                    <a href="#login" class="text-gray-300 hover:text-white transition-colors text-sm font-medium" data-lang="login">登录</a>
                     <a href="https://sings.ai/product/" class="py-2 px-4 rounded-lg font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-500 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300" data-lang="bookDemo">立即体验</a>
                     <div class="lang-switcher flex items-center bg-gray-800/50 border border-gray-700 rounded-lg p-0.5">
                         <button id="lang-zh" class="px-2 py-0.5 text-sm rounded-md transition-colors duration-300">中</button>
                         <button id="lang-en" class="px-2 py-0.5 text-sm rounded-md transition-colors duration-300">EN</button>
                     </div>
                 </div>
-                <div class="md:hidden"><button id="mobile-menu-button" class="text-white"><i class="ph ph-list text-2xl"></i></button></div>
+                <div class="md:hidden"><button id="mobile-menu-button" aria-label="Open menu" class="text-white"><i class="ph ph-list text-2xl"></i></button></div>
             </div>
         </header>
         
@@ -197,15 +282,16 @@
                         产品 <i class="ph ph-caret-down ml-2 transition-transform duration-300"></i>
                     </button>
                     <div id="mobile-products-links" class="hidden mt-4 space-y-4">
-                        <a href="https://sings.ai/product/" class="block text-lg text-gray-400 hover:text-white">AI 智能问卷</a>
-                        <a href="https://sings.ai/product/" class="block text-lg text-gray-400 hover:text-white">AI 深度访谈</a>
+                        <a href="https://sings.ai/product/Survey" class="block text-lg text-gray-400 hover:text-white" data-lang="productLink1Mobile">AI Test 智能问卷</a>
+                        <a href="https://sings.ai/product/FGD" class="block text-lg text-gray-400 hover:text-white" data-lang="productLink2Mobile">AI Talk 智能访谈</a>
+                        <a href="https://sings.ai/product/User" class="block text-lg text-gray-400 hover:text-white" data-lang="productLink3Mobile">AI User 仿真用户</a>
                     </div>
                 </div>
                 <a href="#solutions" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="navSolutionsMobile">解决方案</a>
                 <a href="#case-study" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="navCaseStudiesMobile">客户案例</a>
+                <a href="https://sings.ai/page/price.html" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="navPricingMobile">定价</a>
                 <a href="#faq" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="navFaqMobile">常见问题</a>
                 <hr class="w-full border-gray-700 my-4">
-                <a href="#login" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="loginMobile">登录</a>
                 <a href="https://sings.ai/product/" class="w-full max-w-xs px-6 py-3 rounded-lg text-white font-semibold bg-gradient-to-r from-blue-600 to-indigo-500 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300" data-lang="bookDemoMobile">立即体验</a>
             </div>
         </div>
@@ -237,34 +323,67 @@
             <!-- Products Section -->
             <section id="products" class="py-12 md:py-24 bg-gray-900/30">
                 <div class="container mx-auto px-4">
-                    <div class="text-center mb-16">
+                    <div class="text-center mb-16 md:mb-24">
                         <h2 class="text-3xl md:text-4xl font-bold text-white" data-lang="productsTitle">我们的核心产品</h2>
                     </div>
                     
-                    <div class="space-y-20">
-                        <!-- AI Smart Survey -->
-                        <div class="grid md:grid-cols-2 gap-12 items-center fade-in">
-                            <div>
-                                <h3 class="text-2xl md:text-3xl font-bold text-white" data-lang="product1Title">AI 智能问卷</h3>
-                                <p class="mt-4 text-lg text-gray-400" data-lang="product1Desc">从问卷设计、投放到分析报告，全程自动化。利用AI仿真用户或真实样本，快速完成高质量的数据采集。</p>
-                                <a href="https://sings.ai/product/" class="mt-8 inline-block px-6 py-3 rounded-lg text-white font-semibold bg-blue-600 hover:bg-blue-500 transition-all duration-300" data-lang="learnMore1">立即体验</a>
+                    <div class="space-y-20 md:space-y-28">
+                        <!-- Feature 1: AI Test -->
+                        <section class="flex flex-col md:flex-row items-center gap-8 md:gap-12 fade-in">
+                            <div class="md:w-1/2 text-center md:text-left">
+                                <h3 class="text-3xl md:text-4xl font-bold text-white mb-4" data-lang="product1Title">AI Test 智能问卷</h3>
+                                <p class="text-gray-300 leading-relaxed" data-lang="product1Desc">这不只是简单的在线表单。我们的 AI 问卷能够根据用户的回答进行实时追问和逻辑跳转，像一位经验丰富的研究员一样，挖掘更深层次的动机和原因。告别静态问卷，让每一次回答都充满价值。</p>
+                                <div class="mt-6">
+                                    <a href="https://sings.ai/product/Survey" class="gradient-button text-white font-semibold py-2 px-6 rounded-lg inline-block" data-lang="learnMore1">立即使用</a>
+                                </div>
                             </div>
-                            <div class="bg-gray-900/50 border border-gray-800 rounded-xl p-2">
-                                <svg class="w-full h-auto" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg"><rect x="10" y="70" width="30" height="30" fill="#3B82F6" class="chart-bar" style="animation-delay: 0s;"></rect><rect x="50" y="40" width="30" height="60" fill="#60A5FA" class="chart-bar" style="animation-delay: 0.1s;"></rect><rect x="90" y="20" width="30" height="80" fill="#A78BFA" class="chart-bar" style="animation-delay: 0.2s;"></rect><rect x="130" y="50" width="30" height="50" fill="#60A5FA" class="chart-bar" style="animation-delay: 0.3s;"></rect><line x1="0" y1="100" x2="200" y2="100" stroke="#4B5563" stroke-width="2"></line></svg>
+                            <div class="md:w-1/2 w-full">
+                                <div class="terminal-window" data-terminal-id="questionnaire">
+                                    <div class="terminal-header flex items-center p-3">
+                                        <div class="flex space-x-2"><span class="block w-3 h-3 bg-red-500 rounded-full"></span><span class="block w-3 h-3 bg-yellow-500 rounded-full"></span><span class="block w-3 h-3 bg-green-500 rounded-full"></span></div>
+                                    </div>
+                                    <div class="terminal-body"></div>
+                                </div>
                             </div>
-                        </div>
+                        </section>
 
-                        <!-- AI In-depth Interview -->
-                        <div class="grid md:grid-cols-2 gap-12 items-center fade-in">
-                            <div class="bg-gray-900/50 border border-gray-800 rounded-xl p-2 order-last md:order-first">
-                                <svg viewBox="0 0 600 450" class="rounded-lg w-full" xmlns="http://www.w3.org/2000/svg" aria-label="AI深度访谈模拟界面"><rect width="600" height="450" rx="8" fill="#111827"></rect><text x="50" y="60" font-family="sans-serif" font-size="18" fill="#9CA3AF">AI 主持人</text><rect x="50" y="80" width="400" height="60" rx="10" fill="#1F2937"></rect><rect x="65" y="95" width="300" height="8" rx="4" fill="#4B5563"></rect><rect x="65" y="115" width="250" height="8" rx="4" fill="#4B5563"></rect><text x="550" y="180" font-family="sans-serif" font-size="18" fill="#60A5FA" text-anchor="end">AI 受访者</text><rect x="150" y="200" width="400" height="80" rx="10" fill="#1E40AF"></rect><rect x="165" y="215" width="350" height="8" rx="4" fill="#DBEAFE"></rect><rect x="165" y="235" width="370" height="8" rx="4" fill="#DBEAFE"></rect><rect x="165" y="255" width="310" height="8" rx="4" fill="#DBEAFE"></rect><text x="50" y="320" font-family="sans-serif" font-size="18" fill="#9CA3AF">AI 主持人</text><rect x="50" y="340" width="350" height="40" rx="10" fill="#1F2937"></rect><rect x="65" y="355" width="280" height="8" rx="4" fill="#4B5563"></rect></svg>
+                        <!-- Feature 2: AI Talk -->
+                        <section class="flex flex-col md:flex-row-reverse items-center gap-8 md:gap-12 fade-in">
+                            <div class="md:w-1/2 text-center md:text-left">
+                                <h3 class="text-3xl md:text-4xl font-bold text-white mb-4" data-lang="product2Title">AI Talk 智能访谈</h3>
+                                <p class="text-gray-300 leading-relaxed" data-lang="product2Desc">让 AI 成为您的研究助理，7x24 小时不间断执行第一轮用户访谈。它能标准化执行访谈流程，并实时完成语音转写、情绪分析和关键信息提取，将您从繁琐的重复劳动中解放出来，专注于真正需要洞察的环节。</p>
+                                <div class="mt-6">
+                                    <a href="https://sings.ai/product/FGD" class="gradient-button text-white font-semibold py-2 px-6 rounded-lg inline-block" data-lang="learnMore2">立即使用</a>
+                                </div>
                             </div>
-                            <div>
-                                <h3 class="text-2xl md:text-3xl font-bold text-white" data-lang="product2Title">AI 深度访谈</h3>
-                                <p class="mt-4 text-lg text-gray-400" data-lang="product2Desc">大规模、低成本地挖掘用户行为背后的“为什么”。AI访谈员可以与数百名用户同时进行1v1对话，并自动提炼观点。</p>
-                                <a href="https://sings.ai/product/" class="mt-8 inline-block px-6 py-3 rounded-lg text-white font-semibold bg-blue-600 hover:bg-blue-500 transition-all duration-300" data-lang="learnMore2">立即体验</a>
+                            <div class="md:w-1/2 w-full">
+                                <div class="terminal-window" data-terminal-id="interview">
+                                    <div class="terminal-header flex items-center p-3">
+                                        <div class="flex space-x-2"><span class="block w-3 h-3 bg-red-500 rounded-full"></span><span class="block w-3 h-3 bg-yellow-500 rounded-full"></span><span class="block w-3 h-3 bg-green-500 rounded-full"></span></div>
+                                    </div>
+                                    <div class="terminal-body"></div>
+                                </div>
                             </div>
-                        </div>
+                        </section>
+
+                        <!-- Feature 3: AI User -->
+                        <section class="flex flex-col md:flex-row items-center gap-8 md:gap-12 fade-in">
+                            <div class="md:w-1/2 text-center md:text-left">
+                                <h3 class="text-3xl md:text-4xl font-bold text-white mb-4" data-lang="product3Title">AI User 仿真用户</h3>
+                                <p class="text-gray-300 leading-relaxed" data-lang="product3Desc">我们最具创新性的功能。在产品上线前，与数千个基于真实数据训练的“虚拟用户”进行对话和测试。高效验证产品概念、测试用户流程、优化文案细节，以极低成本获得高价值的迭代方向，规避上线风险。</p>
+                                <div class="mt-6">
+                                    <a href="https://sings.ai/product/User" class="gradient-button text-white font-semibold py-2 px-6 rounded-lg inline-block" data-lang="learnMore3">立即使用</a>
+                                </div>
+                            </div>
+                            <div class="md:w-1/2 w-full">
+                                <div class="terminal-window" data-terminal-id="simulation">
+                                    <div class="terminal-header flex items-center p-3">
+                                        <div class="flex space-x-2"><span class="block w-3 h-3 bg-red-500 rounded-full"></span><span class="block w-3 h-3 bg-yellow-500 rounded-full"></span><span class="block w-3 h-3 bg-green-500 rounded-full"></span></div>
+                                    </div>
+                                    <div class="terminal-body"></div>
+                                </div>
+                            </div>
+                        </section>
                     </div>
 
                     <div class="text-center mt-20">
@@ -275,8 +394,8 @@
                         </button>
                     </div>
 
-                    <div id="more-features-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-12">
-                        <!-- Other features will be populated here by JS -->
+                    <div id="more-features-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        <!-- More features will be populated here by JS -->
                     </div>
                 </div>
             </section>
@@ -293,24 +412,22 @@
                 </div>
             </section>
 
-            <!-- Case Study Section -->
+            <!-- Case Study Section (UPDATED) -->
             <section id="case-study" class="py-20 md:py-24 bg-gray-900/30">
                 <div class="container mx-auto px-4">
-                    <div class="grid lg:grid-cols-2 gap-12 items-center">
-                        <div class="fade-in">
-                            <span class="font-semibold text-blue-400" data-lang="caseStudyLabel">客户成功故事</span>
-                            <h2 class="mt-2 text-3xl md:text-4xl font-bold text-white" data-lang="caseStudyTitle">一家快速增长的DTC生活方式品牌，新品上市决策时间缩短75%</h2>
-                            <p class="mt-4 text-lg text-gray-400" data-lang="caseStudyDesc">面对激烈竞争，该品牌需要在数款潜在新品中快速锁定最具爆款潜力的一个。传统调研流程无法满足其上市速度要求。</p>
-                            <div class="mt-8 pt-8 border-t border-gray-800"><blockquote class="text-xl italic text-white"><p data-lang="caseStudyQuote">“Sings.AI彻底改变了我们的产品决策流程。过去需要一个月才能完成的研究，现在一个周末就拿到了高质量的洞察报告。”</p><footer class="mt-4 text-base not-italic text-gray-400" data-lang="caseStudyAuthor">— 产品创新总监, 一家快速增长的DTC生活方式品牌</footer></blockquote></div>
-                        </div>
-                        <div class="glass-card rounded-xl p-8 lg:p-12 fade-in" style="transition-delay: 200ms;">
-                            <h3 class="text-2xl font-bold text-white text-center" data-lang="caseStudyResultsTitle">核心成果</h3>
-                            <div class="mt-8 grid grid-cols-3 gap-4 text-center">
-                                <div><p class="text-4xl md:text-5xl font-bold text-blue-400" data-count="75">0</p><p class="mt-1 text-gray-400" data-lang="caseStudyResult1">研究周期缩短(%)</p></div>
-                                <div><p class="text-4xl md:text-5xl font-bold text-blue-400" data-count="30">0</p><p class="mt-1 text-gray-400" data-lang="caseStudyResult2">新品爆款率提升(%)</p></div>
-                                <div><p class="text-4xl md:text-5xl font-bold text-blue-400" data-count="50">0</p><p class="mt-1 text-gray-400" data-lang="caseStudyResult3">研究成本降低(%)</p></div>
+                    <div class="case-study-slider-container">
+                        <div class="overflow-hidden">
+                            <div id="case-study-slider" class="case-study-slider">
+                                <!-- Slides will be populated by JS -->
                             </div>
                         </div>
+                        <div class="slider-nav">
+                            <button id="case-study-prev" aria-label="Previous case study"><i class="ph ph-caret-left text-2xl"></i></button>
+                            <button id="case-study-next" aria-label="Next case study"><i class="ph ph-caret-right text-2xl"></i></button>
+                        </div>
+                    </div>
+                    <div id="case-study-dots" class="slider-dots">
+                        <!-- Dots will be populated by JS -->
                     </div>
                 </div>
             </section>
@@ -341,6 +458,19 @@
                 </div>
             </section>
 
+            <!-- FAQ Section -->
+            <section id="faq" class="py-20 md:py-24 bg-gray-900/30">
+                <div class="container mx-auto px-4">
+                    <div class="text-center mb-16">
+                        <h2 class="text-3xl md:text-4xl font-bold text-white" data-lang="faqTitle">常见问题</h2>
+                        <p class="mt-4 max-w-2xl mx-auto text-lg text-gray-400" data-lang="faqSubtitle">在这里找到您关心问题的答案。</p>
+                    </div>
+                    <div id="faq-container" class="max-w-3xl mx-auto space-y-4">
+                        <!-- FAQ items will be populated by JS -->
+                    </div>
+                </div>
+            </section>
+
             <!-- Final CTA Section -->
             <section id="demo" class="py-20 md:py-32 text-center hero-bg">
                 <div class="container mx-auto px-4">
@@ -355,97 +485,273 @@
         <footer class="border-t border-gray-800">
             <div class="container mx-auto px-4 py-16">
                 <div class="grid grid-cols-2 md:grid-cols-5 gap-8">
-                    <div class="col-span-2 md:col-span-1"><a href="#home" class="flex items-center text-2xl font-bold text-white"><span class="text-blue-400">Sings</span><span>.AI</span></a><p class="mt-4 text-gray-400 text-sm" data-lang="footerSlogan">加速您的商业决策</p></div>
-                    <div><h3 class="font-semibold text-white tracking-wider" data-lang="footerProducts">产品</h3><ul class="mt-4 space-y-3" data-lang="footerProductsLinks"><li><a href="https://sings.ai/product/" class="text-gray-400 hover:text-white transition-colors">AI 智能问卷</a></li><li><a href="https://sings.ai/product/" class="text-gray-400 hover:text-white transition-colors">AI 深度访谈</a></li><li><a href="#products" class="text-gray-400 hover:text-white transition-colors">洞察副驾</a></li></ul></div>
-                    <div><h3 class="font-semibold text-white tracking-wider" data-lang="footerSolutions">解决方案</h3><ul class="mt-4 space-y-3" data-lang="footerSolutionsLinks"><li><a href="#solutions" class="text-gray-400 hover:text-white transition-colors">产品开发</a></li><li><a href="#solutions" class="text-gray-400 hover:text-white transition-colors">市场营销</a></li><li><a href="#solutions" class="text-gray-400 hover:text-white transition-colors">用户研究</a></li></ul></div>
-                    <div><h3 class="font-semibold text-white tracking-wider" data-lang="footerResources">资源</h3><ul class="mt-4 space-y-3" data-lang="footerResourcesLinks"><li><a href="#case-study" class="text-gray-400 hover:text-white transition-colors">客户案例</a></li><li><a href="#faq" class="text-gray-400 hover:text-white transition-colors">常见问题</a></li><li><a href="#resources" class="text-gray-400 hover:text-white transition-colors">博客</a></li></ul></div>
-                     <div><h3 class="font-semibold text-white tracking-wider" data-lang="footerCompany">公司</h3><ul class="mt-4 space-y-3" data-lang="footerCompanyLinks"><li><a href="#about" class="text-gray-400 hover:text-white transition-colors">关于我们</a></li><li><a href="mailto:jiang.changsheng@foxmail.com" class="text-gray-400 hover:text-white transition-colors">联系方式</a></li></ul></div>
+                    <div class="col-span-2 md:col-span-1">
+                        <a href="https://sings.ai/index.html" class="flex items-center text-2xl font-bold text-white"><span class="text-blue-400">Sings</span><span>.AI</span></a>
+                        <p class="mt-4 text-gray-400 text-sm" data-lang="footerSlogan">加速您的商业决策</p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-white tracking-wider" data-lang="footerProducts">产品</h3>
+                        <ul class="mt-4 space-y-3" data-lang="footerProductsLinks">
+                            <!-- Populated by JS -->
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-white tracking-wider" data-lang="footerSolutions">解决方案</h3>
+                        <ul class="mt-4 space-y-3" data-lang="footerSolutionsLinks">
+                            <!-- Populated by JS -->
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-white tracking-wider" data-lang="footerResources">资源</h3>
+                        <ul class="mt-4 space-y-3" data-lang="footerResourcesLinks">
+                            <!-- Populated by JS -->
+                        </ul>
+                    </div>
+                     <div>
+                        <h3 class="font-semibold text-white tracking-wider" data-lang="footerCompany">公司</h3>
+                        <ul class="mt-4 space-y-3" data-lang="footerCompanyLinks">
+                            <!-- Populated by JS -->
+                        </ul>
+                    </div>
                 </div>
-                <div class="mt-12 pt-8 border-t border-gray-800 text-center text-gray-500 text-sm"><p data-lang="footerCopyright">&copy; 2024 Sings.AI, Inc. 保留所有权利。</p></div>
+                <div class="mt-12 pt-8 border-t border-gray-800 text-center text-gray-500 text-sm">
+                    <p data-lang="footerCopyright">&copy; 2024 Sings.AI, Inc. 保留所有权利。</p>
+                </div>
             </div>
         </footer>
     </div>
 
     <!-- Back to Top Button -->
-    <button id="back-to-top" class="fixed bottom-8 right-8 bg-blue-600/50 text-white p-3 rounded-full shadow-lg hover:bg-blue-600 transition-all duration-300 opacity-0 pointer-events-none">
+    <button id="back-to-top" aria-label="Back to top" class="fixed bottom-8 right-8 bg-blue-600/50 text-white p-3 rounded-full shadow-lg hover:bg-blue-600 transition-all duration-300 opacity-0 pointer-events-none">
         <i class="ph ph-arrow-up text-xl"></i>
     </button>
     
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // All JS logic from previous version
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
-            const header = document.getElementById('header');
-            const headerInner = document.getElementById('header-inner');
-            const translations = {
-                 navProducts: { zh: '产品', en: 'Products' }, navSolutions: { zh: '解决方案', en: 'Solutions' }, navCaseStudies: { zh: '客户案例', en: 'Case Studies' }, navFaq: { zh: '常见问题', en: 'FAQ' },
-                 login: { zh: '登录', en: 'Login' }, bookDemo: { zh: '立即体验', en: 'Experience Now' },
-                 navProductsMobile: { zh: '产品', en: 'Products' }, navSolutionsMobile: { zh: '解决方案', en: 'Solutions' }, navCaseStudiesMobile: { zh: '客户案例', en: 'Case Studies' }, navFaqMobile: { zh: '常见问题', en: 'FAQ' },
-                 loginMobile: { zh: '登录', en: 'Login' }, bookDemoMobile: { zh: '立即体验', en: 'Experience Now' },
-                 heroTitle: { zh: '数小时获得深度洞察，<br class="hidden md:block" /> 而非数周', en: 'Get In-depth Insights in Hours,<br class="hidden md:block" /> Not Weeks' },
-                 heroSubtitle: { zh: 'Sings.AI 智能调研平台，整合AI问卷、AI访谈与AI数据分析，帮助产品、市场和研究团队更快、更准地做出商业决策。', en: 'The Sings.AI intelligent research platform integrates AI surveys, interviews, and data analysis to help product, marketing, and research teams make faster, more accurate business decisions.' },
-                 heroBtnPrimary: { zh: '立即体验', en: 'Experience Now' }, heroBtnSecondary: { zh: '查看产品', en: 'See Products' },
-                 socialProof: { zh: '众多领先企业信赖的AI洞察伙伴', en: 'The AI insight partner trusted by leading companies' },
-                 demoTitle: { zh: '与您的数据“对话”', en: '“Talk” to Your Data' },
-                 demoSubtitle: { zh: '上传任何文本数据，用自然语言提问，即刻获得洞察。体验Sings.AI洞察副驾的强大功能。', en: 'Upload any text data, ask questions in natural language, and get instant insights. Experience the power of Sings.AI Insights Copilot.' },
-                 productsTitle: { zh: '我们的核心产品', en: 'Our Core Products' },
-                 product1Title: { zh: 'AI 智能问卷', en: 'AI Smart Survey' },
-                 product1Desc: { zh: '从问卷设计、投放到分析报告，全程自动化。利用AI仿真用户或真实样本，快速完成高质量的数据采集。', en: 'Fully automated from survey design and deployment to analysis and reporting. Quickly complete high-quality data collection using AI-simulated or real samples.' },
-                 learnMore1: { zh: '立即体验', en: 'Experience Now' },
-                 product2Title: { zh: 'AI 深度访谈', en: 'AI In-depth Interview' },
-                 product2Desc: { zh: '大规模、低成本地挖掘用户行为背后的“为什么”。AI访谈员可以与数百名用户同时进行1v1对话，并自动提炼观点。', en: 'Uncover the "why" behind user behavior at scale and low cost. AI interviewers can conduct 1-on-1 conversations with hundreds of users simultaneously and automatically extract insights.' },
-                 learnMore2: { zh: '立即体验', en: 'Experience Now' },
-                 moreFeaturesTitle: { zh: '更多平台能力', en: 'More Platform Capabilities' },
-                 showMore: { zh: '显示更多', en: 'Show More' },
-                 showLess: { zh: '收起', en: 'Show Less' },
-                 feature3Title: { zh: '全渠道文本导入', en: 'Omni-channel Text Import' },
-                 feature3Desc: { zh: '整合社交媒体、应用评论、客服记录等非结构化数据。', en: 'Integrate unstructured data from social media, app reviews, support tickets, and more.' },
-                 feature4Title: { zh: '全球千万级样本库', en: 'Global Panel Access' },
-                 feature4Desc: { zh: '快速触达全球范围内的真实消费者，或使用AI仿真用户。', en: 'Quickly reach real consumers worldwide or use AI-simulated respondents.' },
-                 feature5Title: { zh: '洞察副驾 (Copilot)', en: 'Insights Copilot' },
-                 feature5Desc: { zh: '与您的所有数据进行自然语言对话，即时获得答案。', en: 'Engage in natural language conversations with all your data to get instant answers.' },
-                 feature6Title: { zh: '情感与主题分析', en: 'Sentiment & Thematic Analysis' },
-                 feature6Desc: { zh: '自动识别文本中的情绪倾向，并聚类出核心讨论主题。', en: 'Automatically identify sentiment and cluster core discussion themes from text.' },
-                 feature7Title: { zh: '趋势与异常检测', en: 'Trend & Anomaly Detection' },
-                 feature7Desc: { zh: '自动发现数据中的新兴趋势、热点话题和异常信号。', en: 'Automatically discover emerging trends, hot topics, and anomalous signals in your data.' },
-                 feature8Title: { zh: '关键时刻视频剪辑', en: 'Video Highlight Reels' },
-                 feature8Desc: { zh: 'AI自动从访谈录像中剪辑出表达关键观点的视频片段。', en: 'AI automatically clips video segments from interview recordings that express key insights.' },
-                 feature9Title: { zh: '可定制仪表板', en: 'Customizable Dashboards' },
-                 feature9Desc: { zh: '通过拖拽，自由组合图表和洞察，创建个性化报告看板。', en: 'Drag and drop to combine charts and insights into personalized reporting dashboards.' },
-                 feature10Title: { zh: '一键生成报告', en: 'One-click Reporting' },
-                 feature10Desc: { zh: '自动生成PPT、PDF和Word格式的专业研究报告。', en: 'Automatically generate professional research reports in PPT, PDF, and Word formats.' },
-                 feature11Title: { zh: '团队协作空间', en: 'Team Collaboration' },
-                 feature11Desc: { zh: '支持多人在线协作，共同标注、分析数据和撰写报告。', en: 'Enable multiplayer collaboration to tag, analyze data, and write reports together.' },
-                 feature12Title: { zh: 'API与集成', en: 'API & Integrations' },
-                 feature12Desc: { zh: '通过API将洞察集成到您现有的BI、CRM或办公系统中。', en: 'Integrate insights into your existing BI, CRM, or productivity systems via API.' },
-                 caseStudyLabel: { zh: '客户成功故事', en: 'Customer Success Story' },
-                 caseStudyTitle: { zh: '一家快速增长的DTC生活方式品牌，新品上市决策时间缩短75%', en: 'Fast-Growing DTC Lifestyle Brand Cuts New Product Launch Decision Time by 75%' },
-                 caseStudyDesc: { zh: '面对激烈竞争，该品牌需要在数款潜在新品中快速锁定最具爆款潜力的一个。传统调研流程无法满足其上市速度要求。', en: 'Facing fierce competition, the brand needed to quickly identify the product with the highest potential among several candidates. Traditional research processes could not meet their time-to-market needs.' },
-                 caseStudyQuote: { zh: '“Sings.AI彻底改变了我们的产品决策流程。过去需要一个月才能完成的研究，现在一个周末就拿到了高质量的洞察报告。”', en: '"Sings.AI completely changed our product decision-making process. Research that used to take a month is now done over a weekend with high-quality insight reports."' },
-                 caseStudyAuthor: { zh: '— 产品创新总监, 一家快速增长的DTC生活方式品牌', en: '— Director of Product Innovation, Fast-Growing DTC Lifestyle Brand' },
-                 caseStudyResultsTitle: { zh: '核心成果', en: 'Key Results' },
-                 caseStudyResult1: { zh: '研究周期缩短(%)', en: 'Reduction in Research Cycle (%)' },
-                 caseStudyResult2: { zh: '新品爆款率提升(%)', en: 'Increase in Hit Rate (%)' },
-                 caseStudyResult3: { zh: '研究成本降低(%)', en: 'Reduction in Research Cost (%)' },
-                 ctaTitle: { zh: '准备好加速您的研究流程了吗？', en: 'Ready to Accelerate Your Research Process?' },
-                 ctaSubtitle: { zh: '立即预约1v1产品演示，我们将为您展示Sings.AI如何将数周的工作缩短至数小时。', en: 'Book a 1-on-1 demo now, and we’ll show you how Sings.AI can shorten weeks of work into hours.' },
-                 ctaButton: { zh: '立即体验', en: 'Experience Now' },
-                 footerSlogan: { zh: '加速您的商业决策', en: 'Accelerate Your Business Decisions' },
-                 footerProducts: { zh: '产品', en: 'Products' },
-                 footerProductsLinks: { zh: '<li><a href="https://sings.ai/product/" class="text-gray-400 hover:text-white transition-colors">AI 智能问卷</a></li><li><a href="https://sings.ai/product/" class="text-gray-400 hover:text-white transition-colors">AI 深度访谈</a></li><li><a href="#products" class="text-gray-400 hover:text-white transition-colors">洞察副驾</a></li>', en: '<li><a href="https://sings.ai/product/" class="text-gray-400 hover:text-white transition-colors">AI Survey</a></li><li><a href="https://sings.ai/product/" class="text-gray-400 hover:text-white transition-colors">AI Interview</a></li><li><a href="#products" class="text-gray-400 hover:text-white transition-colors">Insights Copilot</a></li>' },
-                 footerSolutions: { zh: '解决方案', en: 'Solutions' },
-                 footerSolutionsLinks: { zh: '<li><a href="#solutions" class="text-gray-400 hover:text-white transition-colors">产品开发</a></li><li><a href="#solutions" class="text-gray-400 hover:text-white transition-colors">市场营销</a></li><li><a href="#solutions" class="text-gray-400 hover:text-white transition-colors">用户研究</a></li>', en: '<li><a href="#solutions" class="text-gray-400 hover:text-white transition-colors">Product Dev</a></li><li><a href="#solutions" class="text-gray-400 hover:text-white transition-colors">Marketing</a></li><li><a href="#solutions" class="text-gray-400 hover:text-white transition-colors">UX Research</a></li>' },
-                 footerResources: { zh: '资源', en: 'Resources' },
-                 footerResourcesLinks: { zh: '<li><a href="#case-study" class="text-gray-400 hover:text-white transition-colors">客户案例</a></li><li><a href="#faq" class="text-gray-400 hover:text-white transition-colors">常见问题</a></li><li><a href="#resources" class="text-gray-400 hover:text-white transition-colors">博客</a></li>', en: '<li><a href="#case-study" class="text-gray-400 hover:text-white transition-colors">Case Studies</a></li><li><a href="#faq" class="text-gray-400 hover:text-white transition-colors">FAQ</a></li><li><a href="#resources" class="text-gray-400 hover:text-white transition-colors">Blog</a></li>' },
-                 footerCompany: { zh: '公司', en: 'Company' },
-                 footerCompanyLinks: { zh: '<li><a href="#about" class="text-gray-400 hover:text-white transition-colors">关于我们</a></li><li><a href="mailto:jiang.changsheng@foxmail.com" class="text-gray-400 hover:text-white transition-colors">联系方式</a></li>', en: '<li><a href="#about" class="text-gray-400 hover:text-white transition-colors">About Us</a></li><li><a href="mailto:jiang.changsheng@foxmail.com" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>' },
-                 footerCopyright: { zh: '&copy; 2024 Sings.AI, Inc. 保留所有权利。', en: '&copy; 2024 Sings.AI, Inc. All rights reserved.' },
-            };
-            const langZhBtn = document.getElementById('lang-zh');
-            const langEnBtn = document.getElementById('lang-en');
 
+            // --- DATA & TRANSLATIONS (CONSOLIDATED) ---
+            const translations = {
+                // Navigation
+                navProducts: { zh: '产品', en: 'Products' },
+                navSolutions: { zh: '解决方案', en: 'Solutions' },
+                navCaseStudies: { zh: '客户案例', en: 'Case Studies' },
+                navPricing: { zh: '定价', en: 'Pricing' },
+                navFaq: { zh: '常见问题', en: 'FAQ' },
+                bookDemo: { zh: '立即体验', en: 'Experience Now' },
+                productLink1: { zh: 'AI Test 智能问卷', en: 'AI Test Smart Survey' },
+                productLink2: { zh: 'AI Talk 智能访谈', en: 'AI Talk Smart Interview' },
+                productLink3: { zh: 'AI User 仿真用户', en: 'AI User Simulated User' },
+                navProductsMobile: { zh: '产品', en: 'Products' },
+                navSolutionsMobile: { zh: '解决方案', en: 'Solutions' },
+                navCaseStudiesMobile: { zh: '客户案例', en: 'Case Studies' },
+                navPricingMobile: { zh: '定价', en: 'Pricing' },
+                navFaqMobile: { zh: '常见问题', en: 'FAQ' },
+                bookDemoMobile: { zh: '立即体验', en: 'Experience Now' },
+                productLink1Mobile: { zh: 'AI Test 智能问卷', en: 'AI Test Smart Survey' },
+                productLink2Mobile: { zh: 'AI Talk 智能访谈', en: 'AI Talk Smart Interview' },
+                productLink3Mobile: { zh: 'AI User 仿真用户', en: 'AI User Simulated User' },
+
+                // Hero Section
+                heroTitle: { zh: '数小时获得深度洞察，<br class="hidden md:block" /> 而非数周', en: 'Get In-depth Insights in Hours,<br class="hidden md:block" /> Not Weeks' },
+                heroSubtitle: { zh: 'Sings.AI 智能调研平台，整合AI问卷、AI访谈与AI数据分析，帮助产品、市场和研究团队更快、更准地做出商业决策。', en: 'The Sings.AI intelligent research platform integrates AI surveys, interviews, and data analysis to help product, marketing, and research teams make faster, more accurate business decisions.' },
+                heroBtnPrimary: { zh: '立即体验', en: 'Experience Now' },
+
+                // Demo Section
+                demoTitle: { zh: '与您的数据“对话”', en: '“Talk” to Your Data' },
+                demoSubtitle: { zh: '上传任何文本数据，用自然语言提问，即刻获得洞察。体验Sings.AI洞察副驾的强大功能。', en: 'Upload any text data, ask questions in natural language, and get instant insights. Experience the power of Sings.AI Insights Copilot.' },
+                
+                // Products Section
+                productsTitle: { zh: '我们的核心产品', en: 'Our Core Products' },
+                product1Title: { zh: 'AI Test 智能问卷', en: 'AI Test Smart Survey' },
+                product1Desc: { zh: '这不只是简单的在线表单。我们的 AI 问卷能够根据用户的回答进行实时追问和逻辑跳转，像一位经验丰富的研究员一样，挖掘更深层次的动机和原因。告别静态问卷，让每一次回答都充满价值。', en: 'This is more than just an online form. Our AI questionnaire can conduct real-time follow-up questions and logical jumps based on user responses, just like an experienced researcher, digging into deeper motivations and reasons. Say goodbye to static questionnaires and make every answer valuable.' },
+                learnMore1: { zh: '立即使用', en: 'Use Now' },
+                product2Title: { zh: 'AI Talk 智能访谈', en: 'AI Talk Smart Interview' },
+                product2Desc: { zh: '让 AI 成为您的研究助理，7x24 小时不间断执行第一轮用户访谈。它能标准化执行访谈流程，并实时完成语音转写、情绪分析和关键信息提取，将您从繁琐的重复劳动中解放出来，专注于真正需要洞察的环节。', en: 'Let AI be your research assistant, conducting the first round of user interviews 24/7. It standardizes the interview process and performs real-time transcription, sentiment analysis, and key information extraction, freeing you from tedious repetitive work to focus on what truly requires insight.' },
+                learnMore2: { zh: '立即使用', en: 'Use Now' },
+                product3Title: { zh: 'AI User 仿真用户', en: 'AI User Simulated User' },
+                product3Desc: { zh: '我们最具创新性的功能。在产品上线前，与数千个基于真实数据训练的“虚拟用户”进行对话和测试。高效验证产品概念、测试用户流程、优化文案细节，以极低成本获得高价值的迭代方向，规避上线风险。', en: 'Our most innovative feature. Before your product goes live, converse with and test it on thousands of "virtual users" trained on real data. Efficiently validate product concepts, test user flows, and optimize copy details to gain high-value iteration directions at a minimal cost, mitigating launch risks.' },
+                learnMore3: { zh: '立即使用', en: 'Use Now' },
+                moreFeaturesTitle: { zh: '更多平台能力', en: 'More Platform Capabilities' },
+                showMore: { zh: '显示更多', en: 'Show More' },
+                showLess: { zh: '收起', en: 'Show Less' },
+
+                // Solutions Section
+                solutionsTitle: { zh: '为高效团队而生', en: 'Built for Efficient Teams' },
+                solutionsSubtitle: { zh: '无论您的角色是什么，Sings.AI 都能提供量身定制的解决方案，加速您的工作流程。', en: 'Whatever your role, Sings.AI offers tailored solutions to accelerate your workflow.' },
+                role1Title: { zh: '为产品经理', en: 'For Product Managers' },
+                role1Desc: { zh: '快速验证产品概念、测试功能优先级、挖掘未被满足的用户需求，让每一个产品决策都有数据支撑。', en: 'Quickly validate product concepts, test feature priorities, and uncover unmet user needs, ensuring every product decision is data-driven.' },
+                role2Title: { zh: '为市场营销', en: 'For Marketers' },
+                role2Desc: { zh: '评估广告创意效果、洞察目标客群、追踪品牌健康度，用精准洞察驱动营销活动的ROI增长。', en: 'Evaluate ad creative effectiveness, understand target audiences, and track brand health to drive marketing campaign ROI with precise insights.' },
+                role3Title: { zh: '为用户研究员', en: 'For UX Researchers' },
+                role3Desc: { zh: '将数周的定性、定量研究压缩至数天甚至数小时，从繁琐的执行工作中解放，专注于更高价值的洞察分析。', en: 'Compress weeks of qualitative and quantitative research into days or even hours, freeing you from tedious execution to focus on high-value insight analysis.' },
+
+                // Case Studies
+                case_studies: [
+                    {
+                        label: { zh: 'DTC生活方式品牌 · UrbanLeaf', en: 'DTC Lifestyle Brand · UrbanLeaf' },
+                        title: { zh: '新品上市决策时间缩短75%，快速锁定爆款潜力股', en: 'New Product Launch Decision Time Cut by 75%, Quickly Identifying Hit Potential' },
+                        desc: { zh: '面对激烈的市场竞争，UrbanLeaf需要在数款潜在新品中快速锁定最具爆款潜力的一个。传统调研流程无法满足其敏捷的上市速度要求。', en: 'Facing fierce market competition, UrbanLeaf needed to quickly identify the product with the highest potential among several candidates. Traditional research processes could not meet their agile time-to-market needs.' },
+                        quote: { zh: '“Sings.AI彻底改变了我们的产品决策流程。过去需要一个月才能完成的研究，现在一个周末就拿到了高质量的洞察报告。”', en: '"Sings.AI completely changed our product decision-making process. Research that used to take a month is now done over a weekend with high-quality insight reports."' },
+                        author: { zh: '— 产品创新总监, UrbanLeaf', en: '— Director of Product Innovation, UrbanLeaf' },
+                        resultsTitle: { zh: '核心成果', en: 'Key Results' },
+                        results: [
+                            { count: 75, label: { zh: '研究周期缩短(%)', en: 'Reduction in Research Cycle (%)' } },
+                            { count: 30, label: { zh: '新品爆款率提升(%)', en: 'Increase in Hit Rate (%)' } },
+                            { count: 50, label: { zh: '研究成本降低(%)', en: 'Reduction in Research Cost (%)' } }
+                        ]
+                    },
+                    {
+                        label: { zh: 'B2B SaaS平台 · ConnectSphere', en: 'B2B SaaS Platform · ConnectSphere' },
+                        title: { zh: '用户流失率降低40%，精准定位产品改进方向', en: 'Reduced Churn Rate by 40% by Pinpointing Product Improvement Areas' },
+                        desc: { zh: 'ConnectSphere面临着较高的用户流失率，尤其是在新用户注册后的第一个月。团队难以确定是功能复杂性、价值主张不明确还是其他原因导致的问题。', en: 'ConnectSphere faced a high churn rate, especially within the first month after new user sign-ups. The team struggled to determine if the issue was feature complexity, an unclear value proposition, or other factors.' },
+                        quote: { zh: '“通过AI深度访谈，我们终于听到了用户真实的声音。Sings.AI帮我们从数百份访谈中自动提炼出三大核心问题，我们的产品路线图从未如此清晰。”', en: '"Through AI in-depth interviews, we finally heard the real voice of our users. Sings.AI automatically extracted the three core issues from hundreds of interviews, making our product roadmap clearer than ever."' },
+                        author: { zh: '— 增长负责人, ConnectSphere', en: '— Head of Growth, ConnectSphere' },
+                        resultsTitle: { zh: '核心成果', en: 'Key Results' },
+                        results: [
+                            { count: 40, label: { zh: '首月流失率降低(%)', en: 'First-Month Churn Reduction (%)' } },
+                            { count: 200, label: { zh: '关键功能采用率提升(%)', en: 'Key Feature Adoption Increase (%)' } },
+                            { count: 5, label: { zh: 'NPS净推荐值提升(分)', en: 'Increase in NPS Score (Points)' } }
+                        ]
+                    },
+                    {
+                        label: { zh: '手机游戏工作室 · PixelPlay Games', en: 'Mobile Gaming Studio · PixelPlay Games' },
+                        title: { zh: '7日留存率提升60%，找到让玩家“上瘾”的关键', en: 'Increased Day-7 Retention by 60% by Finding the Key to Player Engagement' },
+                        desc: { zh: 'PixelPlay的新游戏在初期吸引了大量下载，但玩家在第一周后迅速流失。团队需要快速理解玩家的早期体验，找出流失的关键原因并优化游戏循环。', en: 'PixelPlay\'s new game attracted many downloads initially, but player retention dropped sharply after the first week. The team needed to quickly understand the early player experience to identify key reasons for churn and optimize the game loop.' },
+                        quote: { zh: '“我们用AI仿真用户测试了十几种不同的新手引导方案，只用了一个下午就找到了最优解。这在过去是不可想象的，它至少为我们节省了一个月的开发和测试时间。”', en: '"We tested over a dozen different onboarding flows with AI-simulated users and found the optimal solution in just one afternoon. This was unimaginable in the past and saved us at least a month of development and testing time."' },
+                        author: { zh: '— UX研究主管, PixelPlay Games', en: '— UX Research Lead, PixelPlay Games' },
+                        resultsTitle: { zh: '核心成果', en: 'Key Results' },
+                        results: [
+                            { count: 60, label: { zh: '7日留存率提升(%)', en: 'Increase in Day-7 Retention (%)' } },
+                            { count: 25, label: { zh: '平均游戏时长增加(%)', en: 'Increase in Avg. Session Length (%)' } },
+                            { count: 3, label: { zh: '识别出Top3新功能需求', en: 'Top 3 New Features Identified' } }
+                        ]
+                    }
+                ],
+
+                // Social Proof
+                socialProof: { zh: '众多领先企业信赖的AI洞察伙伴', en: 'The AI insight partner trusted by leading companies' },
+
+                // FAQ Section
+                faqTitle: { zh: '常见问题', en: 'Frequently Asked Questions' },
+                faqSubtitle: { zh: '在这里找到您关心问题的答案。', en: 'Find answers to your questions here.' },
+                faqs: [
+                    { id: 'faq1', q: 'Sings.AI 和传统的调研工具有什么区别？', a: '传统工具主要关注问卷创建和数据收集，而Sings.AI是一个端到端的智能平台。我们利用AI不仅自动化了问卷设计、投放和数据分析，还引入了AI访谈员进行大规模定性研究，将数周的工作压缩到数小时。' },
+                    { id: 'faq2', q: '我的数据安全吗？', a: '绝对安全。我们采用银行级的加密标准保护您的所有数据，在传输和存储过程中都进行加密。我们严格遵守数据隐私法规，绝不会将您的数据用于任何未经授权的用途。' },
+                    { id: 'faq3', q: 'Sings.AI 支持哪些语言？', a: '平台目前支持中文和英文的调研与分析。我们的AI模型经过多语言训练，可以根据您的需求扩展到更多语种。' },
+                    { id: 'faq4', q: 'AI仿真用户和真实用户有什么区别？', a: 'AI仿真用户是基于大量真实世界数据训练出的AI模型，可以模拟特定画像人群的思维和偏好，适合用于快速、低成本的初期概念测试。真实用户则提供来自真实生活经验的、更具深度的反馈，适合用于产品上市前的最终验证。Sings.AI两者都支持。' },
+                ],
+
+                // CTA Section
+                ctaTitle: { zh: '准备好加速您的研究流程了吗？', en: 'Ready to Accelerate Your Research Process?' },
+                ctaSubtitle: { zh: '立即预约1v1产品演示，我们将为您展示Sings.AI如何将数周的工作缩短至数小时。', en: 'Book a 1-on-1 demo now, and we’ll show you how Sings.AI can shorten weeks of work into hours.' },
+                ctaButton: { zh: '立即体验', en: 'Experience Now' },
+
+                // Footer
+                footerSlogan: { zh: '加速您的商业决策', en: 'Accelerate Your Business Decisions' },
+                footerCopyright: { zh: '&copy; 2024 Sings.AI, Inc. 保留所有权利。', en: '&copy; 2024 Sings.AI, Inc. All rights reserved.' },
+                footerProducts: { zh: '产品', en: 'Products' },
+                footerProductsLinks: {
+                    zh: `
+                        <li><a href="https://sings.ai/page/research.html" class="text-gray-400 hover:text-white transition-colors">AI Chat 需求明晰</a></li>
+                        <li><a href="https://sings.ai/product/Survey" class="text-gray-400 hover:text-white transition-colors">AI Test 智能问卷</a></li>
+                        <li><a href="https://sings.ai/product/FGD" class="text-gray-400 hover:text-white transition-colors">AI Talk 智能访谈</a></li>
+                        <li><a href="https://sings.ai/product/User" class="text-gray-400 hover:text-white transition-colors">AI User 仿真用户</a></li>
+                    `,
+                    en: `
+                        <li><a href="https://sings.ai/page/research.html" class="text-gray-400 hover:text-white transition-colors">AI Chat Requirement Clarification</a></li>
+                        <li><a href="https://sings.ai/product/Survey" class="text-gray-400 hover:text-white transition-colors">AI Test Smart Survey</a></li>
+                        <li><a href="https://sings.ai/product/FGD" class="text-gray-400 hover:text-white transition-colors">AI Talk Smart Interview</a></li>
+                        <li><a href="https://sings.ai/product/User" class="text-gray-400 hover:text-white transition-colors">AI User Simulated User</a></li>
+                    `
+                },
+                footerSolutions: { zh: '解决方案', en: 'Solutions' },
+                footerSolutionsLinks: {
+                    zh: `
+                        <li><a href="#solutions" class="text-gray-400 hover:text-white transition-colors">产品开发</a></li>
+                        <li><a href="#solutions" class="text-gray-400 hover:text-white transition-colors">市场营销</a></li>
+                        <li><a href="#solutions" class="text-gray-400 hover:text-white transition-colors">用户研究</a></li>
+                    `,
+                    en: `
+                        <li><a href="#solutions" class="text-gray-400 hover:text-white transition-colors">Product Dev</a></li>
+                        <li><a href="#solutions" class="text-gray-400 hover:text-white transition-colors">Marketing</a></li>
+                        <li><a href="#solutions" class="text-gray-400 hover:text-white transition-colors">UX Research</a></li>
+                    `
+                },
+                footerResources: { zh: '资源', en: 'Resources' },
+                footerResourcesLinks: {
+                    zh: `
+                        <li><a href="#case-study" class="text-gray-400 hover:text-white transition-colors">客户案例</a></li>
+                        <li><a href="https://sings.ai/page/technology.html" class="text-gray-400 hover:text-white transition-colors">技术原理</a></li>
+                        <li><a href="https://sings.ai/page/competitors.html" class="text-gray-400 hover:text-white transition-colors">竞争格局</a></li>
+                        <li><a href="https://sings.ai/page/plan.html" class="text-gray-400 hover:text-white transition-colors">发展计划</a></li>
+                    `,
+                    en: `
+                        <li><a href="#case-study" class="text-gray-400 hover:text-white transition-colors">Case Studies</a></li>
+                        <li><a href="https://sings.ai/page/technology.html" class="text-gray-400 hover:text-white transition-colors">Technology</a></li>
+                        <li><a href="https://sings.ai/page/competitors.html" class="text-gray-400 hover:text-white transition-colors">Competitors</a></li>
+                        <li><a href="https://sings.ai/page/plan.html" class="text-gray-400 hover:text-white transition-colors">Roadmap</a></li>
+                    `
+                },
+                footerCompany: { zh: '公司', en: 'Company' },
+                footerCompanyLinks: {
+                    zh: `
+                        <li><a href="#about" class="text-gray-400 hover:text-white transition-colors">关于我们</a></li>
+                        <li><a href="https://sings.ai/page/job.html" class="text-gray-400 hover:text-white transition-colors">加入我们</a></li>
+                        <li><a href="https://sings.ai/page/email.html" class="text-gray-400 hover:text-white transition-colors">联系我们</a></li>
+                        <li><a href="#resources" class="text-gray-400 hover:text-white transition-colors">博客</a></li>
+                    `,
+                    en: `
+                        <li><a href="#about" class="text-gray-400 hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="https://sings.ai/page/job.html" class="text-gray-400 hover:text-white transition-colors">Join Us</a></li>
+                        <li><a href="https://sings.ai/page/email.html" class="text-gray-400 hover:text-white transition-colors">Contact Us</a></li>
+                        <li><a href="#resources" class="text-gray-400 hover:text-white transition-colors">Blog</a></li>
+                    `
+                },
+                features: [
+                    { id: 'feature3', icon: 'ph-plugs', title: '全渠道文本导入', desc: '整合社交媒体、应用评论、客服记录等非结构化数据。' },
+                    { id: 'feature4', icon: 'ph-globe-hemisphere-west', title: '全球千万级样本库', desc: '快速触达全球范围内的真实消费者，或使用AI仿真用户。' },
+                    { id: 'feature5', icon: 'ph-robot', title: '洞察副驾 (Copilot)', desc: '与您的所有数据进行自然语言对话，即时获得答案。' },
+                    { id: 'feature6', icon: 'ph-smiley', title: '情感与主题分析', desc: '自动识别文本中的情绪倾向，并聚类出核心讨论主题。' },
+                    { id: 'feature7', icon: 'ph-trend-up', title: '趋势与异常检测', desc: '自动发现数据中的新兴趋势、热点话题和异常信号。' },
+                    { id: 'feature8', icon: 'ph-video', title: '关键时刻视频剪辑', desc: 'AI自动从访谈录像中剪辑出表达关键观点的视频片段。' },
+                    { id: 'feature9', icon: 'ph-layout', title: '可定制仪表板', desc: '通过拖拽，自由组合图表和洞察，创建个性化报告看板。' },
+                    { id: 'feature10', icon: 'ph-file-ppt', title: '一键生成报告', desc: '自动生成PPT、PDF和Word格式的专业研究报告。' }
+                ]
+            };
+            
+            // --- DOM ELEMENTS ---
+            const dom = {
+                header: document.getElementById('header'),
+                headerInner: document.getElementById('header-inner'),
+                mobileMenuButton: document.getElementById('mobile-menu-button'),
+                mobileMenu: document.getElementById('mobile-menu'),
+                mobileProductsToggle: document.getElementById('mobile-products-toggle'),
+                mobileProductsLinks: document.getElementById('mobile-products-links'),
+                productsMenu: document.getElementById('products-menu'),
+                productsDropdown: document.getElementById('products-dropdown'),
+                backToTopButton: document.getElementById('back-to-top'),
+                langZhBtn: document.getElementById('lang-zh'),
+                langEnBtn: document.getElementById('lang-en'),
+                interactiveDemo: document.getElementById('interactive-demo'),
+                moreFeaturesGrid: document.getElementById('more-features-grid'),
+                showMoreBtn: document.getElementById('show-more-btn'),
+                showMoreIcon: document.getElementById('show-more-icon'),
+                showMoreText: document.querySelector('#show-more-btn span'),
+                faqContainer: document.getElementById('faq-container'),
+                caseStudySlider: document.getElementById('case-study-slider'),
+                caseStudyDots: document.getElementById('case-study-dots'),
+                caseStudyPrevBtn: document.getElementById('case-study-prev'),
+                caseStudyNextBtn: document.getElementById('case-study-next'),
+            };
+
+            let currentLang = 'zh';
+            let currentSlide = 0;
+
+            // --- FUNCTIONS ---
             function switchLanguage(lang) {
+                currentLang = lang;
+                document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+
                 document.querySelectorAll('[data-lang]').forEach(element => {
                     const key = element.getAttribute('data-lang');
                     if (translations[key] && translations[key][lang]) {
@@ -456,175 +762,423 @@
                         }
                     }
                 });
-                document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
-                langZhBtn.classList.toggle('active-lang', lang === 'zh');
-                langEnBtn.classList.toggle('active-lang', lang === 'en');
-            }
-
-            langZhBtn.addEventListener('click', () => switchLanguage('zh'));
-            langEnBtn.addEventListener('click', () => switchLanguage('en'));
-            switchLanguage('zh');
-
-            if(mobileMenuButton) mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
-            
-            const backToTopButton = document.getElementById('back-to-top');
-
-            window.addEventListener('scroll', () => {
-                const isScrolled = window.scrollY > 10;
-                header.classList.toggle('bg-gray-900/80', isScrolled);
-                header.classList.toggle('backdrop-blur-lg', isScrolled);
-                headerInner.classList.toggle('border-b', isScrolled);
-                headerInner.classList.toggle('border-gray-800', isScrolled);
-
-                if (backToTopButton) {
-                    if (window.scrollY > 300) {
-                        backToTopButton.classList.remove('opacity-0', 'pointer-events-none');
-                    } else {
-                        backToTopButton.classList.add('opacity-0', 'pointer-events-none');
-                    }
-                }
-            });
-
-            if (backToTopButton) {
-                backToTopButton.addEventListener('click', () => {
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                });
-            }
-
-            const faders = document.querySelectorAll('.fade-in');
-            const appearOnScroll = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (!entry.isIntersecting) return;
-                    entry.target.classList.add('visible');
-                    observer.unobserve(entry.target);
-                });
-            }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
-            faders.forEach(fader => appearOnScroll.observe(fader));
-            
-            const productsMenu = document.getElementById('products-menu');
-            const productsDropdown = document.getElementById('products-dropdown');
-            if (productsMenu && productsDropdown) {
-                productsMenu.addEventListener('mouseenter', () => {
-                    productsDropdown.classList.remove('opacity-0', '-translate-y-2', 'pointer-events-none');
-                });
-                productsMenu.addEventListener('mouseleave', () => {
-                    productsDropdown.classList.add('opacity-0', '-translate-y-2', 'pointer-events-none');
-                });
-            }
-
-            const mobileProductsToggle = document.getElementById('mobile-products-toggle');
-            const mobileProductsLinks = document.getElementById('mobile-products-links');
-            if (mobileProductsToggle && mobileProductsLinks) {
-                mobileProductsToggle.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    mobileProductsLinks.classList.toggle('hidden');
-                    mobileProductsToggle.querySelector('i').classList.toggle('rotate-180');
-                });
-            }
-
-            const counters = document.querySelectorAll('[data-count]');
-            const counterObserver = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (!entry.isIntersecting) return;
-                    const el = entry.target;
-                    const target = +el.getAttribute('data-count');
-                    let current = 0;
-                    const increment = target / 100;
-                    const updateCounter = () => {
-                        if (current < target) {
-                            current += increment;
-                            el.innerText = Math.ceil(current);
-                            requestAnimationFrame(updateCounter);
-                        } else {
-                            el.innerText = target;
-                        }
-                    };
-                    updateCounter();
-                    observer.unobserve(el);
-                });
-            }, { threshold: 0.5 });
-            counters.forEach(counter => counterObserver.observe(counter));
-
-            const demoConsole = document.getElementById('interactive-demo');
-            const demoScript = [
-                { type: 'input', text: '分析一下最近的用户访谈记录，找出关于新功能“智能提醒”的主要反馈。' },
-                { type: 'output', text: '正在分析 5 份访谈记录...\n完成！主要反馈如下：\n\n**正面反馈 (75%):**\n- 用户普遍认为该功能“非常有用”，能有效防止错过重要事项。\n- “界面简洁直观”是高频提到的优点。\n\n**负面反馈 (25%):**\n- 少数用户反馈提醒“过于频繁”，希望有自定义设置。\n- 两位用户提到在特定场景下（如会议中）无法快速静音。' },
-                { type: 'input', text: '很好。基于这些反馈，生成3条产品优化建议。' },
-                { type: 'output', text: '好的，生成优化建议：\n\n1. **增加提醒频率自定义:** 在设置中加入“高、中、低”三档提醒频率选项。\n2. **开发“一键静音”模式:** 允许用户通过快捷方式或下拉菜单快速开启1小时或更长的静音模式。\n3. **优化提醒时机:** 结合日历API，在用户有会议安排时自动降低提醒优先级。' }
-            ];
-
-            function typeLine(line, element, onComplete) {
-                const htmlLine = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
-                let currentHtml = '';
-                let i = 0;
-                const speed = 20; 
                 
-                function type() {
-                    if (i < htmlLine.length) {
-                        currentHtml += htmlLine[i];
-                        element.innerHTML = currentHtml;
-                        i++;
-                        setTimeout(type, speed);
-                    } else {
-                        element.classList.remove('demo-line');
-                        if (onComplete) onComplete();
-                    }
-                }
-                type();
+                populateMoreFeatures();
+                populateFaqs();
+                populateCaseStudies();
+
+                dom.langZhBtn.classList.toggle('active-lang', lang === 'zh');
+                dom.langEnBtn.classList.toggle('active-lang', lang === 'en');
             }
 
-            async function runDemo() {
-                if(!demoConsole) return;
-                demoConsole.innerHTML = '';
-                for (const item of demoScript) {
-                    const p = document.createElement('p');
-                    if (item.type === 'input') {
-                        p.innerHTML = `<span class="text-green-400">&gt; </span>`;
-                        const textSpan = document.createElement('span');
-                        p.appendChild(textSpan);
-                        textSpan.classList.add('demo-line');
-                        demoConsole.appendChild(p);
-                        await new Promise(resolve => typeLine(item.text, textSpan, resolve));
-                    } else {
-                        p.classList.add('text-blue-300', 'whitespace-pre-wrap');
-                        const textSpan = document.createElement('span');
-                        p.appendChild(textSpan);
-                        textSpan.classList.add('demo-line');
-                        demoConsole.appendChild(p);
-                        await new Promise(resolve => setTimeout(resolve, 500));
-                        await new Promise(resolve => typeLine(item.text, textSpan, resolve));
-                    }
-                    demoConsole.scrollTop = demoConsole.scrollHeight;
-                    await new Promise(resolve => setTimeout(resolve, 1000));
-                }
-                setTimeout(runDemo, 5000);
+            function populateMoreFeatures() {
+                if (!dom.moreFeaturesGrid) return;
+                dom.moreFeaturesGrid.innerHTML = translations.features.map(feature => {
+                    const title = feature.title;
+                    const desc = feature.desc;
+                    return `
+                        <div class="glass-card rounded-xl p-6 flex items-start gap-4 fade-in">
+                            <i class="${feature.icon} text-3xl text-blue-400"></i>
+                            <div>
+                                <h4 class="font-bold text-white">${title}</h4>
+                                <p class="text-gray-400 text-sm mt-1">${desc}</p>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                observeFadeInElements();
+            }
+            
+            function populateFaqs() {
+                if (!dom.faqContainer) return;
+                dom.faqContainer.innerHTML = translations.faqs.map(faq => {
+                    const question = faq.q;
+                    const answer = faq.a;
+                    return `
+                        <div class="faq-item glass-card rounded-xl fade-in">
+                            <button class="w-full flex justify-between items-center text-left p-6">
+                                <span class="font-semibold text-white">${question}</span>
+                                <i class="ph ph-caret-down faq-arrow text-xl text-gray-400 transition-transform"></i>
+                            </button>
+                            <div class="faq-answer px-6 text-gray-400">
+                                ${answer}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                dom.faqContainer.querySelectorAll('.faq-item button').forEach(button => {
+                    button.addEventListener('click', () => {
+                        button.parentElement.classList.toggle('open');
+                    });
+                });
+                observeFadeInElements();
             }
 
-            const demoObserver = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        runDemo();
-                        observer.unobserve(entry.target);
+            function populateCaseStudies() {
+                const slider = dom.caseStudySlider;
+                const dotsContainer = dom.caseStudyDots;
+                if (!slider || !dotsContainer) return;
+
+                slider.innerHTML = '';
+                dotsContainer.innerHTML = '';
+
+                translations.case_studies.forEach((story, index) => {
+                    const slide = document.createElement('div');
+                    slide.className = 'case-study-slide w-full';
+                    slide.innerHTML = `
+                        <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+                            <div class="fade-in">
+                                <span class="font-semibold text-blue-400">${story.label[currentLang]}</span>
+                                <h2 class="mt-2 text-3xl md:text-4xl font-bold text-white">${story.title[currentLang]}</h2>
+                                <p class="mt-4 text-lg text-gray-400">${story.desc[currentLang]}</p>
+                                <div class="mt-8 pt-8 border-t border-gray-800">
+                                    <blockquote class="text-xl italic text-white">
+                                        <p>"${story.quote[currentLang]}"</p>
+                                        <footer class="mt-4 text-base not-italic text-gray-400">${story.author[currentLang]}</footer>
+                                    </blockquote>
+                                </div>
+                            </div>
+                            <div class="glass-card rounded-xl p-8 lg:p-12 fade-in" style="transition-delay: 200ms;">
+                                <h3 class="text-2xl font-bold text-white text-center">${story.resultsTitle[currentLang]}</h3>
+                                <div class="mt-8 grid grid-cols-3 gap-4 text-center">
+                                    ${story.results.map(result => `
+                                        <div>
+                                            <p class="text-4xl md:text-5xl font-bold text-blue-400" data-count="${result.count}">0</p>
+                                            <p class="mt-1 text-gray-400">${result.label[currentLang]}</p>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    slider.appendChild(slide);
+
+                    const dot = document.createElement('button');
+                    dot.setAttribute('aria-label', `Go to slide ${index + 1}`);
+                    dot.dataset.index = index;
+                    if (index === currentSlide) dot.classList.add('active');
+                    dotsContainer.appendChild(dot);
+                });
+                
+                observeCounters();
+                observeFadeInElements();
+            }
+
+            function initCaseStudySlider() {
+                const slider = dom.caseStudySlider;
+                const dotsContainer = dom.caseStudyDots;
+                if (!slider || !dotsContainer) return;
+
+                const showSlide = (index) => {
+                    const slides = slider.querySelectorAll('.case-study-slide');
+                    const totalSlides = slides.length;
+                    
+                    if (index >= totalSlides) index = 0;
+                    if (index < 0) index = totalSlides - 1;
+
+                    slider.style.transform = `translateX(-${index * 100}%)`;
+                    currentSlide = index;
+
+                    dotsContainer.querySelectorAll('button').forEach((dot, i) => {
+                        dot.classList.toggle('active', i === currentSlide);
+                    });
+                };
+
+                dom.caseStudyNextBtn.addEventListener('click', () => {
+                    showSlide(currentSlide + 1);
+                });
+
+                dom.caseStudyPrevBtn.addEventListener('click', () => {
+                    showSlide(currentSlide - 1);
+                });
+
+                dotsContainer.addEventListener('click', (e) => {
+                    if (e.target.tagName === 'BUTTON') {
+                        const index = parseInt(e.target.dataset.index, 10);
+                        showSlide(index);
                     }
                 });
-            }, { threshold: 0.5 });
-            if(demoConsole) demoObserver.observe(demoConsole);
+            }
 
-            // Smooth scroll for anchor links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    const href = this.getAttribute('href');
-                    if (href.length > 1 && document.querySelector(href)) {
-                        e.preventDefault();
-                        document.querySelector(href).scrollIntoView({
-                            behavior: 'smooth'
-                        });
-                        if(mobileMenu.classList.contains('hidden') === false){
-                           mobileMenu.classList.add('hidden');
+            function toggleMoreFeatures() {
+                const isHidden = !dom.moreFeaturesGrid.classList.contains('show');
+                dom.moreFeaturesGrid.classList.toggle('show');
+                dom.showMoreIcon.classList.toggle('rotate-180');
+                dom.showMoreText.textContent = isHidden ? translations.showLess[currentLang] : translations.showMore[currentLang];
+            }
+
+            function handleScroll() {
+                const isScrolled = window.scrollY > 10;
+                dom.header.classList.toggle('bg-gray-900/80', isScrolled);
+                dom.header.classList.toggle('backdrop-blur-lg', isScrolled);
+                
+                if (dom.backToTopButton) {
+                    dom.backToTopButton.classList.toggle('opacity-0', window.scrollY < 300);
+                    dom.backToTopButton.classList.toggle('pointer-events-none', window.scrollY < 300);
+                }
+            }
+            
+            function observeFadeInElements() {
+                const faders = document.querySelectorAll('.fade-in');
+                const appearOnScroll = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (!entry.isIntersecting) return;
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    });
+                }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+                faders.forEach(fader => appearOnScroll.observe(fader));
+            }
+
+            function observeCounters() {
+                const counters = document.querySelectorAll('[data-count]');
+                const counterObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (!entry.isIntersecting) return;
+                        const el = entry.target;
+                        const target = +el.getAttribute('data-count');
+                        let current = 0;
+                        const increment = target / 100;
+                        const updateCounter = () => {
+                            if (current < target) {
+                                current += increment;
+                                el.innerText = Math.ceil(current);
+                                requestAnimationFrame(updateCounter);
+                            } else {
+                                el.innerText = target;
+                            }
+                        };
+                        updateCounter();
+                        observer.unobserve(el);
+                    });
+                }, { threshold: 0.5 });
+                counters.forEach(counter => counterObserver.observe(counter));
+            }
+
+            function runInteractiveDemo() {
+                const demoScript = [
+                    { type: 'input', text: '分析一下最近的用户访谈记录，找出关于新功能“智能提醒”的主要反馈。' },
+                    { type: 'output', text: '正在分析 5 份访谈记录...\n完成！主要反馈如下：\n\n**正面反馈 (75%):**\n- 用户普遍认为该功能“非常有用”，能有效防止错过重要事项。\n- “界面简洁直观”是高频提到的优点。\n\n**负面反馈 (25%):**\n- 少数用户反馈提醒“过于频繁”，希望有自定义设置。\n- 两位用户提到在特定场景下（如会议中）无法快速静音。' },
+                    { type: 'input', text: '很好。基于这些反馈，生成3条产品优化建议。' },
+                    { type: 'output', text: '好的，生成优化建议：\n\n1. **增加提醒频率自定义:** 在设置中加入“高、中、低”三档提醒频率选项。\n2. **开发“一键静音”模式:** 允许用户通过快捷方式或下拉菜单快速开启1小时或更长的静音模式。\n3. **优化提醒时机:** 结合日历API，在用户有会议安排时自动降低提醒优先级。' }
+                ];
+                let isRunning = false;
+
+                async function typeLine(line, element, onComplete) {
+                    const htmlLine = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+                    let currentHtml = '';
+                    let i = 0;
+                    const speed = 20;
+                    function type() {
+                        if (i < htmlLine.length) {
+                            currentHtml += htmlLine[i];
+                            element.innerHTML = currentHtml;
+                            i++;
+                            setTimeout(type, speed);
+                        } else {
+                            element.classList.remove('demo-line');
+                            if (onComplete) onComplete();
                         }
                     }
+                    type();
+                }
+
+                async function startDemo() {
+                    if (isRunning || !dom.interactiveDemo) return;
+                    isRunning = true;
+                    dom.interactiveDemo.innerHTML = '';
+                    for (const item of demoScript) {
+                        const p = document.createElement('p');
+                        const textSpan = document.createElement('span');
+                        textSpan.classList.add('demo-line');
+                        
+                        if (item.type === 'input') {
+                            p.innerHTML = `<span class="text-green-400">&gt; </span>`;
+                            p.appendChild(textSpan);
+                        } else {
+                            p.classList.add('text-blue-300', 'whitespace-pre-wrap');
+                            p.appendChild(textSpan);
+                            await new Promise(resolve => setTimeout(resolve, 300));
+                        }
+                        
+                        dom.interactiveDemo.appendChild(p);
+                        await new Promise(resolve => typeLine(item.text, textSpan, resolve));
+                        dom.interactiveDemo.scrollTop = dom.interactiveDemo.scrollHeight;
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                    }
+                    isRunning = false;
+                    setTimeout(startDemo, 5000);
+                }
+
+                const demoObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            startDemo();
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.5 });
+
+                if (dom.interactiveDemo) demoObserver.observe(dom.interactiveDemo);
+            }
+
+            function runTerminalAnimations() {
+                const terminalContents = {
+                    questionnaire: {
+                        zh: [
+                            { text: '> 用户: 我觉得这个新功能还不错。', class: 'user-input' },
+                            { text: '> AI: 感谢您的反馈！您提到“还不错”，具体是指哪些方面呢？是操作更方便了，还是解决了您之前的问题？', class: 'ai-output', delay: 1000 }
+                        ],
+                        en: [
+                            { text: '> User: I think this new feature is pretty good.', class: 'user-input' },
+                            { text: '> AI: Thanks for the feedback! When you say "pretty good," what specific aspects do you mean? Is it easier to use, or did it solve a previous problem?', class: 'ai-output', delay: 1000 }
+                        ]
+                    },
+                    interview: {
+                        zh: [
+                            { text: '[00:15] 用户: ...这个包装有点过度了，感觉很浪费。', class: 'user-input' },
+                            { text: '[系统] 正在转写... 完成。', class: 'system-info', delay: 500 },
+                            { text: '[系统] 正在分析...', class: 'system-info', delay: 800 },
+                            { text: '[系统] 已添加标签: #包装, #可持续性, #负面情绪', class: 'system-info', delay: 500 }
+                        ],
+                        en: [
+                            { text: '[00:15] User: ...the packaging is a bit too much, feels wasteful.', class: 'user-input' },
+                            { text: '[SYSTEM] Transcribing... Done.', class: 'system-info', delay: 500 },
+                            { text: '[SYSTEM] Analyzing...', class: 'system-info', delay: 800 },
+                            { text: '[SYSTEM] Tags added: #packaging, #sustainability, #negative_sentiment', class: 'system-info', delay: 500 }
+                        ]
+                    },
+                    simulation: {
+                        zh: [
+                            { text: '$ 执行仿真 --用户画像=科技达人 --场景=新用户引导', class: 'user-input' },
+                            { text: '[信息] 正在启动仿真... 1000个代理已初始化。', class: 'system-info', delay: 800 },
+                            { text: '[虚拟用户_482] 反馈: "教程弹窗有点烦人，可以跳过吗？"', class: 'ai-output', delay: 1200 },
+                            { text: '[虚拟用户_719] 反馈: "喜欢这个深色模式！初始设置非常顺畅。"', class: 'ai-output', delay: 1000 }
+                        ],
+                        en: [
+                            { text: '$ run simulation --persona=tech_savvy --scenario=onboarding', class: 'user-input' },
+                            { text: '[INFO] Starting simulation... 1000 agents initialized.', class: 'system-info', delay: 800 },
+                            { text: '[VIRTUAL_USER_482] Feedback: "The tutorial pop-ups are a bit intrusive. Can I skip them?"', class: 'ai-output', delay: 1200 },
+                            { text: '[VIRTUAL_USER_719] Feedback: "Love the dark mode! The initial setup was super smooth."', class: 'ai-output', delay: 1000 }
+                        ]
+                    }
+                };
+
+                function typeWriter(element, lines, lineIndex = 0) {
+                    if (!lines || lineIndex >= lines.length) {
+                        const cursor = element.querySelector('.terminal-cursor');
+                        if(cursor) cursor.remove();
+                        setTimeout(() => {
+                            element.innerHTML = '';
+                            typeWriter(element, lines, 0);
+                        }, 5000);
+                        return;
+                    }
+
+                    const line = lines[lineIndex];
+                    const p = document.createElement('p');
+                    p.className = line.class;
+                    element.appendChild(p);
+
+                    const cursor = document.createElement('span');
+                    cursor.className = 'terminal-cursor';
+
+                    let charIndex = 0;
+                    const typingInterval = setInterval(() => {
+                        if (charIndex < line.text.length) {
+                            p.textContent += line.text.charAt(charIndex);
+                            charIndex++;
+                            p.appendChild(cursor);
+                        } else {
+                            clearInterval(typingInterval);
+                            const delay = line.delay || 500;
+                            setTimeout(() => typeWriter(element, lines, lineIndex + 1), delay);
+                        }
+                    }, 50);
+                }
+
+                document.querySelectorAll('.terminal-window').forEach(terminal => {
+                    const terminalId = terminal.dataset.terminalId;
+                    const terminalBody = terminal.querySelector('.terminal-body');
+
+                    const observer = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                terminalBody.innerHTML = '';
+                                const lines = terminalContents[terminalId][currentLang];
+                                typeWriter(terminalBody, lines);
+                                observer.unobserve(entry.target);
+                            }
+                        });
+                    }, { threshold: 0.6 });
+                    observer.observe(terminal);
                 });
-            });
+            }
+
+            function initEventListeners() {
+                dom.langZhBtn.addEventListener('click', () => switchLanguage('zh'));
+                dom.langEnBtn.addEventListener('click', () => switchLanguage('en'));
+                window.addEventListener('scroll', handleScroll);
+                dom.mobileMenuButton.addEventListener('click', () => dom.mobileMenu.classList.toggle('hidden'));
+                if (dom.productsMenu && dom.productsDropdown) {
+                    dom.productsMenu.addEventListener('mouseenter', () => dom.productsDropdown.classList.remove('opacity-0', '-translate-y-2', 'pointer-events-none'));
+                    dom.productsMenu.addEventListener('mouseleave', () => dom.productsDropdown.classList.add('opacity-0', '-translate-y-2', 'pointer-events-none'));
+                }
+                if (dom.mobileProductsToggle && dom.mobileProductsLinks) {
+                    dom.mobileProductsToggle.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        dom.mobileProductsLinks.classList.toggle('hidden');
+                        dom.mobileProductsToggle.querySelector('i').classList.toggle('rotate-180');
+                    });
+                }
+                if (dom.showMoreBtn) {
+                    dom.showMoreBtn.addEventListener('click', toggleMoreFeatures);
+                }
+                if (dom.backToTopButton) {
+                    dom.backToTopButton.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+                }
+                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                    anchor.addEventListener('click', function (e) {
+                        const href = this.getAttribute('href');
+                        if (href.length > 1 && document.querySelector(href)) {
+                            e.preventDefault();
+                            document.querySelector(href).scrollIntoView({ behavior: 'smooth' });
+                            if (!dom.mobileMenu.classList.contains('hidden')) {
+                                dom.mobileMenu.classList.add('hidden');
+                            }
+                        }
+                    });
+                });
+            }
+
+            async function detectAndSetLanguage() {
+                try {
+                    const response = await fetch('https://ip-api.com/json/?fields=countryCode');
+                    if (!response.ok) {
+                        throw new Error('IP API response not OK');
+                    }
+                    const data = await response.json();
+                    return data.countryCode === 'CN' ? 'zh' : 'en';
+                } catch (error) {
+                    console.error('Failed to detect language from IP, defaulting to Chinese:', error);
+                    return 'zh'; // Fallback to Chinese
+                }
+            }
+
+            async function init() {
+                const initialLang = await detectAndSetLanguage();
+                switchLanguage(initialLang);
+                
+                initEventListeners();
+                observeFadeInElements();
+                observeCounters();
+                runInteractiveDemo();
+                runTerminalAnimations();
+                initCaseStudySlider();
+            }
+
+            init();
         });
     </script>
 </body>
