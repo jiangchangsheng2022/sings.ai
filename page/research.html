@@ -15,6 +15,9 @@
     
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Showdown.js for Markdown to HTML conversion -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"></script>
     
     <style>
         /* 继承自您网站的自定义全局样式 */
@@ -52,14 +55,6 @@
         ::-webkit-scrollbar-thumb:hover {
             background: rgba(37, 99, 235, 0.8);
         }
-        /* 打字机光标动画 */
-        .typing-cursor::after {
-            content: '▋';
-            animation: blink 1s step-end infinite;
-            color: #60A5FA;
-            margin-left: 2px;
-        }
-        @keyframes blink { 50% { opacity: 0; } }
         /* 加载中旋转动画 */
         .spinning {
             animation: spin 1s linear infinite;
@@ -78,6 +73,35 @@
             background: rgba(255, 255, 255, 0.1);
             border-color: rgba(255, 255, 255, 0.2);
         }
+        /* AI回复内容的格式化样式 */
+        .prose-custom {
+            color: #E2E8F0;
+        }
+        .prose-custom h1, .prose-custom h2, .prose-custom h3, .prose-custom h4 {
+            color: #fff;
+        }
+        .prose-custom p {
+            margin-top: 0.5em;
+            margin-bottom: 0.5em;
+        }
+        .prose-custom ul, .prose-custom ol {
+            padding-left: 1.5em;
+        }
+        .prose-custom li {
+            margin-top: 0.25em;
+            margin-bottom: 0.25em;
+        }
+        .prose-custom strong {
+            color: #A7B2C1;
+        }
+        .prose-custom a {
+            color: #60A5FA;
+        }
+        .prose-custom code {
+            background-color: rgba(0,0,0,0.2);
+            padding: 0.2em 0.4em;
+            border-radius: 0.25rem;
+        }
     </style>
 </head>
 <body class="flex flex-col h-screen">
@@ -85,9 +109,9 @@
     <!-- Header -->
     <header class="p-4">
         <div class="container mx-auto flex justify-between items-center">
-            <a href="#" class="flex items-center text-2xl font-bold text-white"><span class="text-blue-400">Sings</span><span>.AI Chat</span></a>
+            <a href="https://sings.ai/" target="_blank" class="flex items-center text-2xl font-bold text-white"><span class="text-blue-400">Sings</span><span>.AI Chat</span></a>
             <div class="flex items-center space-x-4">
-                <a href="#" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">返回官网</a>
+                <a href="https://sings.ai/" target="_blank" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">返回官网</a>
             </div>
         </div>
     </header>
@@ -215,6 +239,14 @@
 
             // --- Conversation State ---
             let conversationHistory = [];
+            
+            // --- Markdown Converter ---
+            const markdownConverter = new showdown.Converter({
+                tables: true,
+                strikethrough: true,
+                tasklists: true,
+                simpleLineBreaks: true
+            });
 
             // --- Function to add a message to the UI ---
             const addMessage = (sender, message, type = 'chat') => {
@@ -253,7 +285,7 @@
                     </div>
                     <div class="flex-grow ${messageBg} rounded-lg p-4 max-w-3xl">
                         <p class="font-semibold ${nameColor} mb-1">${senderName}</p>
-                        <div class="text-gray-300 prose prose-invert prose-p:my-0"></div>
+                        <div class="prose-custom"></div>
                     </div>
                 `;
                 
@@ -268,24 +300,14 @@
                 }
 
                 chatMessages.appendChild(messageElement);
-                const textContainer = messageElement.querySelector('.prose');
+                const textContainer = messageElement.querySelector('.prose-custom');
                 
-                if (sender !== 'user' && type === 'chat') {
-                    textContainer.classList.add('typing-cursor');
-                    let i = 0;
-                    const speed = 15;
-                    function typeWriter() {
-                        if (i < message.length) {
-                            textContainer.innerHTML += message.charAt(i);
-                            i++;
-                            setTimeout(typeWriter, speed);
-                        } else {
-                            textContainer.classList.remove('typing-cursor');
-                        }
-                    }
-                    typeWriter();
+                // Render message content
+                if (sender === 'user') {
+                    textContainer.textContent = message;
                 } else {
-                    textContainer.innerHTML = message.replace(/\n/g, '<br>');
+                    // Convert Markdown to HTML for AI responses
+                    textContainer.innerHTML = markdownConverter.makeHtml(message);
                 }
 
                 chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -338,6 +360,8 @@
                 };
                 
                 const aiMessage = await callGeminiAPI(payload);
+                
+                typingIndicator.classList.add('hidden');
 
                 if (aiMessage !== null) {
                     conversationHistory.push({ role: 'model', parts: [{ text: aiMessage }] });
@@ -345,7 +369,6 @@
                 }
 
                 sendButton.disabled = false;
-                typingIndicator.classList.add('hidden');
                 chatInput.focus();
             };
             
