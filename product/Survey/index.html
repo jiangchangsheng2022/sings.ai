@@ -312,7 +312,7 @@
                             <p id="report-goal" class="text-gray-300 mt-2"></p>
                         </div>
                         <div class="mb-8">
-                            <h3 id="report-insights-title" class="text-xl font-semibold text-gray-200 mb-4">综合洞察</h3>
+                            <h3 id="report-insights-title" class="text-xl font-semibold text-gray-200 mb-4">研究故事与核心洞察</h3>
                             <div id="report-insights" class="prose prose-invert max-w-none p-4 bg-gray-900/50 rounded-md"></div>
                         </div>
                         <div>
@@ -408,7 +408,7 @@
                 progress_text_done: '数据处理完成！共获得 {count} 份有效数据。',
                 step5_title: '第五步：用户研究报告',
                 report_background_title: '研究背景',
-                report_insights_title: '综合洞察',
+                report_insights_title: '研究故事与核心洞察',
                 report_charts_title: '数据可视化图表',
                 download_pdf_btn: '下载PDF报告',
                 share_report_btn: '分享报告',
@@ -461,14 +461,48 @@
 
 研究目标: "${state.researchGoal}"
 `,
-                prompt_questionnaire: `作为一名资深的用户研究专家，请根据以下研究目的，设计一份专业的定量研究问卷。\n研究目的："${state.researchGoal}"\n\n你的输出必须是一个严格遵循以下JSON格式的字符串，不要包含任何额外的解释或Markdown标记：\n\`\`\`json\n{\n  "title": "关于...的研究问卷",\n  "screener": [\n    { "questionId": "s1", "questionText": "您在过去一年内是否使用或购买过相关产品/服务？", "questionType": "single-choice", "options": ["是", "否"] }\n  ],\n  "mainBody": [\n    { "questionId": "m1", "questionText": "您最常使用的品牌是什么？", "questionType": "single-choice", "options": ["品牌A", "品牌B", "品牌C", "其他"] },\n    { "questionId": "m2", "questionText": "您选择该品牌的主要原因是什么？(可多选)", "questionType": "multiple-choice", "options": ["价格实惠", "性能强大", "设计美观", "朋友推荐", "广告影响"] }\n  ],\n  "demographics": [\n    { "questionId": "d1", "questionText": "您的性别是？", "questionType": "single-choice", "options": ["男", "女", "其他"] },\n    { "questionId": "d2", "questionText": "您的年龄段是？", "questionType": "single-choice", "options": ["18岁以下", "18-25岁", "26-35岁", "36-45岁", "45岁以上"] },\n    { "questionId": "d3", "questionText": "您的职业是？", "questionType": "single-choice", "options": ["学生", "技术/IT", "设计/艺术", "教育/科研", "医疗/健康", "自由职业", "其他"] }\n  ]\n}\n\`\`\`\n请确保问题设计专业、逻辑严谨，并完整覆盖甄别、主体和个人信息三个部分。`,
-                prompt_recruit: `作为一名专业的市场研究招募专员，请根据以下研究目标，为我生成 ${config.simulationCount} 位符合条件的虚拟用户画像。每个对象都必须包含 "name" (一个常见的中文名), "age" (一个数字), "gender" (男或女), 和 "bio" (一段20-40字的生动自我介绍，需符合其画像特征)。你的输出必须是一个严格的JSON数组，数组中包含 ${config.simulationCount} 个对象，不要包含任何额外的解释或Markdown标记。\n\`\`\`json\n[\n  {\n    "name": "李明",\n    "age": 28,\n    "gender": "男",\n    "bio": "我是一名在北京工作的软件工程师，平时喜欢研究各种数码产品，对新技术很敏感，业余时间会去健身和爬山。"\n  },\n  {\n    "name": "王秀英",\n    "age": 22,\n    "gender": "女",\n    "bio": "我是上海一所大学的设计系学生，热爱时尚和艺术，喜欢用Vlog记录生活，对产品的颜值和设计感有很高的要求。"\n  }\n]\n\`\`\`\n请确保生成的用户画像多样化，并能覆盖研究目标可能涉及的不同用户群体。`,
-                prompt_simulate: `你是一个高级数据模拟器。现在，请为以下这位已被招募的用户，填写这份问卷。 \n\n你的任务是生成一个 JSON 对象，代表这位用户的完整问卷回答。回答必须严格符合用户的个人简介(bio)和画像特征。\n\n这是当前用户的信息：\n{user}\n\n这是需要填写的问卷：\n{questionnaire}\n\n你的输出必须是一个严格的、格式完全正确的 JSON 对象。不要包含任何额外的解释或 Markdown 标记：\n\`\`\`json\n{\n    "respondentId": "user-1",\n    "persona": { "name": "李明", "age": 28, "gender": "男", "bio": "我是一名在北京工作的软件工程师，平时喜欢研究各种数码产品，对新技术很敏感，业余时间会去健身和爬山。"},\n    "answers": [\n      { "questionId": "s1", "answer": "是" },\n      { "questionId": "m1", "answer": "品牌A" },\n      { "questionId": "m2", "answer": ["性能强大"] },\n      { "questionId": "m3", "answer": "满意" },\n      { "questionId": "d1", "answer": "男" },\n      { "questionId": "d2", "answer": "26-35岁" },\n      { "questionId": "d3", "answer": "技术/IT" }\n    ]\n}\n\`\`\`\n请确保回答与用户的个人信息和简介高度一致。`,
-                prompt_analyze: `作为一名资深数据分析师，请根据以下关于研究项目 "{title}" 的定量问卷数据，总结 3-5 个关键市场洞察和商业建议。以 Markdown 格式回复。
+                prompt_questionnaire: `作为一名资深的用户研究专家，请根据以下研究目的，设计一份专业的定量研究问卷。\n研究目的："${state.researchGoal}"\n\n你的输出必须是一个严格遵循以下JSON格式的字符串，不要包含任何额外的解释或Markdown标记：\n\`\`\`json\n{\n  "title": "关于...的研究问卷",\n  "screener": [\n    { "questionId": "s1", "questionText": "您在过去一年内是否使用或购买过相关产品/服务？", "questionType": "single-choice", "options": ["是", "否"] }\n  ],\n  "mainBody": [\n    { "questionId": "m1", "questionText": "您最常使用的品牌是什么？", "questionType": "single-choice", "options": ["品牌A", "品牌B", "品牌C", "其他"] },\n    { "questionId": "m2", "questionText": "您选择该品牌的主要原因是什么？(可多选)", "questionType": "multiple-choice", "options": ["价格实惠", "性能强大", "设计美观", "朋友推荐", "广告影响"] }\n  ],\n  "demographics": [\n    { "questionId": "d1", "questionText": "您的性别是？", "questionType": "single-choice", "options": ["男", "女", "其他"] },\n    { "questionId": "d2", "questionText": "您的年龄段是？", "questionType": "single-choice", "options": ["18岁以下", "18-25岁", "26-35岁", "36-45岁", "45岁以上"] },\n    { "questionId": "d3", "questionText": "您的职业是？", "questionType": "single-choice", "options": ["学生", "技术/IT", "设计/艺术", "教育/科研", "医疗/健康", "自由职业", "其他"] }\n  ]\n}\n\`\`\`\n请确保问题设计专业、逻辑严谨，并完整覆盖甄别、主体和个人信息三个部分。`,
+                prompt_recruit: `作为一名专业的市场研究招募专员，请根据以下研究目标，为我生成 ${config.simulationCount} 位符合条件的虚拟用户画像。每个对象都必须包含 "name" (一个常见的中文名), "age" (一个数字), "gender" (男或女), 和 "bio" (一段20-40字的生动自我介绍，需符合其画像特征)。你的输出必须是一个严格的JSON数组，数组中包含 ${config.simulationCount} 个对象，不要包含任何额外的解释或Markdown标记。\n\`\`\`json\n[\n  {\n    "name": "李明",\n    "age": 28,\n    "gender": "男",\n    "bio": "我是一名在北京工作的软件工程师，平时喜欢研究各种数码产品，对新技术很敏感，业余时间会去健身和爬山。"\n  },\n  {\n    "name": "王秀英",\n    "age": 22,\n    "gender": "女",\n    "bio": "我是上海一所大学的设计系学生，热爱时尚和艺术，喜欢用Vlog记录生活，对产品的颜值和设计感有很高的要求。"\n  }\n]\n\`\`\`\n请确保生成的用户画像多样化，并能覆盖研究目标可能涉及的不同用户群体。`,
+                prompt_simulate: `你是一个高级数据模拟器。现在，请为以下这位已被招募的用户，填写这份问卷。 \n\n你的任务是生成一个 JSON 对象，代表这位用户的完整问卷回答。回答必须严格符合用户的个人简介(bio)和画像特征。\n\n这是当前用户的信息：\n{user}\n\n这是需要填写的问卷：\n{questionnaire}\n\n你的输出必须是一个严格的、格式完全正确的 JSON 对象。不要包含任何额外的解释或 Markdown 标记：\n\`\`\`json\n{\n    "respondentId": "user-1",\n    "persona": { "name": "李明", "age": 28, "gender": "男", "bio": "我是一名在北京工作的软件工程师，平时喜欢研究各种数码产品，对新技术很敏感，业余时间会去健身和爬山。"},\n    "answers": [\n      { "questionId": "s1", "answer": "是" },\n      { "questionId": "m1", "answer": "品牌A" },\n      { "questionId": "m2", "answer": ["性能强大"] },\n      { "questionId": "m3", "answer": "满意" },\n      { "questionId": "d1", "answer": "男" },\n      { "questionId": "d2", "answer": "26-35岁" },\n      { "questionId": "d3", "answer": "技术/IT" }\n    ]\n}\n\`\`\`\n请确保回答与用户的个人信息和简介高度一致。`,
+                prompt_analyze: `作为一名善于讲故事的顶尖用户研究专家，请将本次研究发现编织成一个引人入胜的故事。你的报告不仅仅是数据，而是关于用户体验的生动叙述。
 
-研究目标: {goal}
-定量数据总结:\n{quantitativeSummary}\n
-`
+**你的任务是：**
+将枯燥的数据转化为一个结构清晰、逻辑严谨、充满洞察力的“用户故事”报告。
+
+**报告必须包含以下章节，并严格遵循格式：**
+
+### 📖 故事开篇：执行摘要
+* 用一两句话，高度概括整个故事的核心：我们发现了什么关键的用户行为或态度？
+
+### 🎯 第一章：核心发现 (The Key Findings)
+* 列出 2-3 个最重要、最惊人的发现。
+* **每一个发现都必须用数据说话**。例如：“**发现一：78% 的用户在价格页面犹豫不决。**”
+* 这是故事的主线，直接回应我们的“研究目标”。
+
+### 💡 第二章：深层洞察 (The 'Aha!' Moment)
+* 针对每一个核心发现，深入挖掘其背后的 **“为什么”**。
+* 这部分是故事的高潮。解释用户的动机、情感和潜在需求。
+* 例如：“用户犹豫不决，并非因为价格高，而是因为复杂的定价结构让他们感到困惑和不信任（推论）。”
+
+### 🚀 第三章：故事新篇章 (Actionable Recommendations)
+* 基于前面的洞察，提出 **3个具体、可立即执行的建议**。
+* 每个建议都应清晰地说明“做什么”、“为什么这么做”。
+* 例如：“**1. 简化定价页面：** 将三个套餐合并为两个，并提供一键对比功能，以减少用户的认知负荷，重建信任感。”
+
+---
+**研究项目信息：**
+
+**1. 研究项目标题：**
+"{title}"
+
+**2. 研究目标：**
+{goal}
+
+**3. 定量数据总结：**
+{quantitativeSummary}
+---
+
+请用简洁、易懂、引人入胜的语言开始讲述这个关于用户的研究故事。直接以 Markdown 格式返回你的报告。`
             },
             en: {
                 nav_back: 'Back to Home',
@@ -498,7 +532,7 @@
                 progress_text_done: 'Data processing complete! {count} valid responses obtained.',
                 step5_title: 'Step 5: User Research Report',
                 report_background_title: 'Research Background',
-                report_insights_title: 'Comprehensive Insights',
+                report_insights_title: 'The Research Story & Core Insights',
                 report_charts_title: 'Data Visualization Charts',
                 download_pdf_btn: 'Download PDF Report',
                 share_report_btn: 'Share Report',
@@ -549,14 +583,48 @@
 
 Research Objective: "${state.researchGoal}"
 `,
-                prompt_questionnaire: `As a senior user research expert, please design a professional quantitative research questionnaire based on the following research objective.\nResearch Objective: "${state.researchGoal}"\n\nYour output must be a string in strict JSON format, without any extra explanations or Markdown tags:\n\`\`\`json\n{\n  "title": "Questionnaire on...",\n  "screener": [\n    { "questionId": "s1", "questionText": "Have you used or purchased related products/services in the past year?", "questionType": "single-choice", "options": ["Yes", "No"] }\n  ],\n  "mainBody": [\n    { "questionId": "m1", "questionText": "What brand do you use most often?", "questionType": "single-choice", "options": ["Brand A", "Brand B", "Brand C", "Other"] },\n    { "questionId": "m2", "questionText": "What are the main reasons for choosing this brand? (Multiple choice)", "questionType": "multiple-choice", "options": ["Affordable Price", "High Performance", "Aesthetic Design", "Friend's Recommendation", "Advertising Influence"] }\n  ],\n  "demographics": [\n    { "questionId": "d1", "questionText": "What is your gender?", "questionType": "single-choice", "options": ["Male", "Female", "Other"] },\n    { "questionId": "d2", "questionText": "What is your age range?", "questionType": "single-choice", "options": ["Under 18", "18-25", "26-35", "36-45", "Over 45"] },\n    { "questionId": "d3", "questionText": "What is your occupation?", "questionType": "single-choice", "options": ["Student", "Tech/IT", "Design/Art", "Education/Research", "Medical/Health", "Freelancer", "Other"] }\n  ]\n}\n\`\`\`\nEnsure the questions are professional, logical, and cover screening, main body, and demographic sections completely.`,
-                prompt_recruit: `As a professional market research recruiter, please generate ${config.simulationCount} qualified virtual user personas based on the following research objective. Each object must include "name" (a common English name), "age" (a number), "gender" (Male or Female), and "bio" (a vivid 20-40 word self-introduction that matches their persona). Your output must be a strict JSON array of ${config.simulationCount} objects, without any extra explanations or Markdown tags.\n\`\`\`json\n[\n  {\n    "name": "John Smith",\n    "age": 28,\n    "gender": "Male",\n    "bio": "I'm a software engineer in New York, passionate about exploring new gadgets and technology. I enjoy hiking and going to the gym in my spare time."\n  },\n  {\n    "name": "Emily White",\n    "age": 22,\n    "gender": "Female",\n    "bio": "As a design student in Los Angeles, I love fashion and art. I vlog about my life and have high standards for product aesthetics and design."\n  }\n]\n\`\`\`\nEnsure the generated personas are diverse and cover different user groups relevant to the research objective.`,
-                prompt_simulate: `You are an advanced data simulator. Your task is to fill out this questionnaire for the following recruited user. \n\nGenerate a JSON object representing the user's complete survey response. The answers must strictly align with the user's bio and persona.\n\n这是当前用户的信息：\n{user}\n\n这是需要填写的问卷：\n{questionnaire}\n\n你的输出必须是一个严格的、格式完全正确的 JSON 对象。不要包含任何额外的解释或 Markdown 标记：\n\`\`\`json\n{\n    "respondentId": "user-1",\n    "persona": { "name": "John Smith", "age": 28, "gender": "Male", "bio": "I'm a software engineer in New York, passionate about exploring new gadgets and technology. I enjoy hiking and going to the gym in my spare time."},\n    "answers": [\n      { "questionId": "s1", "answer": "Yes" },\n      { "questionId": "m1", "answer": "Brand A" },\n      { "questionId": "m2", "answer": ["High Performance"] },\n      { "questionId": "m3", "answer": "Satisfied" },\n      { "questionId": "d1", "answer": "Male" },\n      { "questionId": "d2", "answer": "26-35" },\n      { "questionId": "d3", "answer": "Tech/IT" }\n    ]\n}\n\`\`\`\nEnsure the answers are highly consistent with the user's personal information and bio.`,
-                prompt_analyze: `作为一名资深数据分析师，请根据以下关于研究项目 "{title}" 的定量问卷数据，总结 3-5 个关键市场洞察和商业建议。以 Markdown 格式回复。
+                prompt_questionnaire: `As a senior user research expert, please design a professional quantitative research questionnaire based on the following research objective.\nResearch Objective: "${state.researchGoal}"\n\nYour output must be a string in strict JSON format, without any extra explanations or Markdown tags:\n\`\`\`json\n{\n  "title": "Questionnaire on...",\n  "screener": [\n    { "questionId": "s1", "questionText": "Have you used or purchased related products/services in the past year?", "questionType": "single-choice", "options": ["Yes", "No"] }\n  ],\n  "mainBody": [\n    { "questionId": "m1", "questionText": "What brand do you use most often?", "questionType": "single-choice", "options": ["Brand A", "Brand B", "Brand C", "Other"] },\n    { "questionId": "m2", "questionText": "What are the main reasons for choosing this brand? (Multiple choice)", "questionType": "multiple-choice", "options": ["Affordable Price", "High Performance", "Aesthetic Design", "Friend's Recommendation", "Advertising Influence"] }\n  ],\n  "demographics": [\n    { "questionId": "d1", "questionText": "What is your gender?", "questionType": "single-choice", "options": ["Male", "Female", "Other"] },\n    { "questionId": "d2", "questionText": "What is your age range?", "questionType": "single-choice", "options": ["Under 18", "18-25", "26-35", "36-45", "Over 45"] },\n    { "questionId": "d3", "questionText": "What is your occupation?", "questionType": "single-choice", "options": ["Student", "Tech/IT", "Design/Art", "Education/Research", "Medical/Health", "Freelancer", "Other"] }\n  ]\n}\n\`\`\`\nEnsure the questions are professional, logical, and cover screening, main body, and demographic sections completely.`,
+                prompt_recruit: `As a professional market research recruiter, please generate ${config.simulationCount} qualified virtual user personas based on the following research objective. Each object must include "name" (a common English name), "age" (a number), "gender" (Male or Female), and "bio" (a vivid 20-40 word self-introduction that matches their persona). Your output must be a strict JSON array of ${config.simulationCount} objects, without any extra explanations or Markdown tags.\n\`\`\`json\n[\n  {\n    "name": "John Smith",\n    "age": 28,\n    "gender": "Male",\n    "bio": "I'm a software engineer in New York, passionate about exploring new gadgets and technology. I enjoy hiking and going to the gym in my spare time."\n  },\n  {\n    "name": "Emily White",\n    "age": 22,\n    "gender": "Female",\n    "bio": "As a design student in Los Angeles, I love fashion and art. I vlog about my life and have high standards for product aesthetics and design."\n  }\n]\n\`\`\`\nEnsure the generated personas are diverse and cover different user groups relevant to the research objective.`,
+                prompt_simulate: `You are an advanced data simulator. Your task is to fill out this questionnaire for the following recruited user. \n\nGenerate a JSON object representing the user's complete survey response. The answers must strictly align with the user's bio and persona.\n\nThis is the current user's information:\n{user}\n\nThis is the questionnaire to be filled out:\n{questionnaire}\n\nYour output must be a strictly and correctly formatted JSON object. Do not include any extra explanations or Markdown tags:\n\`\`\`json\n{\n    "respondentId": "user-1",\n    "persona": { "name": "John Smith", "age": 28, "gender": "Male", "bio": "I'm a software engineer in New York, passionate about exploring new gadgets and technology. I enjoy hiking and going to the gym in my spare time."},\n    "answers": [\n      { "questionId": "s1", "answer": "Yes" },\n      { "questionId": "m1", "answer": "Brand A" },\n      { "questionId": "m2", "answer": ["High Performance"] },\n      { "questionId": "m3", "answer": "Satisfied" },\n      { "questionId": "d1", "answer": "Male" },\n      { "questionId": "d2", "answer": "26-35" },\n      { "questionId": "d3", "answer": "Tech/IT" }\n    ]\n}\n\`\`\`\nEnsure the answers are highly consistent with the user's personal information and bio.`,
+                prompt_analyze: `As a master storyteller and top-tier user research expert, weave the findings of this study into a compelling narrative. Your report is not just data; it's a vivid story about the user experience.
 
-研究目标: {goal}
-定量数据总结:\n{quantitativeSummary}\n
-`
+**Your Mission:**
+Transform the raw data into a "User Story" report that is well-structured, logical, and full of insight.
+
+**Report Structure (Must follow this format):**
+
+### 📖 The Story's Opening: Executive Summary
+* In one or two sentences, summarize the core of the story: What key user behavior or attitude did we uncover?
+
+### 🎯 Chapter 1: The Key Findings
+* List the 2-3 most important and surprising discoveries.
+* **Every finding must be backed by data.** For example: "**Finding 1: 78% of users hesitated on the pricing page.**"
+* This is the main plot of your story and must directly address our "Research Goal."
+
+### 💡 Chapter 2: The 'Aha!' Moment (The Insight)
+* For each key finding, dig deep into the **"why"** behind it.
+* This is the climax of the story. Explain the users' motivations, emotions, and underlying needs.
+* For example: "Users hesitated not because the price was high, but because the complex pricing structure made them feel confused and distrustful (inference)."
+
+### 🚀 Chapter 3: The Next Chapter (Actionable Recommendations)
+* Based on the insights, provide **3 specific, immediately actionable recommendations.**
+* Each recommendation should clearly state "what to do" and "why."
+* For example: "**1. Simplify the Pricing Page:** Consolidate the three plans into two and add a one-click comparison feature to reduce cognitive load and rebuild trust."
+
+---
+**Research Project Information:**
+
+**1. Project Title:**
+"{title}"
+
+**2. Research Goal:**
+{goal}
+
+**3. Quantitative Data Summary:**
+{quantitativeSummary}
+---
+
+Now, begin telling this research story about our users in a language that is simple, clear, and engaging. Return your report directly in Markdown format.`
             }
         };
 
@@ -866,13 +934,10 @@ Research Objective: "${state.researchGoal}"
                 const card = document.createElement('div');
                 card.className = 'user-card bg-gray-900/50 p-4 rounded-lg border border-gray-700 flex items-center space-x-4';
                 
-                // 根据用户的性别生成不同的随机头像
-                const avatarUrl = (user.gender === '男' || user.gender === 'Male') 
-                    ? `https://randomuser.me/api/portraits/men/${index + 1}.jpg`
-                    : `https://randomuser.me/api/portraits/women/${index + 1}.jpg`;
+                const avatarUrl = `https://i.pravatar.cc/128?u=${encodeURIComponent(user.name)}`;
                 
                 const genderText = (user.gender === 'Male' || user.gender === '男') ? T('user_card_gender_male') : T('user_card_gender_female');
-                card.innerHTML = `<img src="${avatarUrl}" alt="User Avatar" class="w-16 h-16 rounded-full border-2 border-gray-600"><div class="flex-1"><h4 class="font-bold text-lg text-indigo-400">${user.name}</h4><p class="text-sm text-gray-400 mb-2">${genderText}, ${user.age}${T('user_card_age')}</p><p class="text-sm text-gray-300">${user.bio}</p></div>`;
+                card.innerHTML = `<img src="${avatarUrl}" alt="User Avatar" class="w-16 h-16 rounded-full border-2 border-gray-600 bg-gray-700"><div class="flex-1"><h4 class="font-bold text-lg text-indigo-400">${user.name}</h4><p class="text-sm text-gray-400 mb-2">${genderText}, ${user.age}${T('user_card_age')}</p><p class="text-sm text-gray-300">${user.bio}</p></div>`;
                 recruitedUsersContainer.appendChild(card);
                 setTimeout(() => {
                     card.style.opacity = '1';
@@ -920,7 +985,7 @@ Research Objective: "${state.researchGoal}"
             showLoader(true, 'loader_analyzing');
             
             const quantitativeSummary = state.simulationResults.length > 0 ? summarizeDataForAI() : "无定量数据。";
-                
+                    
             const prompt = T('prompt_analyze', {
                 title: state.questionnaire ? state.questionnaire.title : state.researchGoal,
                 goal: state.researchGoal,
