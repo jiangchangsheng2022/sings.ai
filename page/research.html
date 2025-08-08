@@ -102,6 +102,16 @@
             padding: 0.2em 0.4em;
             border-radius: 0.25rem;
         }
+        .prose-custom pre {
+             background-color: rgba(0,0,0,0.3);
+             padding: 1em;
+             border-radius: 0.5rem;
+             overflow-x: auto;
+        }
+        .prose-custom pre code {
+            background-color: transparent;
+            padding: 0;
+        }
     </style>
 </head>
 <body class="flex flex-col h-screen">
@@ -125,7 +135,7 @@
                 <div id="initial-message-container">
                     <div class="flex items-start gap-4">
                         <div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-500/20 border border-blue-500 overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=400&auto=format&fit=crop" alt="Deep Research AI Assistant Avatar" class="w-full h-full object-cover">
+                            <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=400&auto=format&fit=crop" alt="Deep Research AI Assistant Avatar" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='https://placehold.co/100x100/1E40AF/FFFFFF?text=AI';">
                         </div>
                         <div class="flex-grow bg-gray-800/50 rounded-lg p-4 max-w-3xl">
                             <p class="font-semibold text-blue-300 mb-1">Deep Research</p>
@@ -170,7 +180,7 @@
             <div id="typing-indicator" class="hidden p-6 pt-0">
                  <div class="flex items-start gap-4">
                     <div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-500/20 border border-blue-500 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=400&auto=format&fit=crop" alt="Deep Research AI Assistant Avatar" class="w-full h-full object-cover">
+                        <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=400&auto=format&fit=crop" alt="Deep Research AI Assistant Avatar" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='https://placehold.co/100x100/1E40AF/FFFFFF?text=AI';">
                     </div>
                     <div class="flex-grow bg-gray-800/50 rounded-lg p-4 max-w-3xl">
                         <p class="font-semibold text-blue-300 mb-1">Deep Research</p>
@@ -205,7 +215,7 @@
                             <span id="summarize-text">生成研究摘要</span>
                         </button>
                     </div>
-                    <p class="text-xs text-gray-500">核心模型: Gemini Flash</p>
+                    <p id="model-name-display" class="text-xs text-gray-500">核心模型: Qwen2-7B-Instruct</p>
                 </div>
             </div>
         </div>
@@ -225,17 +235,16 @@
             const summarizeText = document.getElementById('summarize-text');
             const initialMessageContainer = document.getElementById('initial-message-container');
             const presetPrompts = document.getElementById('preset-prompts');
+            const modelNameDisplay = document.getElementById('model-name-display');
 
-            // --- API Configuration ---
-            const GEMINI_API_KEY = "AIzaSyAazWjGX4uXKXR0mOO7oB6__EgDKTrYMog";
-            const GEMINI_MODEL = 'gemini-2.5-flash-preview-05-20';
-            const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
-            
+            // --- API Configuration (SiliconFlow) ---
+            const SILICONFLOW_API_KEY = "sk-xifmrwnarxegowpdpwjmbpiodhjawjtacbkgtkoygpgszhec";
+            const SILICONFLOW_MODEL = 'alibaba/Qwen2-7B-Instruct'; // Using a recommended model
+            const SILICONFLOW_API_URL = `https://api.siliconflow.cn/v1/chat/completions`;
+            modelNameDisplay.textContent = `核心模型: ${SILICONFLOW_MODEL.split('/')[1]}`;
+
             // --- System Instruction ---
-            const SYSTEM_INSTRUCTION = {
-                role: "system",
-                parts: [{ text: "角色与目标 (Role and Goal)\n你将扮演我的专属AI研究助理，名为 “Deep Research”。你的核心定位是成为一名兼具用户研究（微观产品层面）与市场研究（宏观战略层面）双重能力的专家级顾问和高效执行伙伴。你的首要目标是协助我——一名专业的用户与市场研究员——精准、深入、高效地完成从研究规划到成果汇报的全流程工作，并提供具有战略价值的洞察和建议。\n\n核心能力与知识库 (Core Competencies & Knowledge Base)\n你的所有能力和知识都严格基于以下专业职责描述。在与我互动时，你必须始终遵循这些框架：\n\n1. 用户研究 (User Research) - 聚焦具体产品与用户体验\n需求沟通与研究规划: 你能协助我将模糊的业务问题拆解为清晰、可执行的研究课题。当我提出一个研究方向时（如“探索新功能的接受度”），你能主动提出建议的研究方法组合（如可用性测试、深度访谈、问卷调查、A/B测试等），并帮我起草包含研究目标、研究方法、参与者标准、时间规划的详细研究计划初稿。\n用户招募与筛选: 你能根据我定义的目标用户画像，帮我设计逻辑严谨、高效的筛选问卷，以确保招募到的参与者具有代表性。\n执行研究与数据收集: 你是我的“陪练”，可以帮我撰写深度访谈提纲、可用性测试任务脚本、焦点小组讨论指南以及大规模定量问卷的题目。在数据收集阶段，你能帮我整理和初步标记原始数据（如访谈记录）。\n数据分析与洞察提炼: 你擅长处理定性与定量数据。对于访谈录音、用户行为录像等定性数据，你能协助我进行内容编码、主题归纳，并提炼关键发现（Key Findings）和洞察（Insights）。对于定量数据，你能提出恰当的统计分析建议，并解读数据背后的规律。\n撰写报告与成果沟通: 你是我的报告撰写助理。你能将零散的发现组织成有说服力的故事线，帮我起草研究报告的各个章节。你尤其擅长将研究成果转化为用户画像 (Persona)、体验地图 (Experience Map)、故事版 (Storyboard) 等可视化、易于理解的形式，以确保研究价值能被跨职能团队有效吸收。\n\n2. 市场研究 (Market Research) - 聚焦宏观格局与商业机会\n行业监控与趋势分析: 你能作为一个高效的信息处理器，根据我的指令，快速搜集并总结特定行业的市场规模、增长率、主要竞争对手动态、新兴技术、消费者趋势以及相关的宏观经济政策。\n研究项目设计与管理: 当面临战略性问题时（如“评估新市场的进入可行性”），你能协助我设计整合性的研究方案，该方案可能包含案头研究（二手资料分析）、定性座谈会、大规模抽样调查等。你还能帮我起草与外部调研机构沟通的需求文档。\n数据采集与分析: 你能帮我分析各类二手数据（如政府统计报告、行业协会数据、上市公司财报），并从中提取关键信息。同时，你精通SWOT分析、PEST分析、波特五力模型等战略分析框架，能将数据融入其中进行综合评估。\n撰写战略性报告: 你的报告产出更具战略高度。你能协助我撰写包含市场细分、目标人群画像、竞争格局评估、品牌健康度追踪、市场进入策略建议等内容的商业报告。报告的语言风格和逻辑结构应直接面向企业高层管理者。\n跨部门协作与咨询: 你能站在我的角度，思考如何将市场洞察有效地传递给市场部、销售部和战略部。例如，为营销活动策划提供消费者洞察，或为销售团队评估市场潜力。\n\n互动与协作风格 (Interaction & Collaboration Style)\n主动性 (Proactive): 当我提出一个问题时，你不会只被动回答。你会像一个真正的同事一样，提出追问以廓清背景，甚至主动提供多种备选方案或指出潜在风险。\n结构化 (Structured): 你的回答总是条理清晰、逻辑严谨。你会频繁使用标题、列表、表格等形式，让复杂信息一目了然。\n数据驱动 (Data-Driven): 你所有的结论和建议都必须基于逻辑和（模拟的）数据证据。你会经常提醒我“要验证这个假设，我们需要收集...数据”。\n多格式输出 (Versatile Formats): 你能根据我的要求，灵活切换输出格式，无论是正式的报告文本、PPT要点、访谈脚本，还是简单的数据表格。"}]
-            };
+            const SYSTEM_PROMPT = "角色与目标 (Role and Goal)\n你将扮演我的专属AI研究助理，名为 “Deep Research”。你的核心定位是成为一名兼具用户研究（微观产品层面）与市场研究（宏观战略层面）双重能力的专家级顾问和高效执行伙伴。你的首要目标是协助我——一名专业的用户与市场研究员——精准、深入、高效地完成从研究规划到成果汇报的全流程工作，并提供具有战略价值的洞察和建议。\n\n核心能力与知识库 (Core Competencies & Knowledge Base)\n你的所有能力和知识都严格基于以下专业职责描述。在与我互动时，你必须始终遵循这些框架：\n\n1. 用户研究 (User Research) - 聚焦具体产品与用户体验\n需求沟通与研究规划: 你能协助我将模糊的业务问题拆解为清晰、可执行的研究课题。当我提出一个研究方向时（如“探索新功能的接受度”），你能主动提出建议的研究方法组合（如可用性测试、深度访谈、问卷调查、A/B测试等），并帮我起草包含研究目标、研究方法、参与者标准、时间规划的详细研究计划初稿。\n用户招募与筛选: 你能根据我定义的目标用户画像，帮我设计逻辑严谨、高效的筛选问卷，以确保招募到的参与者具有代表性。\n执行研究与数据收集: 你是我的“陪练”，可以帮我撰写深度访谈提纲、可用性测试任务脚本、焦点小组讨论指南以及大规模定量问卷的题目。在数据收集阶段，你能帮我整理和初步标记原始数据（如访谈记录）。\n数据分析与洞察提炼: 你擅长处理定性与定量数据。对于访谈录音、用户行为录像等定性数据，你能协助我进行内容编码、主题归纳，并提炼关键发现（Key Findings）和洞察（Insights）。对于定量数据，你能提出恰当的统计分析建议，并解读数据背后的规律。\n撰写报告与成果沟通: 你是我的报告撰写助理。你能将零散的发现组织成有说服力的故事线，帮我起草研究报告的各个章节。你尤其擅长将研究成果转化为用户画像 (Persona)、体验地图 (Experience Map)、故事版 (Storyboard) 等可视化、易于理解的形式，以确保研究价值能被跨职能团队有效吸收。\n\n2. 市场研究 (Market Research) - 聚焦宏观格局与商业机会\n行业监控与趋势分析: 你能作为一个高效的信息处理器，根据我的指令，快速搜集并总结特定行业的市场规模、增长率、主要竞争对手动态、新兴技术、消费者趋势以及相关的宏观经济政策。\n研究项目设计与管理: 当面临战略性问题时（如“评估新市场的进入可行性”），你能协助我设计整合性的研究方案，该方案可能包含案头研究（二手资料分析）、定性座谈会、大规模抽样调查等。你还能帮我起草与外部调研机构沟通的需求文档。\n数据采集与分析: 你能帮我分析各类二手数据（如政府统计报告、行业协会数据、上市公司财报），并从中提取关键信息。同时，你精通SWOT分析、PEST分析、波特五力模型等战略分析框架，能将数据融入其中进行综合评估。\n撰写战略性报告: 你的报告产出更具战略高度。你能协助我撰写包含市场细分、目标人群画像、竞争格局评估、品牌健康度追踪、市场进入策略建议等内容的商业报告。报告的语言风格和逻辑结构应直接面向企业高层管理者。\n跨部门协作与咨询: 你能站在我的角度，思考如何将市场洞察有效地传递给市场部、销售部和战略部。例如，为营销活动策划提供消费者洞察，或为销售团队评估市场潜力。\n\n互动与协作风格 (Interaction & Collaboration Style)\n主动性 (Proactive): 当我提出一个问题时，你不会只被动回答。你会像一个真正的同事一样，提出追问以廓清背景，甚至主动提供多种备选方案或指出潜在风险。\n结构化 (Structured): 你的回答总是条理清晰、逻辑严谨。你会频繁使用标题、列表、表格等形式，让复杂信息一目了然。\n数据驱动 (Data-Driven): 你所有的结论和建议都必须基于逻辑和（模拟的）数据证据。你会经常提醒我“要验证这个假设，我们需要收集...数据”。\n多格式输出 (Versatile Formats): 你能根据我的要求，灵活切换输出格式，无论是正式的报告文本、PPT要点、访谈脚本，还是简单的数据表格。";
 
             // --- Conversation State ---
             let conversationHistory = [];
@@ -251,9 +260,9 @@
             // --- Function to add a message to the UI ---
             const addMessage = (sender, message, type = 'chat') => {
                 const messageElement = document.createElement('div');
-                messageElement.classList.add('flex', 'items-start', 'gap-4');
+                messageElement.classList.add('flex', 'items-start', 'gap-4', 'w-full');
 
-                let iconHtml, senderName, messageBg, nameColor, avatarBg, avatarBorder;
+                let iconHtml, senderName, messageBg, nameColor, avatarBg, avatarBorder, messageAlignment;
 
                 if (sender === 'user') {
                     iconHtml = `<i class="ph ph-user text-xl text-gray-300"></i>`;
@@ -262,7 +271,7 @@
                     nameColor = 'text-gray-300';
                     avatarBg = 'bg-gray-600/30';
                     avatarBorder = 'border-gray-600';
-                    messageElement.classList.add('justify-end');
+                    messageAlignment = 'justify-end';
                 } else if (type === 'summary') {
                     iconHtml = `<i class="ph ph-file-text text-xl text-purple-300"></i>`;
                     senderName = '研究摘要';
@@ -270,29 +279,34 @@
                     nameColor = 'text-purple-300';
                     avatarBg = 'bg-purple-500/20';
                     avatarBorder = 'border-purple-500';
+                    messageAlignment = 'justify-start';
                 } else { // AI Assistant
-                    iconHtml = `<img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=400&auto=format&fit=crop" alt="Deep Research AI Assistant Avatar" class="w-full h-full object-cover">`;
+                    iconHtml = `<img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=400&auto=format&fit=crop" alt="Deep Research AI Assistant Avatar" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='https://placehold.co/100x100/1E40AF/FFFFFF?text=AI';">`;
                     senderName = 'Deep Research';
                     messageBg = 'bg-gray-800/50';
                     nameColor = 'text-blue-300';
                     avatarBg = 'bg-blue-500/20';
                     avatarBorder = 'border-blue-500';
+                    messageAlignment = 'justify-start';
                 }
+                
+                messageElement.classList.add(messageAlignment);
 
-                const messageContent = `
+                const avatarDiv = `
                     <div class="flex-shrink-0 w-10 h-10 rounded-full ${avatarBg} flex items-center justify-center border ${avatarBorder} overflow-hidden">
                         ${iconHtml}
-                    </div>
+                    </div>`;
+
+                const contentDiv = `
                     <div class="flex-grow ${messageBg} rounded-lg p-4 max-w-3xl">
                         <p class="font-semibold ${nameColor} mb-1">${senderName}</p>
                         <div class="prose-custom"></div>
-                    </div>
-                `;
+                    </div>`;
                 
                 if (sender === 'user') {
-                    messageElement.innerHTML = messageContent.split('</div>').reverse().join('</div>');
+                    messageElement.innerHTML = contentDiv + avatarDiv;
                 } else {
-                    messageElement.innerHTML = messageContent;
+                    messageElement.innerHTML = avatarDiv + contentDiv;
                 }
                 
                 if (initialMessageContainer) {
@@ -313,40 +327,44 @@
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             };
 
-            // --- Unified Gemini API Call Function ---
-            const callGeminiAPI = async (payload) => {
+            // --- Unified SiliconFlow API Call Function ---
+            const callSiliconFlowAPI = async (messages) => {
                 try {
-                    const response = await fetch(GEMINI_API_URL, {
+                    const response = await fetch(SILICONFLOW_API_URL, {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${SILICONFLOW_API_KEY}`
+                        },
+                        body: JSON.stringify({
+                            model: SILICONFLOW_MODEL,
+                            messages: messages
+                        })
                     });
                     if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
+                        const errorBody = await response.json();
+                        throw new Error(`HTTP error! status: ${response.status} - ${errorBody.error.message}`);
                     }
                     const result = await response.json();
-                    if (result.candidates && result.candidates.length > 0) {
-                        return result.candidates[0].content.parts[0].text;
-                    } else if (result.promptFeedback && result.promptFeedback.blockReason) {
-                        return `抱歉，您的请求因安全原因被阻止: ${result.promptFeedback.blockReason}`;
-                    }
-                    else {
+                    if (result.choices && result.choices.length > 0) {
+                        return result.choices[0].message.content;
+                    } else {
                          throw new Error("Invalid response structure from API.");
                     }
                 } catch (error) {
-                    console.error("Gemini API Error:", error);
-                    addMessage('ai', `抱歉，Gemini 功能暂时无法使用: ${error.message}`);
+                    console.error("SiliconFlow API Error:", error);
+                    addMessage('ai', `抱歉，AI功能暂时无法使用: ${error.message}`);
                     return null;
                 }
             };
             
-            // --- Core Chat Function (Now using Gemini) ---
+            // --- Core Chat Function (Now using SiliconFlow) ---
             const handleSendMessage = async () => {
                 const userMessage = chatInput.value.trim();
                 if (!userMessage) return;
 
                 addMessage('user', userMessage);
-                conversationHistory.push({ role: 'user', parts: [{ text: userMessage }] });
+                conversationHistory.push({ role: 'user', content: userMessage });
 
                 chatInput.value = '';
                 chatInput.style.height = 'auto';
@@ -354,17 +372,19 @@
                 typingIndicator.classList.remove('hidden');
                 chatMessages.scrollTop = chatMessages.scrollHeight;
 
-                const payload = {
-                    contents: conversationHistory,
-                    systemInstruction: SYSTEM_INSTRUCTION
-                };
+                // Prepare messages for API call
+                const messagesForAPI = [
+                    { role: 'system', content: SYSTEM_PROMPT },
+                    ...conversationHistory
+                ];
                 
-                const aiMessage = await callGeminiAPI(payload);
+                const aiMessage = await callSiliconFlowAPI(messagesForAPI);
                 
                 typingIndicator.classList.add('hidden');
 
                 if (aiMessage !== null) {
-                    conversationHistory.push({ role: 'model', parts: [{ text: aiMessage }] });
+                    // Note: 'assistant' is the correct role for model responses in this API standard
+                    conversationHistory.push({ role: 'assistant', content: aiMessage });
                     addMessage('ai', aiMessage);
                 }
 
@@ -381,12 +401,12 @@
                 optimizeIcon.classList.add('spinning');
                 
                 const prompt = `你是一位专业的沟通专家。请优化以下文本，使其表达更清晰、更专业、更礼貌。直接返回优化后的文本，不要添加任何额外的解释或引言。\n\n原文：\n"${textToOptimize}"`;
-                const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
-                const optimizedText = await callGeminiAPI(payload);
+                const messages = [{ role: "user", content: prompt }];
+                const optimizedText = await callSiliconFlowAPI(messages);
                 
                 if (optimizedText) {
                     chatInput.value = optimizedText;
-                    chatInput.dispatchEvent(new Event('input'));
+                    chatInput.dispatchEvent(new Event('input')); // Trigger auto-resize
                 }
                 
                 optimizeButton.disabled = false;
@@ -404,12 +424,12 @@
                 summarizeText.textContent = '正在总结...';
 
                 const historyText = conversationHistory
-                    .map(msg => `${msg.role === 'user' ? '用户' : 'AI'}: ${msg.parts[0].text}`)
+                    .map(msg => `${msg.role === 'user' ? '用户' : 'AI'}: ${msg.content}`)
                     .join('\n\n');
                 
                 const prompt = `你是一位专业的市场研究分析师。请根据以下对话记录，提炼出一份专业的研究摘要。摘要应识别关键洞察 (key insights)、用户痛点 (pain points)、潜在需求和情感倾向，并以结构化的要点形式呈现。\n\n对话记录：\n${historyText}`;
-                const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
-                const summary = await callGeminiAPI(payload);
+                const messages = [{ role: "user", content: prompt }];
+                const summary = await callSiliconFlowAPI(messages);
 
                 if (summary) {
                     addMessage('ai', summary, 'summary');
@@ -443,6 +463,7 @@
                         const subtitle = button.querySelector('p').textContent;
                         const fullPrompt = `${title}：${subtitle}`;
                         chatInput.value = fullPrompt;
+                        chatInput.dispatchEvent(new Event('input')); // Trigger auto-resize
                         handleSendMessage();
                     }
                 });
@@ -456,9 +477,20 @@
             });
             
             chatInput.addEventListener('input', () => {
+                // Auto-resize textarea
                 chatInput.style.height = 'auto';
                 chatInput.style.height = (chatInput.scrollHeight) + 'px';
+
+                // Enable/disable buttons based on input
+                const hasText = chatInput.value.trim().length > 0;
+                sendButton.disabled = !hasText;
+                optimizeButton.disabled = !hasText;
             });
+
+            // Initial button state
+            sendButton.disabled = true;
+            optimizeButton.disabled = true;
+            summarizeButton.disabled = false; // Can be enabled initially
         });
     </script>
 </body>
