@@ -116,9 +116,6 @@
         .nav-link:hover::after {
             width: 100%;
         }
-        .dropdown {
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
         .logos-container {
             -webkit-mask-image: linear-gradient(to right, transparent, white 20%, white 80%, transparent);
             mask-image: linear-gradient(to right, transparent, white 20%, white 80%, transparent);
@@ -266,46 +263,30 @@
         <!-- Header -->
         <header id="header" class="fixed top-0 left-0 right-0 z-50 p-4 transition-all duration-300">
              <div id="header-inner" class="container mx-auto glass-morphism rounded-xl p-2 px-4 flex justify-between items-center transition-all duration-300">
-                <a href="https://sings.ai/index.html" class="flex items-center text-2xl font-bold text-white"><span class="text-blue-400">Sings</span><span>.AI</span></a>
-                <nav class="hidden md:flex items-center space-x-8">
-                    <div class="relative" id="products-menu">
-                        <button class="nav-link text-gray-300 hover:text-white transition-colors flex items-center" data-lang="navProducts">
-                            产品 <i class="ph ph-caret-down ml-1 transition-transform duration-300"></i>
-                        </button>
-                        <div id="products-dropdown" class="dropdown absolute top-full left-1/2 -translate-x-1/2 mt-4 w-60 bg-gray-900/80 backdrop-blur-lg border border-gray-700 rounded-lg shadow-lg opacity-0 pointer-events-none transform -translate-y-2">
-                            <a href="https://sings.ai/product/Survey" class="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-gray-700/50 hover:text-white transition-colors rounded-t-lg" data-lang="productLink1"><i class="ph ph-chart-pie-slice text-lg text-blue-400"></i> AI Test 智能问卷</a>
-                            <a href="https://sings.ai/product/FGD" class="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-gray-700/50 hover:text-white transition-colors" data-lang="productLink2"><i class="ph ph-users-three text-lg text-purple-400"></i> AI Talk 智能访谈</a>
-                            <a href="https://sings.ai/product/User" class="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-gray-700/50 hover:text-white transition-colors rounded-b-lg" data-lang="productLink3"><i class="ph ph-user-circle-gear text-lg text-green-400"></i> AI User 仿真用户</a>
-                        </div>
-                    </div>
+                 <a href="https://sings.ai/index.html" class="flex items-center text-2xl font-bold text-white"><span class="text-blue-400">Sings</span><span>.AI</span></a>
+                 <nav class="hidden md:flex items-center space-x-8">
+                    <!-- MODIFIED: "Products" is now a direct link -->
+                    <a href="https://sings.ai/product/" class="nav-link text-gray-300 hover:text-white transition-colors" data-lang="navProducts">产品</a>
                     <a href="https://sings.ai/page/price.html" class="nav-link text-gray-300 hover:text-white transition-colors" data-lang="navPricing">定价</a>
                     <a href="https://sings.ai/page/technology.html" class="nav-link text-gray-300 hover:text-white transition-colors" data-lang="navTechnology">技术原理</a>
                     <a href="https://sings.ai/page/competitors.html" class="nav-link text-gray-300 hover:text-white transition-colors" data-lang="navCompetitors">竞争格局</a>
-                </nav>
-                <div class="hidden md:flex items-center space-x-4">
-                    <a href="https://sings.ai/product/" class="py-2 px-4 rounded-lg font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-500 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300" data-lang="bookDemo">立即体验</a>
-                    <div class="lang-switcher flex items-center bg-gray-800/50 border border-gray-700 rounded-lg p-0.5">
-                        <button id="lang-zh" class="px-2 py-0.5 text-sm rounded-md transition-colors duration-300">中</button>
-                        <button id="lang-en" class="px-2 py-0.5 text-sm rounded-md transition-colors duration-300">EN</button>
-                    </div>
-                </div>
-                <div class="md:hidden"><button id="mobile-menu-button" aria-label="Open menu" class="text-white"><i class="ph ph-list text-2xl"></i></button></div>
-            </div>
+                 </nav>
+                 <div class="hidden md:flex items-center space-x-4">
+                     <a href="https://sings.ai/product/" class="py-2 px-4 rounded-lg font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-500 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300" data-lang="bookDemo">立即体验</a>
+                     <div class="lang-switcher flex items-center bg-gray-800/50 border border-gray-700 rounded-lg p-0.5">
+                         <button id="lang-zh" class="px-2 py-0.5 text-sm rounded-md transition-colors duration-300">中</button>
+                         <button id="lang-en" class="px-2 py-0.5 text-sm rounded-md transition-colors duration-300">EN</button>
+                     </div>
+                 </div>
+                 <div class="md:hidden"><button id="mobile-menu-button" aria-label="Open menu" class="text-white"><i class="ph ph-list text-2xl"></i></button></div>
+             </div>
         </header>
         
         <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden md:hidden fixed inset-0 bg-gray-900/90 backdrop-blur-sm z-40 pt-28">
             <div class="container mx-auto px-4 flex flex-col items-center text-center space-y-6">
-                <div class="text-center w-full">
-                    <button id="mobile-products-toggle" class="text-xl text-gray-300 hover:text-white transition-colors w-full flex items-center justify-center" data-lang="navProductsMobile">
-                        产品 <i class="ph ph-caret-down ml-2 transition-transform duration-300"></i>
-                    </button>
-                    <div id="mobile-products-links" class="hidden mt-4 space-y-4">
-                        <a href="https://sings.ai/product/Survey" class="block text-lg text-gray-400 hover:text-white" data-lang="productLink1Mobile">AI Test 智能问卷</a>
-                        <a href="https://sings.ai/product/FGD" class="block text-lg text-gray-400 hover:text-white" data-lang="productLink2Mobile">AI Talk 智能访谈</a>
-                        <a href="https://sings.ai/product/User" class="block text-lg text-gray-400 hover:text-white" data-lang="productLink3Mobile">AI User 仿真用户</a>
-                    </div>
-                </div>
+                <!-- MODIFIED: "Products" is now a direct link -->
+                <a href="https://sings.ai/product/" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="navProductsMobile">产品</a>
                 <a href="https://sings.ai/page/price.html" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="navPricingMobile">定价</a>
                 <a href="https://sings.ai/page/technology.html" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="navTechnologyMobile">技术原理</a>
                 <a href="https://sings.ai/page/competitors.html" class="text-xl text-gray-300 hover:text-white transition-colors" data-lang="navCompetitorsMobile">竞争格局</a>
@@ -558,17 +539,17 @@
                 navTechnology: { zh: '技术原理', en: 'Technology' },
                 navCompetitors: { zh: '竞争格局', en: 'Competitors' },
                 bookDemo: { zh: '立即体验', en: 'Experience Now' },
-                productLink1: { zh: 'AI Test 智能问卷', en: 'AI Test Smart Survey' },
-                productLink2: { zh: 'AI Talk 智能访谈', en: 'AI Talk Smart Interview' },
-                productLink3: { zh: 'AI User 仿真用户', en: 'AI User Simulated User' },
+                // productLink1: { zh: 'AI Test 智能问卷', en: 'AI Test Smart Survey' }, // REMOVED
+                // productLink2: { zh: 'AI Talk 智能访谈', en: 'AI Talk Smart Interview' }, // REMOVED
+                // productLink3: { zh: 'AI User 仿真用户', en: 'AI User Simulated User' }, // REMOVED
                 navProductsMobile: { zh: '产品', en: 'Products' },
                 navPricingMobile: { zh: '定价', en: 'Pricing' },
                 navTechnologyMobile: { zh: '技术原理', en: 'Technology' },
                 navCompetitorsMobile: { zh: '竞争格局', en: 'Competitors' },
                 bookDemoMobile: { zh: '立即体验', en: 'Experience Now' },
-                productLink1Mobile: { zh: 'AI Test 智能问卷', en: 'AI Test Smart Survey' },
-                productLink2Mobile: { zh: 'AI Talk 智能访谈', en: 'AI Talk Smart Interview' },
-                productLink3Mobile: { zh: 'AI User 仿真用户', en: 'AI User Simulated User' },
+                // productLink1Mobile: { zh: 'AI Test 智能问卷', en: 'AI Test Smart Survey' }, // REMOVED
+                // productLink2Mobile: { zh: 'AI Talk 智能访谈', en: 'AI Talk Smart Interview' }, // REMOVED
+                // productLink3Mobile: { zh: 'AI User 仿真用户', en: 'AI User Simulated User' }, // REMOVED
 
                 // Hero Section
                 heroTitle: { zh: '数小时获得深度洞察，<br class="hidden md:block" /> 而非数周', en: 'Get In-depth Insights in Hours,<br class="hidden md:block" /> Not Weeks' },
@@ -750,10 +731,7 @@
                 headerInner: document.getElementById('header-inner'),
                 mobileMenuButton: document.getElementById('mobile-menu-button'),
                 mobileMenu: document.getElementById('mobile-menu'),
-                mobileProductsToggle: document.getElementById('mobile-products-toggle'),
-                mobileProductsLinks: document.getElementById('mobile-products-links'),
-                productsMenu: document.getElementById('products-menu'),
-                productsDropdown: document.getElementById('products-dropdown'),
+                // REMOVED dropdown related elements
                 backToTopButton: document.getElementById('back-to-top'),
                 langZhBtn: document.getElementById('lang-zh'),
                 langEnBtn: document.getElementById('lang-en'),
@@ -1160,17 +1138,9 @@
                 dom.langEnBtn.addEventListener('click', () => switchLanguage('en'));
                 window.addEventListener('scroll', handleScroll);
                 dom.mobileMenuButton.addEventListener('click', () => dom.mobileMenu.classList.toggle('hidden'));
-                if (dom.productsMenu && dom.productsDropdown) {
-                    dom.productsMenu.addEventListener('mouseenter', () => dom.productsDropdown.classList.remove('opacity-0', '-translate-y-2', 'pointer-events-none'));
-                    dom.productsMenu.addEventListener('mouseleave', () => dom.productsDropdown.classList.add('opacity-0', '-translate-y-2', 'pointer-events-none'));
-                }
-                if (dom.mobileProductsToggle && dom.mobileProductsLinks) {
-                    dom.mobileProductsToggle.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        dom.mobileProductsLinks.classList.toggle('hidden');
-                        dom.mobileProductsToggle.querySelector('i').classList.toggle('rotate-180');
-                    });
-                }
+                
+                // REMOVED event listeners for product dropdown
+                
                 if (dom.showMoreBtn) {
                     dom.showMoreBtn.addEventListener('click', toggleMoreFeatures);
                 }
