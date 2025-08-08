@@ -934,7 +934,10 @@ Now, begin telling this research story about our users in a language that is sim
                 const card = document.createElement('div');
                 card.className = 'user-card bg-gray-900/50 p-4 rounded-lg border border-gray-700 flex items-center space-x-4';
                 
-                const avatarUrl = `https://i.pravatar.cc/128?u=${encodeURIComponent(user.name)}`;
+                // --- MODIFICATION START ---
+                // Use DiceBear for avatar generation
+                const avatarUrl = `https://api.dicebear.com/8.x/lorelei/svg?seed=${encodeURIComponent(user.name)}`;
+                // --- MODIFICATION END ---
                 
                 const genderText = (user.gender === 'Male' || user.gender === '男') ? T('user_card_gender_male') : T('user_card_gender_female');
                 card.innerHTML = `<img src="${avatarUrl}" alt="User Avatar" class="w-16 h-16 rounded-full border-2 border-gray-600 bg-gray-700"><div class="flex-1"><h4 class="font-bold text-lg text-indigo-400">${user.name}</h4><p class="text-sm text-gray-400 mb-2">${genderText}, ${user.age}${T('user_card_age')}</p><p class="text-sm text-gray-300">${user.bio}</p></div>`;
