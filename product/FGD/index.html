@@ -324,10 +324,10 @@
             flex-shrink: 0; /* Prevent avatar from shrinking */
         }
         .moderator-avatar {
-            background: #4F46E5;
+            background-color: transparent;
         }
         .user-avatar {
-            background: #6B21A8;
+            background-color: transparent;
         }
 
         /* 访谈追问输入框 */
@@ -549,6 +549,10 @@
         <div class="bg-gray-900 border border-gray-700 text-white p-6 rounded-lg shadow-lg w-full max-w-lg mx-auto">
             <h3 class="text-xl font-bold mb-4" data-key="editParticipantTitle">编辑用户画像</h3>
             <form id="edit-participant-form">
+                <!-- Avatar Preview -->
+                <div class="flex justify-center mb-4">
+                    <img id="edit-avatar-preview" src="" alt="Avatar Preview" class="w-24 h-24 rounded-full border-2 border-gray-600 bg-gray-800">
+                </div>
                 <div class="mb-4">
                     <label for="edit-name" class="form-label">姓名</label>
                     <input type="text" id="edit-name" name="name" class="form-input" required>
@@ -1153,16 +1157,19 @@
             grid.innerHTML = '';
             appState.participants.forEach((p, index) => {
                 const card = document.createElement('div');
-                card.className = 'participant-card border border-gray-700 rounded-lg p-4 bg-gray-900/50 flex flex-col justify-between';
+                card.className = 'participant-card border border-gray-700 rounded-lg p-4 bg-gray-900/50 flex flex-col justify-between text-center';
                 card.style.transitionDelay = `${100 * index}ms`;
                 card.innerHTML = `
                     <div>
+                        <div class="flex justify-center mb-3">
+                            <img src="https://api.dicebear.com/8.x/lorelei/svg?seed=${encodeURIComponent(p.name)}" alt="Avatar of ${p.name}" class="w-20 h-20 rounded-full border-2 border-indigo-400 bg-gray-800">
+                        </div>
                         <h3 class="font-bold text-lg text-white">${p.name}</h3>
                         <p class="text-sm text-gray-400">${p.gender}, ${p.age}岁</p>
                         <p class="text-sm text-gray-400">${p.city} - ${p.profession}</p>
                         <p class="text-xs text-gray-500 mt-2 italic">"${p.bio}"</p>
                     </div>
-                    <div class="mt-4 flex space-x-2">
+                    <div class="mt-4 flex justify-center space-x-2">
                         <button onclick="editParticipant(${index})" class="btn-link text-sm">编辑</button>
                         <button onclick="removeParticipant(${index})" class="btn-link text-sm text-red-400">删除</button>
                     </div>
@@ -1185,7 +1192,17 @@
 
         function editParticipant(index) {
             const participant = appState.participants[index];
-            document.getElementById('edit-name').value = participant.name;
+            const nameInput = document.getElementById('edit-name');
+            const avatarPreview = document.getElementById('edit-avatar-preview');
+
+            avatarPreview.src = `https://api.dicebear.com/8.x/lorelei/svg?seed=${encodeURIComponent(participant.name || 'NewUser')}`;
+
+            nameInput.oninput = (e) => {
+                const newName = e.target.value;
+                avatarPreview.src = `https://api.dicebear.com/8.x/lorelei/svg?seed=${encodeURIComponent(newName || 'NewUser')}`;
+            };
+
+            nameInput.value = participant.name;
             document.getElementById('edit-age').value = participant.age;
             document.getElementById('edit-gender').value = participant.gender;
             document.getElementById('edit-city').value = participant.city;
@@ -1225,20 +1242,35 @@
         }
 
         // --- Focus Group Simulation Core Logic ---
-        function showTypingIndicator(show) {
-            let indicator = document.getElementById('typing-indicator');
+        // MODIFIED: Show typing indicator for a specific participant
+        function showTypingIndicator(show, name, type) {
+            const chatContainer = document.getElementById('chat-container');
+            const indicatorId = `typing-indicator-${name.replace(/\s+/g, '-')}`;
+            
+            let indicator = document.getElementById(indicatorId);
+
             if (show) {
                 if (!indicator) {
                     indicator = document.createElement('div');
-                    indicator.id = 'typing-indicator';
-                    indicator.className = 'typing-indicator-wrapper';
+                    indicator.id = indicatorId;
+                    const isModerator = type === 'moderator';
+                    indicator.className = `flex items-start space-x-2 w-full ${isModerator ? 'justify-end' : 'justify-start'}`;
+                    
+                    const avatarSrc = isModerator 
+                        ? `https://api.dicebear.com/8.x/lorelei/svg?seed=AI-Host` 
+                        : `https://api.dicebear.com/8.x/lorelei/svg?seed=${encodeURIComponent(name)}`;
+
                     indicator.innerHTML = `
-                        <div class="user-avatar">AI</div>
-                        <div class="chat-bubble chat-bubble-left">
-                            <div class="typing-indicator"><span></span><span></span><span></span></div>
+                        <div class="flex items-start space-x-3 max-w-[85%] ${isModerator ? 'flex-row-reverse space-x-reverse' : ''}">
+                            <div class="${isModerator ? 'moderator-avatar' : 'user-avatar'}">
+                                <img src="${avatarSrc}" class="w-full h-full rounded-full" alt="Avatar of ${name}">
+                            </div>
+                            <div class="chat-bubble ${isModerator ? 'chat-bubble-right' : 'chat-bubble-left'}">
+                                <div class="typing-indicator"><span></span><span></span><span></span></div>
+                            </div>
                         </div>`;
-                    document.getElementById('chat-container').appendChild(indicator);
-                    document.getElementById('chat-container').scrollTop = document.getElementById('chat-container').scrollHeight;
+                    chatContainer.appendChild(indicator);
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
                 }
             } else {
                 if (indicator) {
@@ -1246,7 +1278,8 @@
                 }
             }
         }
-
+        
+        // MODIFIED: Add chat messages with avatars for both user and moderator
         function addChatMessage(name, text, type, sentiment = 'neutral') {
             const chatContainer = document.getElementById('chat-container');
             const message = { name, text, type, sentiment };
@@ -1260,8 +1293,12 @@
             contentWrapper.className = `flex items-start space-x-3 max-w-[85%] ${isModerator ? 'flex-row-reverse space-x-reverse' : ''}`;
 
             const avatar = document.createElement('div');
+            const avatarSrc = isModerator 
+                ? `https://api.dicebear.com/8.x/lorelei/svg?seed=AI-Host` 
+                : `https://api.dicebear.com/8.x/lorelei/svg?seed=${encodeURIComponent(name)}`;
+            
             avatar.className = `${isModerator ? 'moderator-avatar' : 'user-avatar'}`;
-            avatar.textContent = name.substring(0, 1);
+            avatar.innerHTML = `<img src="${avatarSrc}" class="w-full h-full rounded-full" alt="Avatar of ${name}">`;
 
             const bubble = document.createElement('div');
             bubble.className = `chat-bubble ${isModerator ? 'chat-bubble-right' : 'chat-bubble-left'}`;
@@ -1314,15 +1351,13 @@
                 return;
             }
             
-            // Phase 1: Warm-up
             await postModeratorMessage(`你是一位用户研究主持人。请用非常口语化、平易近人的语气说一段开场白欢迎大家。严格遵守：1. 不超过30个字。 2. 直接输出你说的这句话，不要带任何前缀。`);
             await new Promise(r => setTimeout(r, 500));
             
             await postModeratorMessage(`你是一位用户研究主持人。现在请用口语化的语气邀请大家做自我介绍。严格遵守：1. 语气自然、友好。 2. 直接输出你说的这句话，不要带任何前缀。`);
 
-            // Use the queue for introductions
             appState.interviewController.participantQueue = [...appState.participants];
-            currentQuestionIndex = 0; // Reset question index
+            currentQuestionIndex = 0;
             interviewLoop();
         }
 
@@ -1331,45 +1366,37 @@
                 return;
             }
 
-            // Check if queue is empty
             if (appState.interviewController.participantQueue.length === 0) {
-                // All participants have answered the current question. Move to the next.
                 currentQuestionIndex++;
                 if (currentQuestionIndex >= coreQuestions.length) {
-                    // End of interview
                     await postModeratorMessage(`你是一位用户研究主持人。所有问题都讨论完了，请用非常口语化的语气发表结束语，感谢大家。严格遵守：1. 不超过25个字。 2. 直接输出你说的这句话，不要带任何前缀。`);
                     finishInterviewUI();
                     return;
                 } else {
-                    // Pose the next question and repopulate the queue
                     await postModeratorMessage(`你是一位用户研究主持人，请用自然的语气承上启下，过渡到下一个话题。不要提具体的问题。`);
                     await postModeratorMessage(`你是一位用户研究主持人。现在请用非常口语化、平易近人的语气，提出这个问题：“${coreQuestions[currentQuestionIndex]}”`);
-                    appState.interviewController.participantQueue = [...appState.participants].sort(() => Math.random() - 0.5); // Shuffle for variety
+                    appState.interviewController.participantQueue = [...appState.participants].sort(() => Math.random() - 0.5);
                 }
             }
             
-            // Get the next participant from the queue
             const currentParticipant = appState.interviewController.participantQueue.shift();
             
-            // Determine if it's an intro or question
             const type = (currentQuestionIndex === 0 && appState.chatHistory.length < (appState.participants.length + 2)) ? 'intro' : 'question';
             
             await postParticipantReply(currentParticipant, type);
             
-            // Add a moderator probe mid-discussion for realism
             if (appState.participants.length - appState.interviewController.participantQueue.length === 3 && Math.random() > 0.5) {
                 await postModeratorMessage("你是一位用户研究主持人，请对刚才的讨论做个简短的追问或小结。");
             }
 
-            // Continue the loop
             appState.interviewController.loopTimeout = setTimeout(interviewLoop, 500);
         }
 
         async function postModeratorMessage(prompt) {
             if (!appState.isInterviewRunning) return;
-            showTypingIndicator(true);
+            showTypingIndicator(true, '主持人', 'moderator');
             const response = await callAIModel(prompt, false, false);
-            showTypingIndicator(false);
+            showTypingIndicator(false, '主持人', 'moderator');
             if (response) {
                 addChatMessage('主持人', response, 'moderator');
             }
@@ -1377,20 +1404,25 @@
         }
 
         function getRelevantHistory() {
-            // Get last 2 user messages for context
             const userHistory = appState.chatHistory.filter(m => m.type === 'user');
-            const recentMessages = userHistory.slice(-2);
-            if (recentMessages.length === 0) return '';
+            const recentMessages = userHistory.slice(-4); // Get more context
+            if (recentMessages.length === 0) return '这是第一个问题，大家可以自由发言。';
             
             const context = recentMessages.map(msg => `${msg.name}: ${msg.text}`).join('\n');
             return `最近的几条发言是:\n${context}`;
         }
-
+        
+        // MODIFIED: Enhanced prompt for more realistic conversation
         async function postParticipantReply(participant, type) {
             let prompt;
             if (type === 'intro') {
-                prompt = `你正在深度扮演一个虚拟用户，参与一场座谈会。你的角色信息: ${JSON.stringify(participant, null, 2)}。主持人请你做个简短的自我介绍。严格遵守：1. 语气非常口语化。 2. 不超过25个字。 3. 直接输出你说的这句话，不要带你的名字或任何前缀。请在响应中包含对你发言的情感判断，只返回一个JSON对象，包含两个键: "text", "sentiment" (值为positive/negative/neutral)。`;
-            } else { // 'question' type
+                prompt = `你正在深度扮演一个虚拟用户，参与一场座谈会。你的角色信息: ${JSON.stringify(participant, null, 2)}。主持人请你做个简短的自我介绍。
+**规则:**
+1. **口语化:** 语气非常像真人。
+2. **简短:** 不超过25个字。
+3. **无前缀:** 直接输出你说的这句话，不要带你的名字。
+4. **JSON格式:** 只返回一个JSON对象，包含两个键: "text", "sentiment" (值为positive/negative/neutral)。`;
+            } else { 
                 const question = coreQuestions[currentQuestionIndex];
                 const relevantHistory = getRelevantHistory();
                 prompt = `你正在深度扮演一个虚拟用户，参与一场关于“${appState.refinedNeed}”的座谈会。
@@ -1403,17 +1435,18 @@ ${JSON.stringify(participant, null, 2)}
 ${relevantHistory}
 ---
 **你的任务 (Your Task):**
-现在轮到你发言了。请你完全代入你的角色，**直接针对主持人提出的问题**，做出一个高度仿真、像真人聊天一样、符合你身份的回应。你可以参考或反驳他人的观点。
+现在轮到你发言了。请你完全代入你的角色，**直接针对主持人提出的问题**，做出一个高度仿真、像真人聊天一样、符合你身份的回应。
 **严格遵守以下规则:**
-1.  **极度简短:** 你的发言**绝对不能超过30个字**。
-2.  **绝对口语化:** 语气非常接地气，就像在和朋友微信聊天。
-3.  **不要带前缀:** 直接输出你扮演角色说的话，**绝对不要**包含你的名字或任何类似 '小李:' 的前缀。
-4.  **JSON格式输出:** 只返回一个JSON对象，包含两个键: "text" (你的发言内容), 和 "sentiment" (值为 "positive", "negative", 或 "neutral")。`;
+1.  **有立场:** 根据你的角色性格，可以同意、**强烈反对**、或者**质疑**别人的观点。**不要害怕冲突，让讨论更有动态性。**
+2.  **极度简短:** 你的发言**绝对不能超过35个字**。
+3.  **绝对口语化:** 语气非常接地气，就像在和朋友微信聊天。
+4.  **不要带前缀:** 直接输出你扮演角色说的话，**绝对不要**包含你的名字或任何类似 '小李:' 的前缀。
+5.  **JSON格式输出:** 只返回一个JSON对象，包含两个键: "text" (你的发言内容), 和 "sentiment" (值为 "positive", "negative", 或 "neutral")。`;
             }
 
-            showTypingIndicator(true);
+            showTypingIndicator(true, participant.name, 'user');
             const reply = await callAIModel(prompt, true, false);
-            showTypingIndicator(false);
+            showTypingIndicator(false, participant.name, 'user');
 
             if (reply && reply.text) {
                 addChatMessage(participant.name, reply.text, 'user', reply.sentiment);
@@ -1445,7 +1478,7 @@ ${relevantHistory}
             await new Promise(r => setTimeout(r, 1000));
             
             for (const participant of targetParticipants) {
-                const prompt = `你正在深度扮演一个虚拟用户...主持人刚刚追问: "${questionText}"...请你完全代入你的角色...做出回应...`;
+                const prompt = `你正在深度扮演一个虚拟用户...主持人刚刚追问: "${questionText}"...请你完全代入你的角色...做出回应...`; // Simplified for brevity
                 await postParticipantReply(participant, 'question');
             }
             
