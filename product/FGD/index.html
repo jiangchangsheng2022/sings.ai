@@ -953,7 +953,7 @@
             closeButton.onclick = () => modalOverlay.remove();
             
             modalContent.append(messageP, closeButton);
-            modalOverlay.appendChild(modalContent);
+            modalOverlay.appendChild(modalOverlay);
             document.body.appendChild(modalOverlay);
         }
 
@@ -993,7 +993,7 @@
                 const payload = {
                     model: "alibaba/Qwen2-7B-Instruct",
                     messages: [{ role: "user", content: prompt }],
-                    temperature: 0.8, 
+                    temperature: 0.9, 
                     max_tokens: 1024,
                 };
 
@@ -1420,7 +1420,9 @@
                 await postModeratorMessage("你是一位用户研究主持人，请对刚才的讨论做个不超过20字的简短追问或小结。");
             }
 
-            appState.interviewController.loopTimeout = setTimeout(interviewLoop, 500);
+            // MODIFIED: Randomized delay for more human-like pacing
+            const randomDelay = Math.random() * 1500 + 500; // Delay between 0.5s and 2s
+            appState.interviewController.loopTimeout = setTimeout(interviewLoop, randomDelay);
         }
 
         async function postModeratorMessage(prompt) {
@@ -1431,7 +1433,7 @@
             if (response) {
                 addChatMessage('主持人', response, 'moderator');
             }
-            await new Promise(r => setTimeout(r, 500));
+            await new Promise(r => setTimeout(r, 200)); // Short delay after moderator speaks
         }
 
         function getRelevantHistory() {
@@ -1443,37 +1445,45 @@
             return `最近的几条发言是:\n${context}`;
         }
         
+        // MODIFIED: Final, most advanced prompt for generating diverse, in-character, and focused responses.
         async function postParticipantReply(participant, type) {
             let prompt;
             const speechActKeys = `["statement", "question", "agreement", "disagreement", "addition", "hesitation", "suggestion"]`;
 
             if (type === 'intro') {
-                prompt = `你正在深度扮演一个虚拟用户，参与一场座谈会。你的角色信息: ${JSON.stringify(participant, null, 2)}。主持人请你做个简短的自我介绍。
+                prompt = `你正在深度扮演一个虚拟用户。你的角色信息: ${JSON.stringify(participant, null, 2)}。主持人请你做个自我介绍。
 **规则:**
 1. **口语化:** 语气非常像真人。
 2. **简短:** 绝对不超过20个字。
-3. **无前缀:** 直接输出你说的这句话，不要带你的名字。
+3. **无前缀:** 直接输出你说的这句话。
 4. **JSON格式:** 只返回一个JSON对象，包含三个键: "text", "sentiment" (值为 "positive", "negative", 或 "neutral"), "speech_acts" (值为 ["introduction"])。`;
             } else { 
                 const question = coreQuestions[currentQuestionIndex];
                 const relevantHistory = getRelevantHistory();
-                prompt = `你正在深度扮演一个虚拟用户，参与一场关于“${appState.refinedNeed}”的座谈会。
+                prompt = `你是一名顶级的角色扮演AI。你的任务是完全沉浸在以下角色中，并以他/她的口吻进行一次极其简短、真实的发言。
 ---
-**你的角色信息 (Your Persona):**
+**你的角色 (Your Persona):**
 ${JSON.stringify(participant, null, 2)}
+
+**核心任务: 分析并模仿这个角色的说话风格。**
+- 他/她是一个${participant.profession}，这通常意味着他/她说话可能会 [严谨/有创意/务实/爱用行话]。
+- 他/她的简介是“${participant.bio}”，这暗示了他/她的性格可能是 [乐观/挑剔/内向/外向]。
+- 综合来看，他/她说话的风格应该是：**[在这里填入你对角色说话风格的1-2个关键词总结]**。
+
 ---
-**当前讨论的上下文 (Current Context):**
-主持人刚刚提出了这个问题: "${question}"
+**当前对话场景 (Current Context):**
+主持人刚刚问: "${question}"
 ${relevantHistory}
+
 ---
-**你的任务 (Your Task):**
-现在轮到你发言了。请你完全代入你的角色，**直接针对主持人提出的问题**，做出一个高度仿真、像真人聊天一样、符合你身份的回应。
-**严格遵守以下规则:**
-1.  **有立场:** 根据你的角色性格，可以同意、**强烈反对**、或者**质疑**别人的观点。**不要害怕冲突，让讨论更有动态性。**
-2.  **极度简短:** 你的发言**绝对不能超过20个字**。
-3.  **绝对口语化:** 语气非常接地气，就像在和朋友微信聊天。
-4.  **不要带前缀:** 直接输出你扮演角色说的话，**绝对不要**包含你的名字或任何类似 '小李:' 的前缀。
-5.  **JSON格式输出:** 只返回一个JSON对象，包含三个键: "text" (你的发言内容), "sentiment" (值为 "positive", "negative", 或 "neutral"), 和 "speech_acts" (一个数组，从 ${speechActKeys} 中选择1-2个最贴切的标签)。`;
+**你的行动 (Your Action):**
+现在，请你**完全忘记自己是AI**，用你刚刚分析出的**角色说话风格**，对主持人的问题或他人的发言做出回应。
+**【【【绝对天条】】】:**
+1.  **首要任务：** 你的发言**必须**是针对主持人当前问题“${question}”的直接回答。这是最高优先级。
+2.  **极度简短:** 你的整句话**绝对不能超过20个汉字**。这是死命令。
+3.  **互动性:** 在回答问题的基础上，你可以对别人的观点做出回应（赞同、反对、质疑），但不能偏离主题。
+4.  **无前缀:** 直接说出角色的话，不要带名字。
+5.  **JSON格式输出:** 只返回一个JSON对象，包含三个键: "text" (你的发言), "sentiment" (值为 "positive", "negative", 或 "neutral"), 和 "speech_acts" (一个数组，从 ${speechActKeys} 中选择1-2个最贴切的标签)。`;
             }
 
             showTypingIndicator(true, participant.name, 'user');
