@@ -11,13 +11,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
     <style>
-        /* 自定义样式，使其更接近 sings.ai 的风格 */
+        /* 自定义样式 */
         body {
             font-family: 'Inter', sans-serif;
             background-color: #000000;
             color: #E5E7EB; /* text-gray-200 */
         }
-        /* 背景辉光效果 */
         .glow-background {
             position: relative;
             overflow-x: hidden;
@@ -34,14 +33,12 @@
             z-index: -1;
             pointer-events: none;
         }
-        /* 标题渐变色 */
         .gradient-text {
             background-image: linear-gradient(to right, #A78BFA, #3B82F6);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
         }
-        /* 按钮渐变背景 */
         .gradient-button {
             background-image: linear-gradient(to right, #4F46E5, #3B82F6);
             transition: all 0.3s ease;
@@ -49,7 +46,6 @@
         .gradient-button:hover {
             box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
         }
-        /* 特性卡片样式 */
         .feature-card {
             background-color: rgba(31, 41, 55, 0.2);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -62,11 +58,9 @@
             border-color: #4F46E5;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
-        /* SVG 图标颜色 */
         .icon-color {
             color: #A78BFA;
         }
-        /* 玻璃质感背景 */
         .glass-morphism {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(12px);
@@ -84,34 +78,19 @@
             <div class="flex items-center space-x-4">
                 <a href="https://sings.ai/#" class="flex items-center text-gray-300 hover:text-white transition-colors">
                     <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-                    返回主页
+                    <span id="nav-home">返回主页</span>
                 </a>
                 <a href="https://sings.ai/#" class="text-xl font-bold text-white">sings.ai</a>
             </div>
 
-            <!-- 中间: 导航链接 (桌面端显示) -->
-            <div class="hidden md:flex items-center space-x-8">
-                <a href="#" class="text-gray-300 hover:text-white transition-colors">产品</a>
-                <a href="#" class="text-gray-300 hover:text-white transition-colors">方案</a>
-                <a href="#" class="text-gray-300 hover:text-white transition-colors">资源</a>
-                <a href="#" class="text-gray-300 hover:text-white transition-colors">定价</a>
-            </div>
-
-            <!-- 右侧: 操作按钮 (桌面端显示) -->
-            <div class="hidden md:flex items-center space-x-4">
-                <a href="#" class="text-gray-300 hover:text-white transition-colors">登录</a>
-                <a href="#" class="gradient-button text-white font-semibold py-2 px-4 rounded-lg">免费开始</a>
-            </div>
-            <!-- 移动端菜单按钮 -->
-            <div class="md:hidden">
-                <button class="text-white">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-                </button>
+            <!-- 右侧: 中英文切换按钮 -->
+            <div class="flex items-center">
+                <button id="lang-toggle" class="text-gray-300 hover:text-white transition-colors font-semibold py-2 px-4 rounded-lg">EN</button>
             </div>
         </div>
     </nav>
 
-    <!-- 页面主体内容 (增加上边距以避开导航栏) -->
+    <!-- 页面主体内容 -->
     <div class="container mx-auto px-4 pt-32 md:pt-40 pb-16 md:pb-24">
 
         <!-- 1. 页面主标题 -->
@@ -119,94 +98,115 @@
             <h1 class="text-4xl md:text-6xl font-black tracking-tighter mb-4">
                 <span class="gradient-text">Insight Engine</span>
             </h1>
-            <p class="text-2xl md:text-3xl font-bold text-white mb-6">下一代研究分析引擎，专为行业洞察而生</p>
-            <p class="text-lg text-gray-400">
+            <p id="header-subtitle" class="text-2xl md:text-3xl font-bold text-white mb-6">下一代研究分析引擎，专为行业洞察而生</p>
+            <p id="header-desc" class="text-lg text-gray-400">
                 在信息爆炸的时代，数据本身不是壁垒，从数据中提炼真知灼见的能力才是。我们打造的 Insight Engine，正是为了完成这“惊险的一跃”，将您的研究从“数据收集”时代，带入“智能洞察”时代。
             </p>
         </header>
 
         <!-- 2. 为什么需要行业大模型 -->
         <section class="max-w-5xl mx-auto mb-20 md:mb-32">
-            <h2 class="text-3xl font-bold text-center text-white mb-12">通用 AI vs. 行业专家</h2>
+            <h2 id="section-title-1" class="text-3xl font-bold text-center text-white mb-12">通用 AI vs. 行业专家</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div class="glass-morphism rounded-2xl p-8">
-                    <h3 class="text-xl font-bold text-gray-400 mb-4">通用大模型</h3>
-                    <p class="text-gray-400 mb-6">知识广博，但对特定行业的理解浮于表面。它们就像一个什么都懂一点的通才，可以回答“什么是用户画像”，但无法判断一份具体的用户画像是否精准、是否有商业价值。</p>
+                    <h3 id="card-title-1a" class="text-xl font-bold text-gray-400 mb-4">通用大模型</h3>
+                    <p id="card-desc-1a" class="text-gray-400 mb-6">知识广博，但对特定行业的理解浮于表面。它们就像一个什么都懂一点的通才，可以回答“什么是用户画像”，但无法判断一份具体的用户画像是否精准、是否有商业价值。</p>
                     <ul class="space-y-3">
-                        <li class="flex items-center text-red-400"><svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>缺乏行业术语的深度理解</li>
-                        <li class="flex items-center text-red-400"><svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>容易产生与业务无关的“幻觉”</li>
-                        <li class="flex items-center text-red-400"><svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>无法进行深度的因果关系推断</li>
+                        <li id="card-item-1a1" class="flex items-center text-red-400"><svg class="w-5 h-5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>缺乏行业术语的深度理解</li>
+                        <li id="card-item-1a2" class="flex items-center text-red-400"><svg class="w-5 h-5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>容易产生与业务无关的“幻觉”</li>
+                        <li id="card-item-1a3" class="flex items-center text-red-400"><svg class="w-5 h-5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>无法进行深度的因果关系推断</li>
                     </ul>
                 </div>
                 <div class="glass-morphism rounded-2xl p-8 border-2 border-indigo-500">
-                    <h3 class="text-xl font-bold text-white mb-4">Sings.AI Insight Engine</h3>
-                    <p class="text-gray-300 mb-6">我们用数百万份行业文献、报告和一手调研材料进行深度训练，使其成为一个真正的“行业专家”。它不仅“认识”术语，更能“理解”其背后的商业逻辑和语境。</p>
+                    <h3 id="card-title-1b" class="text-xl font-bold text-white mb-4">Sings.AI Insight Engine</h3>
+                    <p id="card-desc-1b" class="text-gray-300 mb-6">我们用数百万份行业文献、报告和一手调研材料进行深度训练，使其成为一个真正的“行业专家”。它不仅“认识”术语，更能“理解”其背后的商业逻辑和语境。</p>
                     <ul class="space-y-3">
-                        <li class="flex items-center text-green-400"><svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>精准理解行业黑话与复杂概念</li>
-                        <li class="flex items-center text-green-400"><svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>洞察结论与业务强相关，可落地</li>
-                        <li class="flex items-center text-green-400"><svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>发现隐藏在数据背后的商业机会</li>
+                        <li id="card-item-1b1" class="flex items-center text-green-400"><svg class="w-5 h-5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>精准理解行业黑话与复杂概念</li>
+                        <li id="card-item-1b2" class="flex items-center text-green-400"><svg class="w-5 h-5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>洞察结论与业务强相关，可落地</li>
+                        <li id="card-item-1b3" class="flex items-center text-green-400"><svg class="w-5 h-5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>发现隐藏在数据背后的商业机会</li>
                     </ul>
                 </div>
             </div>
         </section>
-
+        
+        <!-- 2.5. 技术架构 -->
+        <section class="max-w-7xl mx-auto mb-20 md:mb-32">
+            <h2 id="section-title-2" class="text-3xl font-bold text-center text-white mb-4">我们的技术架构</h2>
+            <p id="section-desc-2" class="text-lg text-gray-400 text-center max-w-3xl mx-auto mb-12">
+                我们构建了一个稳定、可扩展、安全可靠的技术架构，以确保 Insight Engine 能够高效处理海量数据，并持续输出高质量的行业洞察。
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="feature-card rounded-2xl p-8">
+                    <div class="flex justify-center mb-6"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-12 h-12 icon-color"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375" /></svg></div>
+                    <h3 id="card-title-2a" class="text-xl font-bold text-white mb-3">数据层</h3>
+                    <p id="card-desc-2a" class="text-gray-400">构建统一的数据湖，支持多源异构数据的接入、清洗和管理。通过严格的数据治理和安全协议，确保数据的完整性、一致性和安全性。</p>
+                </div>
+                <div class="feature-card rounded-2xl p-8">
+                    <div class="flex justify-center mb-6"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-12 h-12 icon-color"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15-3.75V3m15 1.5V3m0 18v-1.5m-15 0V21m15-9h1.5m-18 0h1.5m15 3.75V21m-15-1.5V21M9 12.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0Z" /></svg></div>
+                    <h3 id="card-title-2b" class="text-xl font-bold text-white mb-3">模型层</h3>
+                    <p id="card-desc-2b" class="text-gray-400">核心是为特定行业深度优化的专有大模型。结合持续学习和微调技术，使模型能够理解复杂的行业知识，并进行精准的推理和预测。</p>
+                </div>
+                <div class="feature-card rounded-2xl p-8">
+                    <div class="flex justify-center mb-6"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-12 h-12 icon-color"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 8.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 8.25 20.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6A2.25 2.25 0 0 1 15.75 3.75h2.25A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25A2.25 2.25 0 0 1 13.5 8.25V6ZM13.5 15.75A2.25 2.25 0 0 1 15.75 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z" /></svg></div>
+                    <h3 id="card-title-2c" class="text-xl font-bold text-white mb-3">应用层</h3>
+                    <p id="card-desc-2c" class="text-gray-400">提供丰富的 API 接口和模块化的应用组件，支持快速构建上层业务应用，如智能报告、对话式分析、趋势预警等，将洞察无缝对接到业务流程。</p>
+                </div>
+            </div>
+        </section>
 
         <!-- 3. 核心技术能力 -->
         <section class="max-w-7xl mx-auto mb-20 md:mb-32">
-            <h2 class="text-3xl font-bold text-center text-white mb-12">引擎核心能力</h2>
+            <h2 id="section-title-3" class="text-3xl font-bold text-center text-white mb-12">引擎核心能力</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- 能力一 -->
                 <div class="feature-card rounded-2xl p-8">
                     <div class="flex justify-center mb-6"><svg class="w-12 h-12 icon-color" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg></div>
-                    <h3 class="text-xl font-bold text-white mb-3">多模态融合分析</h3>
-                    <p class="text-gray-400">打破数据孤岛，从语音语调、文本语义、甚至视频中的微表情，交叉验证信息，还原用户真实、完整的体验瞬间。</p>
+                    <h3 id="card-title-3a" class="text-xl font-bold text-white mb-3">多模态融合分析</h3>
+                    <p id="card-desc-3a" class="text-gray-400">打破数据孤岛，从语音语调、文本语义、甚至视频中的微表情，交叉验证信息，还原用户真实、完整的体验瞬间。</p>
                 </div>
-                <!-- 能力二 -->
                 <div class="feature-card rounded-2xl p-8">
                     <div class="flex justify-center mb-6"><svg class="w-12 h-12 icon-color" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10s5 2 7 3 1.657 1.657 1.657 1.657zM9.343 17.343A7.965 7.965 0 016 12c0-1.772 1.433-5 1.433-5s4.286 1 7.143 4c.952 1 .952 2.571 0 3.571S9.343 17.343 9.343 17.343z"></path></svg></div>
-                    <h3 class="text-xl font-bold text-white mb-3">深度因果推断</h3>
-                    <p class="text-gray-400">超越简单的相关性分析。模型能推断出“因为某个功能设计复杂，所以用户流失率上升”这类深层因果链条，直击问题本质。</p>
+                    <h3 id="card-title-3b" class="text-xl font-bold text-white mb-3">深度因果推断</h3>
+                    <p id="card-desc-3b" class="text-gray-400">超越简单的相关性分析。模型能推断出“因为某个功能设计复杂，所以用户流失率上升”这类深层因果链条，直击问题本质。</p>
                 </div>
-                <!-- 能力三 -->
                 <div class="feature-card rounded-2xl p-8">
                     <div class="flex justify-center mb-6"><svg class="w-12 h-12 icon-color" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg></div>
-                    <h3 class="text-xl font-bold text-white mb-3">市场趋势预测</h3>
-                    <p class="text-gray-400">通过学习海量时间序列数据，模型能识别新兴需求和潜在爆点，帮助您在市场变化之前就提前布局，抢占先机。</p>
+                    <h3 id="card-title-3c" class="text-xl font-bold text-white mb-3">市场趋势预测</h3>
+                    <p id="card-desc-3c" class="text-gray-400">通过学习海量时间序列数据，模型能识别新兴需求和潜在爆点，帮助您在市场变化之前就提前布局，抢占先机。</p>
                 </div>
             </div>
         </section>
 
         <!-- 4. 工作流程 -->
         <section class="text-center max-w-6xl mx-auto mb-20 md:mb-32">
-            <h2 class="text-3xl font-bold text-white mb-12">洞察生成之旅</h2>
+            <h2 id="section-title-4" class="text-3xl font-bold text-white mb-12">洞察生成之旅</h2>
             <div class="relative">
                 <div class="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-gray-700"></div>
                 <div class="hidden md:block absolute top-1/2 left-0 w-full h-0.5" style="background: linear-gradient(to right, #4F46E5, #3B82F6, transparent);"></div>
                 <div class="relative flex flex-col md:flex-row justify-between items-center space-y-10 md:space-y-0">
                     <div class="flex flex-col items-center w-48">
                         <div class="w-16 h-16 rounded-full glass-morphism flex items-center justify-center mb-3 border-2 border-indigo-500">1</div>
-                        <h4 class="font-bold text-white">数据注入</h4>
-                        <p class="text-xs text-gray-400">安全上传各类原始数据</p>
+                        <h4 id="step-title-1" class="font-bold text-white">数据注入</h4>
+                        <p id="step-desc-1" class="text-xs text-gray-400">安全上传各类原始数据</p>
                     </div>
                     <div class="flex flex-col items-center w-48">
                         <div class="w-16 h-16 rounded-full glass-morphism flex items-center justify-center mb-3 border-2 border-indigo-400">2</div>
-                        <h4 class="font-bold text-white">AI预处理</h4>
-                        <p class="text-xs text-gray-400">转写、清洗、标准化</p>
+                        <h4 id="step-title-2" class="font-bold text-white">AI预处理</h4>
+                        <p id="step-desc-2" class="text-xs text-gray-400">转写、清洗、标准化</p>
                     </div>
                     <div class="flex flex-col items-center w-48">
                         <div class="w-16 h-16 rounded-full glass-morphism flex items-center justify-center mb-3 border-2 border-blue-400">3</div>
-                        <h4 class="font-bold text-white">多维分析</h4>
-                        <p class="text-xs text-gray-400">情感、意图、因果、趋势</p>
+                        <h4 id="step-title-3" class="font-bold text-white">多维分析</h4>
+                        <p id="step-desc-3" class="text-xs text-gray-400">情感、意图、因果、趋势</p>
                     </div>
                     <div class="flex flex-col items-center w-48">
                         <div class="w-16 h-16 rounded-full glass-morphism flex items-center justify-center mb-3 border-2 border-purple-400">4</div>
-                        <h4 class="font-bold text-white">洞察合成</h4>
-                        <p class="text-xs text-gray-400">生成观点、画像、机会点</p>
+                        <h4 id="step-title-4" class="font-bold text-white">洞察合成</h4>
+                        <p id="step-desc-4" class="text-xs text-gray-400">生成观点、画像、机会点</p>
                     </div>
                     <div class="flex flex-col items-center w-48">
                         <div class="w-16 h-16 rounded-full glass-morphism flex items-center justify-center mb-3 border-2 border-purple-500">5</div>
-                        <h4 class="font-bold text-white">报告呈现</h4>
-                        <p class="text-xs text-gray-400">交互式可视化报告</p>
+                        <h4 id="step-title-5" class="font-bold text-white">报告呈现</h4>
+                        <p id="step-desc-5" class="text-xs text-gray-400">交互式可视化报告</p>
                     </div>
                 </div>
             </div>
@@ -214,16 +214,150 @@
 
         <!-- 5. 应用场景和 CTA -->
         <section class="gradient-button rounded-2xl p-8 md:p-12 max-w-5xl mx-auto text-center">
-            <h2 class="text-3xl font-bold text-white mb-4">将洞察力转化为增长力</h2>
-            <p class="text-gray-200 mb-8 max-w-2xl mx-auto">
+            <h2 id="cta-title" class="text-3xl font-bold text-white mb-4">将洞察力转化为增长力</h2>
+            <p id="cta-desc" class="text-gray-200 mb-8 max-w-2xl mx-auto">
                 Insight Engine 不仅仅是一个分析工具，它是您业务增长的催化剂，将模糊的用户反馈，转化为清晰的商业行动指南。
             </p>
-            <a href="#" class="inline-block w-full sm:w-auto text-center py-3 px-8 rounded-lg font-semibold bg-white text-indigo-600 hover:bg-gray-200 transition-colors">
+            <a href="#" id="cta-button" class="inline-block w-full sm:w-auto text-center py-3 px-8 rounded-lg font-semibold bg-white text-indigo-600 hover:bg-gray-200 transition-colors">
                 预约专属演示
             </a>
         </section>
-
     </div>
+
+    <script>
+        // 1. 定义中英文文本内容
+        const translations = {
+            zh: {
+                'nav-home': '返回主页',
+                'lang-toggle': 'EN',
+                'header-subtitle': '下一代研究分析引擎，专为行业洞察而生',
+                'header-desc': '在信息爆炸的时代，数据本身不是壁垒，从数据中提炼真知灼见的能力才是。我们打造的 Insight Engine，正是为了完成这“惊险的一跃”，将您的研究从“数据收集”时代，带入“智能洞察”时代。',
+                'section-title-1': '通用 AI vs. 行业专家',
+                'card-title-1a': '通用大模型',
+                'card-desc-1a': '知识广博，但对特定行业的理解浮于表面。它们就像一个什么都懂一点的通才，可以回答“什么是用户画像”，但无法判断一份具体的用户画像是否精准、是否有商业价值。',
+                'card-item-1a1': '缺乏行业术语的深度理解',
+                'card-item-1a2': '容易产生与业务无关的“幻觉”',
+                'card-item-1a3': '无法进行深度的因果关系推断',
+                'card-title-1b': 'Sings.AI Insight Engine',
+                'card-desc-1b': '我们用数百万份行业文献、报告和一手调研材料进行深度训练，使其成为一个真正的“行业专家”。它不仅“认识”术语，更能“理解”其背后的商业逻辑和语境。',
+                'card-item-1b1': '精准理解行业黑话与复杂概念',
+                'card-item-1b2': '洞察结论与业务强相关，可落地',
+                'card-item-1b3': '发现隐藏在数据背后的商业机会',
+                'section-title-2': '我们的技术架构',
+                'section-desc-2': '我们构建了一个稳定、可扩展、安全可靠的技术架构，以确保 Insight Engine 能够高效处理海量数据，并持续输出高质量的行业洞察。',
+                'card-title-2a': '数据层',
+                'card-desc-2a': '构建统一的数据湖，支持多源异构数据的接入、清洗和管理。通过严格的数据治理和安全协议，确保数据的完整性、一致性和安全性。',
+                'card-title-2b': '模型层',
+                'card-desc-2b': '核心是为特定行业深度优化的专有大模型。结合持续学习和微调技术，使模型能够理解复杂的行业知识，并进行精准的推理和预测。',
+                'card-title-2c': '应用层',
+                'card-desc-2c': '提供丰富的 API 接口和模块化的应用组件，支持快速构建上层业务应用，如智能报告、对话式分析、趋势预警等，将洞察无缝对接到业务流程。',
+                'section-title-3': '引擎核心能力',
+                'card-title-3a': '多模态融合分析',
+                'card-desc-3a': '打破数据孤岛，从语音语调、文本语义、甚至视频中的微表情，交叉验证信息，还原用户真实、完整的体验瞬间。',
+                'card-title-3b': '深度因果推断',
+                'card-desc-3b': '超越简单的相关性分析。模型能推断出“因为某个功能设计复杂，所以用户流失率上升”这类深层因果链条，直击问题本质。',
+                'card-title-3c': '市场趋势预测',
+                'card-desc-3c': '通过学习海量时间序列数据，模型能识别新兴需求和潜在爆点，帮助您在市场变化之前就提前布局，抢占先机。',
+                'section-title-4': '洞察生成之旅',
+                'step-title-1': '数据注入',
+                'step-desc-1': '安全上传各类原始数据',
+                'step-title-2': 'AI预处理',
+                'step-desc-2': '转写、清洗、标准化',
+                'step-title-3': '多维分析',
+                'step-desc-3': '情感、意图、因果、趋势',
+                'step-title-4': '洞察合成',
+                'step-desc-4': '生成观点、画像、机会点',
+                'step-title-5': '报告呈现',
+                'step-desc-5': '交互式可视化报告',
+                'cta-title': '将洞察力转化为增长力',
+                'cta-desc': 'Insight Engine 不仅仅是一个分析工具，它是您业务增长的催化剂，将模糊的用户反馈，转化为清晰的商业行动指南。',
+                'cta-button': '预约专属演示',
+            },
+            en: {
+                'nav-home': 'Back to Home',
+                'lang-toggle': '中文',
+                'header-subtitle': 'The Next-Gen Research Analysis Engine, Born for Industry Insight',
+                'header-desc': 'In an era of information explosion, data itself is not a barrier; the ability to extract true insights from it is. Our Insight Engine is designed to make this "critical leap," taking your research from the "data collection" era to the "intelligent insight" era.',
+                'section-title-1': 'General AI vs. Industry Expert',
+                'card-title-1a': 'General Large Models',
+                'card-desc-1a': 'Broad in knowledge, but their understanding of specific industries is superficial. They are like generalists who know a little about everything, able to answer "what is a user persona" but unable to judge if a specific persona is accurate or has business value.',
+                'card-item-1a1': 'Lack of deep understanding of industry jargon',
+                'card-item-1a2': 'Prone to generating business-irrelevant "hallucinations"',
+                'card-item-1a3': 'Unable to perform deep causal inference',
+                'card-title-1b': 'Sings.AI Insight Engine',
+                'card-desc-1b': 'We use millions of industry documents, reports, and first-hand research to train our model, making it a true "industry expert." It not only "recognizes" terms but also "understands" the business logic and context behind them.',
+                'card-item-1b1': 'Accurately understands industry slang and complex concepts',
+                'card-item-1b2': 'Insights are highly relevant to business and actionable',
+                'card-item-1b3': 'Discovers hidden business opportunities in data',
+                'section-title-2': 'Our Technical Architecture',
+                'section-desc-2': 'We have built a stable, scalable, and secure technical architecture to ensure the Insight Engine can efficiently process massive amounts of data and continuously deliver high-quality industry insights.',
+                'card-title-2a': 'Data Layer',
+                'card-desc-2a': 'A unified data lake supports the ingestion, cleaning, and management of multi-source heterogeneous data. Strict data governance and security protocols ensure data integrity, consistency, and security.',
+                'card-title-2b': 'Model Layer',
+                'card-desc-2b': 'The core is a proprietary large model deeply optimized for specific industries. Combined with continuous learning and fine-tuning, the model understands complex industry knowledge for precise inference and prediction.',
+                'card-title-2c': 'Application Layer',
+                'card-desc-2c': 'Provides rich APIs and modular application components to support rapid development of upper-level business applications, such as smart reports, conversational analysis, and trend alerts, seamlessly integrating insights into business workflows.',
+                'section-title-3': 'Core Engine Capabilities',
+                'card-title-3a': 'Multi-modal Fusion Analysis',
+                'card-desc-3a': 'Break down data silos. Cross-validate information from voice tone, text semantics, and even micro-expressions in videos to restore the user\'s true and complete experience.',
+                'card-title-3b': 'Deep Causal Inference',
+                'card-desc-3b': 'Go beyond simple correlation analysis. The model can infer deep causal chains like "user churn increased because a feature was too complex," getting to the root of the problem.',
+                'card-title-3c': 'Market Trend Prediction',
+                'card-desc-3c': 'By learning from massive time-series data, the model can identify emerging demands and potential hotspots, helping you to plan ahead and seize market opportunities.',
+                'section-title-4': 'The Journey of Insight Generation',
+                'step-title-1': 'Data Ingestion',
+                'step-desc-1': 'Securely upload various raw data',
+                'step-title-2': 'AI Pre-processing',
+                'step-desc-2': 'Transcribe, clean, standardize',
+                'step-title-3': 'Multi-dimensional Analysis',
+                'step-desc-3': 'Sentiment, intent, causality, trends',
+                'step-title-4': 'Insight Synthesis',
+                'step-desc-4': 'Generate viewpoints, personas, opportunities',
+                'step-title-5': 'Report Presentation',
+                'step-desc-5': 'Interactive visual reports',
+                'cta-title': 'Turn Insight into Growth',
+                'cta-desc': 'The Insight Engine is more than just an analysis tool; it\'s a catalyst for your business growth, transforming vague user feedback into clear, actionable business guidance.',
+                'cta-button': 'Request a Demo',
+            }
+        };
+
+        // 2. 获取需要操作的元素
+        const langToggleButton = document.getElementById('lang-toggle');
+        let currentLanguage = 'zh'; // 默认语言为中文
+
+        // 3. 切换语言的函数
+        function setLanguage(lang) {
+            // 遍历 translations 对象中当前语言的所有键
+            for (const key in translations[lang]) {
+                const element = document.getElementById(key);
+                if (element) {
+                    // 特殊处理列表项，只替换文本节点
+                    if (key.startsWith('card-item')) {
+                         // 最后一个子节点是文本节点
+                        element.childNodes[element.childNodes.length - 1].nodeValue = ' ' + translations[lang][key];
+                    } else {
+                        element.textContent = translations[lang][key];
+                    }
+                }
+            }
+            // 更新按钮本身的文本
+            langToggleButton.textContent = translations[lang]['lang-toggle'];
+            // 更新html的lang属性
+            document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+        }
+
+        // 4. 给按钮添加点击事件
+        langToggleButton.addEventListener('click', () => {
+            // 切换语言
+            currentLanguage = currentLanguage === 'zh' ? 'en' : 'zh';
+            // 更新页面文本
+            setLanguage(currentLanguage);
+        });
+
+        // 初始加载时设置一次语言（虽然默认是中文，但这是个好习惯）
+        setLanguage(currentLanguage);
+
+    </script>
 
 </body>
 </html>
