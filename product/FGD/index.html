@@ -334,9 +334,10 @@
         #ask-question-container {
             transition: opacity 0.3s ease;
         }
-        .sentiment-badge {
+        .sentiment-badge, .speech-act-badge {
             display: inline-block;
             padding: 0.25rem 0.75rem;
+            margin-right: 0.5rem;
             margin-top: 0.5rem;
             font-size: 0.75rem;
             font-weight: bold;
@@ -345,6 +346,7 @@
         .sentiment-positive { background-color: #10B981; color: white; }
         .sentiment-negative { background-color: #EF4444; color: white; }
         .sentiment-neutral { background-color: #9CA3AF; color: white; }
+        .speech-act-badge { background-color: #374151; color: #d1d5db; }
     </style>
 </head>
 <body class="antialiased">
@@ -666,6 +668,15 @@
                 sentimentPositive: '积极',
                 sentimentNeutral: '中性',
                 sentimentNegative: '消极',
+                // Speech Acts
+                speechActStatement: "陈述观点",
+                speechActQuestion: "提出疑问",
+                speechActAgreement: "表示赞同",
+                speechActDisagreement: "表示反对",
+                speechActAddition: "补充信息",
+                speechActHesitation: "犹豫不决",
+                speechActSuggestion: "提出建议",
+                speechActIntroduction: "自我介绍",
                 // Step 7
                 step7Title: '第七步：数据分析与研究报告',
                 step7Desc: '基于本次研究的全过程，AI已为你生成一份详细的研究报告。',
@@ -771,6 +782,15 @@
                 sentimentPositive: 'Positive',
                 sentimentNeutral: 'Neutral',
                 sentimentNegative: 'Negative',
+                 // Speech Acts
+                speechActStatement: "Statement",
+                speechActQuestion: "Question",
+                speechActAgreement: "Agreement",
+                speechActDisagreement: "Disagreement",
+                speechActAddition: "Addition",
+                speechActHesitation: "Hesitation",
+                speechActSuggestion: "Suggestion",
+                speechActIntroduction: "Introduction",
                 // Step 7
                 step7Title: 'Step 7: Data Analysis & Research Report',
                 step7Desc: 'Based on the entire process of this study, the AI has generated a detailed research report for you.',
@@ -1242,7 +1262,6 @@
         }
 
         // --- Focus Group Simulation Core Logic ---
-        // MODIFIED: Show typing indicator for a specific participant
         function showTypingIndicator(show, name, type) {
             const chatContainer = document.getElementById('chat-container');
             const indicatorId = `typing-indicator-${name.replace(/\s+/g, '-')}`;
@@ -1279,10 +1298,9 @@
             }
         }
         
-        // MODIFIED: Add chat messages with avatars for both user and moderator
-        function addChatMessage(name, text, type, sentiment = 'neutral') {
+        function addChatMessage(name, text, type, sentiment = 'neutral', speechActs = []) {
             const chatContainer = document.getElementById('chat-container');
-            const message = { name, text, type, sentiment };
+            const message = { name, text, type, sentiment, speechActs };
             appState.chatHistory.push(message);
             const isModerator = type === 'moderator';
             
@@ -1307,15 +1325,28 @@
             nameEl.textContent = name;
             const textEl = document.createElement('div');
             textEl.textContent = text;
-            bubble.append(nameEl, textEl);
             
+            const tagsContainer = document.createElement('div');
+            tagsContainer.className = 'flex flex-wrap items-center';
+
             if (type === 'user' && sentiment) {
                 const sentimentBadge = document.createElement('span');
                 sentimentBadge.className = `sentiment-badge sentiment-${sentiment}`;
                 sentimentBadge.textContent = translations[appState.currentLanguage][`sentiment${sentiment.charAt(0).toUpperCase() + sentiment.slice(1)}`];
-                bubble.appendChild(sentimentBadge);
+                tagsContainer.appendChild(sentimentBadge);
             }
 
+            if (type === 'user' && speechActs && speechActs.length > 0) {
+                speechActs.forEach(actKey => {
+                    const speechActBadge = document.createElement('span');
+                    speechActBadge.className = 'speech-act-badge';
+                    const translationKey = `speechAct${actKey.charAt(0).toUpperCase() + actKey.slice(1)}`;
+                    speechActBadge.textContent = translations[appState.currentLanguage][translationKey] || actKey;
+                    tagsContainer.appendChild(speechActBadge);
+                });
+            }
+
+            bubble.append(nameEl, textEl, tagsContainer);
             contentWrapper.append(avatar, bubble);
             messageWrapper.appendChild(contentWrapper);
             chatContainer.appendChild(messageWrapper);
@@ -1351,10 +1382,10 @@
                 return;
             }
             
-            await postModeratorMessage(`你是一位用户研究主持人。请用非常口语化、平易近人的语气说一段开场白欢迎大家。严格遵守：1. 不超过30个字。 2. 直接输出你说的这句话，不要带任何前缀。`);
+            await postModeratorMessage(`你是一位用户研究主持人。请用非常口语化、平易近人的语气说一段开场白欢迎大家。严格遵守：1. 不超过20个字。 2. 直接输出你说的这句话，不要带任何前缀。`);
             await new Promise(r => setTimeout(r, 500));
             
-            await postModeratorMessage(`你是一位用户研究主持人。现在请用口语化的语气邀请大家做自我介绍。严格遵守：1. 语气自然、友好。 2. 直接输出你说的这句话，不要带任何前缀。`);
+            await postModeratorMessage(`你是一位用户研究主持人。现在请用口语化的语气邀请大家做自我介绍。严格遵守：1. 不超过20个字。 2. 语气自然、友好。 3. 直接输出你说的这句话，不要带任何前缀。`);
 
             appState.interviewController.participantQueue = [...appState.participants];
             currentQuestionIndex = 0;
@@ -1369,12 +1400,12 @@
             if (appState.interviewController.participantQueue.length === 0) {
                 currentQuestionIndex++;
                 if (currentQuestionIndex >= coreQuestions.length) {
-                    await postModeratorMessage(`你是一位用户研究主持人。所有问题都讨论完了，请用非常口语化的语气发表结束语，感谢大家。严格遵守：1. 不超过25个字。 2. 直接输出你说的这句话，不要带任何前缀。`);
+                    await postModeratorMessage(`你是一位用户研究主持人。所有问题都讨论完了，请用非常口语化的语气发表结束语，感谢大家。严格遵守：1. 不超过20个字。 2. 直接输出你说的这句话，不要带任何前缀。`);
                     finishInterviewUI();
                     return;
                 } else {
-                    await postModeratorMessage(`你是一位用户研究主持人，请用自然的语气承上启下，过渡到下一个话题。不要提具体的问题。`);
-                    await postModeratorMessage(`你是一位用户研究主持人。现在请用非常口语化、平易近人的语气，提出这个问题：“${coreQuestions[currentQuestionIndex]}”`);
+                    await postModeratorMessage(`你是一位用户研究主持人，请用不超过20字的自然语气承上启下，过渡到下一个话题。不要提具体的问题。`);
+                    await postModeratorMessage(`你是一位用户研究主持人。请用极度简短、口语化的方式提出这个问题：“${coreQuestions[currentQuestionIndex]}”。严格遵守：1. 只问这一个问题。2. 你的整句话绝对不能超过20个字。3. 直接输出你说的这句话，不要带任何前缀。`);
                     appState.interviewController.participantQueue = [...appState.participants].sort(() => Math.random() - 0.5);
                 }
             }
@@ -1386,7 +1417,7 @@
             await postParticipantReply(currentParticipant, type);
             
             if (appState.participants.length - appState.interviewController.participantQueue.length === 3 && Math.random() > 0.5) {
-                await postModeratorMessage("你是一位用户研究主持人，请对刚才的讨论做个简短的追问或小结。");
+                await postModeratorMessage("你是一位用户研究主持人，请对刚才的讨论做个不超过20字的简短追问或小结。");
             }
 
             appState.interviewController.loopTimeout = setTimeout(interviewLoop, 500);
@@ -1412,16 +1443,17 @@
             return `最近的几条发言是:\n${context}`;
         }
         
-        // MODIFIED: Enhanced prompt for more realistic conversation
         async function postParticipantReply(participant, type) {
             let prompt;
+            const speechActKeys = `["statement", "question", "agreement", "disagreement", "addition", "hesitation", "suggestion"]`;
+
             if (type === 'intro') {
                 prompt = `你正在深度扮演一个虚拟用户，参与一场座谈会。你的角色信息: ${JSON.stringify(participant, null, 2)}。主持人请你做个简短的自我介绍。
 **规则:**
 1. **口语化:** 语气非常像真人。
-2. **简短:** 不超过25个字。
+2. **简短:** 绝对不超过20个字。
 3. **无前缀:** 直接输出你说的这句话，不要带你的名字。
-4. **JSON格式:** 只返回一个JSON对象，包含两个键: "text", "sentiment" (值为positive/negative/neutral)。`;
+4. **JSON格式:** 只返回一个JSON对象，包含三个键: "text", "sentiment" (值为 "positive", "negative", 或 "neutral"), "speech_acts" (值为 ["introduction"])。`;
             } else { 
                 const question = coreQuestions[currentQuestionIndex];
                 const relevantHistory = getRelevantHistory();
@@ -1438,10 +1470,10 @@ ${relevantHistory}
 现在轮到你发言了。请你完全代入你的角色，**直接针对主持人提出的问题**，做出一个高度仿真、像真人聊天一样、符合你身份的回应。
 **严格遵守以下规则:**
 1.  **有立场:** 根据你的角色性格，可以同意、**强烈反对**、或者**质疑**别人的观点。**不要害怕冲突，让讨论更有动态性。**
-2.  **极度简短:** 你的发言**绝对不能超过35个字**。
+2.  **极度简短:** 你的发言**绝对不能超过20个字**。
 3.  **绝对口语化:** 语气非常接地气，就像在和朋友微信聊天。
 4.  **不要带前缀:** 直接输出你扮演角色说的话，**绝对不要**包含你的名字或任何类似 '小李:' 的前缀。
-5.  **JSON格式输出:** 只返回一个JSON对象，包含两个键: "text" (你的发言内容), 和 "sentiment" (值为 "positive", "negative", 或 "neutral")。`;
+5.  **JSON格式输出:** 只返回一个JSON对象，包含三个键: "text" (你的发言内容), "sentiment" (值为 "positive", "negative", 或 "neutral"), 和 "speech_acts" (一个数组，从 ${speechActKeys} 中选择1-2个最贴切的标签)。`;
             }
 
             showTypingIndicator(true, participant.name, 'user');
@@ -1449,10 +1481,10 @@ ${relevantHistory}
             showTypingIndicator(false, participant.name, 'user');
 
             if (reply && reply.text) {
-                addChatMessage(participant.name, reply.text, 'user', reply.sentiment);
+                addChatMessage(participant.name, reply.text, 'user', reply.sentiment, reply.speech_acts);
             } else {
                 console.error("AI returned an invalid response for participant reply:", reply);
-                addChatMessage(participant.name, "嗯，让我想想...", 'user', 'neutral');
+                addChatMessage(participant.name, "嗯，让我想想...", 'user', 'neutral', ['hesitation']);
             }
         }
 
@@ -1495,7 +1527,7 @@ ${relevantHistory}
             appState.isInterviewRunning = false;
             clearTimeout(appState.interviewController.loopTimeout);
             if (appState.chatHistory.length > 0 && !appState.chatHistory[appState.chatHistory.length-1].text.includes('结束')) {
-                 addChatMessage('主持人', '好的，访谈提前结束了，谢谢大家今天的分享！', 'moderator');
+                 addChatMessage('主持人', '好的，时间差不多了，谢谢大家！', 'moderator');
             }
             finishInterviewUI();
         }
